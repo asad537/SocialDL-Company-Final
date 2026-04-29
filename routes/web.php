@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\VideoController;
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/extract', [VideoController::class, 'extract']);
+Route::get('/proxy-download', [VideoController::class, 'proxyDownload']);
+Route::get('/merge-download', [VideoController::class, 'mergeDownload']);
+Route::get('/thumbnail-proxy', [VideoController::class, 'proxyThumbnail']);
