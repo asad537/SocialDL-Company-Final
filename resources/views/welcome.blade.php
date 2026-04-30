@@ -1,306 +1,587 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SocialDL Pro - Universal Video Downloader</title>
+    <title>Video Saver - HD Video & Music Downloader</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --border: #334155;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --success: #22c55e;
+            --primary: #FFB800;
+            --primary-hover: #E5A600;
+            --text-dark: #111827;
+            --text-gray: #4B5563;
+            --bg-light: #FFFFFF;
+            --bg-off: #F9FAFB;
+            --border: #E5E7EB;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* ── Header ── */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.2rem 0;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .logo img {
+            height: 80px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .nav-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .lang-dropdown {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
 
         /* ── Hero ── */
         .hero {
-            background: linear-gradient(180deg, #1e1b4b 0%, var(--bg-dark) 100%);
-            padding: 5rem 1rem 6rem;
-            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 500px;
+            /* Default for mobile/tablets */
+            display: flex;
+            align-items: center;
+            padding: 4rem 0;
+            overflow: hidden;
         }
 
-        /* ── Search bar ── */
-        .search-wrap { position: relative; max-width: 800px; margin: 2.5rem auto 0; }
-        .auto-hint {
-            position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
-            background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.35);
-            color: var(--primary-light); font-size: 0.78rem; font-weight: 600;
-            padding: 3px 14px; border-radius: 20px; white-space: nowrap;
-            opacity: 0; transition: opacity 0.2s; pointer-events: none;
+        /* 13 inch screens (~1280px to 1440px) */
+        @media (min-width: 1200px) {
+            .hero {
+                height: 500px;
+            }
         }
-        .auto-hint.visible { opacity: 1; }
+
+        /* 15 inch screens (~1440px to 1600px) */
+        @media (min-width: 1440px) {
+            .hero {
+                height: 550px;
+            }
+        }
+
+        /* Above 15 inch (>1600px) */
+        @media (min-width: 1600px) {
+            .hero {
+                height: 560px;
+            }
+        }
+
+        /* BG image — Covers full width without stretching */
+        .hero-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center right;
+            /* Phones right side pe hain */
+            z-index: 0;
+        }
+
+        .hero-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 750px;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .hero-btn {
+            background: var(--primary);
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 10px 15px -3px rgba(255, 184, 0, 0.3);
+            transition: all 0.2s;
+            margin-bottom: 3rem;
+        }
+
+        .hero-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .trust-row {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-gray);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .trust-item img {
+            height: 24px;
+        }
+
+        /* ── Search Section ── */
+        .search-section {
+            padding: 5rem 0;
+            text-align: center;
+            background: white;
+        }
+
+        .search-section h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            color: var(--text-dark);
+        }
+
+        .search-box-wrap {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
 
         .search-container {
-            background: var(--card-bg); padding: 8px; border-radius: 20px;
-            border: 1px solid var(--border); display: flex;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-            transition: border-color 0.3s, box-shadow 0.3s;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .search-container.detecting {
-            border-color: var(--primary);
-            animation: borderPulse 1.2s ease-in-out infinite;
+
+        .search-container i.fa-globe {
+            margin-left: 1.5rem;
+            color: #9CA3AF;
+            font-size: 1.2rem;
         }
-        @keyframes borderPulse {
-            0%,100% { box-shadow: 0 0 0 3px rgba(99,102,241,0.2), 0 20px 40px rgba(0,0,0,0.35); }
-            50%      { box-shadow: 0 0 0 7px rgba(99,102,241,0.06), 0 20px 40px rgba(0,0,0,0.35); }
-        }
+
         .search-container input {
-            flex: 1; background: transparent; border: none;
-            padding: 1rem 1.5rem; color: white; font-size: 1.05rem; outline: none;
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
         }
-        .search-container input::placeholder { color: var(--text-dim); }
+
         .search-container button {
-            background: var(--primary); color: white; border: none;
-            padding: 0 2rem; border-radius: 14px; font-weight: 700;
-            font-size: 0.95rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+            background: var(--primary);
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
         }
-        .search-container button:hover:not(:disabled) { background: var(--primary-light); transform: translateY(-2px); }
-        .search-container button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ── Spinner loader ── */
-        .loader-box { display: none; text-align: center; padding: 3rem 1rem; }
+        .search-container button:hover {
+            background: var(--primary-hover);
+        }
+
+        .search-container button i {
+            background: rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .tutorial-link {
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #3B82F6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .tutorial-link i {
+            font-size: 1.2rem;
+        }
+
+        .tutorial-link span {
+            color: var(--text-gray);
+            font-weight: 400;
+            margin-left: 5px;
+        }
+
+        /* ── Loader ── */
+        .loader-box {
+            display: none;
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
         .spinner {
-            width: 44px; height: 44px;
-            border: 4px solid rgba(99,102,241,0.1);
+            width: 50px;
+            height: 50px;
+            border: 4px solid #F3F4F6;
             border-top-color: var(--primary);
-            border-radius: 50%; animation: spin 0.9s linear infinite;
-            margin: 0 auto 16px;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loader-title { font-weight: 600; font-size: 1rem; }
-        .loader-status { font-size: 0.85rem; color: var(--text-dim); margin-top: 6px; min-height: 1.2em; }
 
-        /* ── Skeleton loader (shows INSTANTLY, 0ms) ── */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Skeleton ── */
         .skeleton-wrapper {
-            max-width: 1100px; margin: -40px auto 4rem;
-            display: none; grid-template-columns: 320px 1fr;
-            gap: 30px; padding: 0 1rem;
+            max-width: 1100px;
+            margin: 2rem auto;
+            display: none;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            padding: 0 2rem;
         }
-        .skeleton-box {
-            background: var(--card-bg); border-radius: 24px;
-            border: 1px solid var(--border); padding: 20px;
-        }
-        .skel {
-            background: linear-gradient(90deg, #1e293b 25%, #263148 50%, #1e293b 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.4s infinite;
-            border-radius: 8px;
-        }
-        @keyframes shimmer {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        .skel-thumb  { width:100%; aspect-ratio:16/9; border-radius:16px; margin-bottom:16px; }
-        .skel-line   { height:14px; margin-bottom:10px; }
-        .skel-line.w80  { width:80%; }
-        .skel-line.w50  { width:50%; }
-        .skel-row    { display:grid; grid-template-columns:80px 120px 1fr 180px; gap:12px; padding:16px 24px; border-bottom:1px solid var(--border); align-items:center; }
-        .skel-row .skel { height:14px; border-radius:6px; }
 
-        /* ── Error ── */
-        #error {
-            color: #ef4444; text-align: center; margin: 2rem 1rem;
-            display: none; font-weight: 600; font-size: 0.95rem;
-            background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
-            padding: 1rem 1.5rem; border-radius: 12px; max-width: 700px; margin: 2rem auto;
+        .skeleton-box {
+            background: #F9FAFB;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            padding: 24px;
+        }
+
+        .skel {
+            background: #E5E7EB;
+            border-radius: 8px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         /* ── Results ── */
         .results-wrapper {
-            max-width: 1100px; margin: -40px auto 4rem;
-            display: none; grid-template-columns: 320px 1fr;
-            gap: 30px; padding: 0 1rem;
+            max-width: 1100px;
+            margin: 2rem auto 5rem;
+            display: none;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            padding: 0 2rem;
         }
+
         .sidebar {
-            background: var(--card-bg); border-radius: 24px;
-            border: 1px solid var(--border); padding: 20px; height: fit-content;
+            background: white;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            height: fit-content;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
+
         .thumb-box {
-            width: 100%; aspect-ratio: 16/9; border-radius: 16px;
-            overflow: hidden; margin-bottom: 20px; position: relative;
-            background: #0f172a;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #000;
         }
-        .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
-        .duration-badge {
-            position: absolute; bottom: 10px; right: 10px;
-            background: rgba(0,0,0,0.8); padding: 4px 8px;
-            border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+
+        .thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        .video-title { font-size: 1rem; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
 
         .main-content {
-            background: var(--card-bg); border-radius: 24px;
-            border: 1px solid var(--border); overflow: hidden;
+            background: white;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
+
         .section-header {
-            padding: 14px 24px; border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.025); font-size: 0.95rem; font-weight: 700;
-        }
-        .format-row {
-            display: grid; grid-template-columns: 72px 110px 1fr 210px;
-            padding: 14px 24px; align-items: center;
+            padding: 15px 25px;
             border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
+            background: #F9FAFB;
+            font-weight: 700;
+            color: var(--text-dark);
         }
-        .format-row:hover { background: rgba(255,255,255,0.03); }
-        .badge-ext {
-            background: #f59e0b; color: #000; padding: 3px 7px;
-            border-radius: 6px; font-weight: 800; font-size: 0.68rem;
-            width: fit-content; letter-spacing: 0.03em;
+
+        .format-row {
+            display: grid;
+            grid-template-columns: 80px 120px 1fr 200px;
+            padding: 15px 25px;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
         }
+
         .dl-btn {
-            background: transparent; border: 2px solid var(--success);
-            color: var(--success); padding: 7px 14px; border-radius: 10px;
-            text-decoration: none; font-weight: 700; font-size: 0.82rem;
-            text-align: center; transition: all 0.18s; display: inline-block;
+            background: var(--primary);
+            color: var(--text-dark);
+            padding: 8px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: background 0.2s;
         }
-        .dl-btn:hover { background: var(--success); color: white; }
-        .proxy-btn {
-            border-color: #6366f1; color: #6366f1;
-            font-size: 0.75rem; padding: 6px 10px;
+
+        .dl-btn:hover {
+            background: var(--primary-hover);
         }
-        .proxy-btn:hover { background: #6366f1; color: white; }
+
+        #error {
+            color: #EF4444;
+            text-align: center;
+            max-width: 700px;
+            margin: 2rem auto;
+            display: none;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            background: #FEF2F2;
+            border: 1px solid #FEE2E2;
+            border-radius: 12px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .hero {
+                background-position: center bottom;
+                text-align: center;
+                padding-bottom: 300px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .trust-row {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .results-wrapper,
+            .skeleton-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
+
 <body>
 
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">
+                <img src="/images/logo.png" alt="Video Saver">
+
+            </a>
+            <div class="nav-wrap">
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Supported Platforms</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Download</a></li>
+                </ul>
+                <div class="lang-dropdown">
+                    English <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <section class="hero">
-        <h1 style="font-size: 2.6rem; font-weight: 800; letter-spacing: -0.5px;">SocialDL Pro</h1>
-        <p style="color: var(--text-dim); margin-top: 10px; font-size: 1.05rem;">
-            Paste any link — results appear <strong style="color:var(--primary-light);">automatically</strong>
-        </p>
-        <div class="search-wrap">
-            <span class="auto-hint" id="autoHint">⚡ Link detected — fetching...</span>
-            <div class="search-container" id="searchBox">
-                <input type="text" id="videoUrl"
-                    placeholder="Paste YouTube / Instagram / TikTok / Facebook link here..."
-                    autocomplete="off" spellcheck="false">
-                <button id="fetchBtn">Fetch Now</button>
+        <img class="hero-bg-img" src="/images/hero_section.jpeg" alt="">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>HD Video & Music Downloader for<br>Seamless Downloads</h1>
+                <a href="#" class="hero-btn">Download Video Saver</a>
+
+                <div class="trust-row">
+                    <div class="trust-item">
+                        <img src="/images/security2.png" alt="McAfee"> McAfee
+                    </div>
+                    <div class="trust-item">
+                        <img src="/images/security1.png" alt="CM Security"> CM Security
+                    </div>
+                    <div class="trust-item">
+                        <img src="/images/security2.png" alt="Lookout"> Lookout
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="hero-container">
+            <h2>Paste Your Link & Download Instantly</h2>
+            <div class="search-box-wrap">
+                <div class="search-container" id="searchBox">
+                    <i class="fas fa-globe"></i>
+                    <input type="text" id="videoUrl" placeholder="Paste your link here" autocomplete="off"
+                        spellcheck="false">
+                    <button id="fetchBtn"><i class="fas fa-arrow-down"></i> Download</button>
+                </div>
+                <a href="#" class="tutorial-link">
+                    <i class="fab fa-youtube" style="color: #FF0000;"></i> How to download? <span>Watch the
+                        tutorial</span>
+                </a>
             </div>
         </div>
     </section>
 
     <div class="loader-box" id="loader">
         <div class="spinner"></div>
-        <p class="loader-title">Fetching video info...</p>
-        <p class="loader-status" id="loaderStatus">Connecting to platform...</p>
+        <p>Connecting to platform...</p>
     </div>
 
-    {{-- Skeleton: shows INSTANTLY (0ms) when URL is pasted --}}
-    <div class="skeleton-wrapper" id="skeleton">
-        <div class="skeleton-box">
-            <div class="skel skel-thumb"></div>
-            <div class="skel skel-line w80"></div>
-            <div class="skel skel-line w50"></div>
-        </div>
-        <div class="skeleton-box" style="padding:0;overflow:hidden">
-            <div style="padding:14px 24px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.025)">
-                <div class="skel skel-line w50" style="margin:0"></div>
-            </div>
-            <div class="skel-row"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-            <div class="skel-row"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-            <div class="skel-row"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-            <div style="padding:14px 24px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.025);margin-top:1px">
-                <div class="skel skel-line w50" style="margin:0"></div>
-            </div>
-            <div class="skel-row"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-        </div>
-    </div>
+    <div class="skeleton-wrapper" id="skeleton"></div>
 
     <div id="error"></div>
 
     <div class="results-wrapper" id="results">
         <aside class="sidebar">
-            <div class="thumb-box">
-                <img id="thumb" src="" alt="thumbnail">
-                <span class="duration-badge" id="duration">--:--</span>
-            </div>
+            <div class="thumb-box"><img id="thumb" src="" alt="thumbnail"></div>
             <h2 class="video-title" id="title">Video Title</h2>
-            <p style="color: var(--text-dim); font-size: 0.82rem;">
-                Platform: <span id="source" style="color: var(--primary-light); font-weight:600;">—</span>
-            </p>
+            <p style="color: var(--text-gray); font-size: 0.85rem;">Platform: <span id="source"
+                    style="color: var(--text-dark); font-weight:700;">—</span></p>
         </aside>
 
         <main class="main-content">
-            <div class="section-header">🎬 Video Files</div>
+            <div class="section-header">Video Files</div>
             <div id="video-list"></div>
-            <div class="section-header" style="margin-top:1px;">🎵 Audio Files</div>
+            <div class="section-header" style="margin-top:1px;">Audio Files</div>
             <div id="audio-list"></div>
         </main>
     </div>
 
     <script>
-        const input        = document.getElementById('videoUrl');
-        const fetchBtn     = document.getElementById('fetchBtn');
-        const searchBox    = document.getElementById('searchBox');
-        const autoHint     = document.getElementById('autoHint');
-        const skeleton     = document.getElementById('skeleton');
-        const loader       = document.getElementById('loader');
-        const loaderStatus = document.getElementById('loaderStatus');
-        const resultsBox   = document.getElementById('results');
-        const errorDiv     = document.getElementById('error');
-        const csrf         = document.querySelector('meta[name="csrf-token"]').content;
+        const input = document.getElementById('videoUrl');
+        const fetchBtn = document.getElementById('fetchBtn');
+        const loader = document.getElementById('loader');
+        const resultsBox = document.getElementById('results');
+        const errorDiv = document.getElementById('error');
+        const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
-        let timer     = null;
-        let busy      = false;
-
-        /* ── URL validator ─────────────────────────────────── */
-        const isUrl = s => /^https?:\/\/.{8,}/.test(s.trim());
-
-        /* ── Helper: hide all loading states ──────────────── */
-        function hideLoading() {
-            skeleton.style.display    = 'none';
-            loader.style.display      = 'none';
-            busy                      = false;
-            fetchBtn.disabled         = false;
-            fetchBtn.textContent      = 'Fetch Now';
-        }
-
-        /* ── Status cycling messages ───────────────────────── */
-        const STATUSES = [
-            'Connecting to platform...',
-            'Extracting video metadata...',
-            'Scanning available formats...',
-            'Almost ready...'
-        ];
-
-        /* ── Main fetch ────────────────────────────────────── */
         async function fetchVideo(url) {
-            if (busy) return;
-            busy = true;
-
-            // UI: loading state
-            searchBox.classList.remove('detecting');
-            autoHint.classList.remove('visible');
-            fetchBtn.disabled = true;
-            fetchBtn.textContent = 'Fetching...';
-            errorDiv.style.display = 'none';
+            if (!url) return;
+            loader.style.display = 'block';
             resultsBox.style.display = 'none';
-
-            // ★ Show skeleton INSTANTLY (0ms) so user sees activity right away
-            skeleton.style.display = 'grid';
-            skeleton.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            // Cycle status text
-            let si = 0;
-            loaderStatus.textContent = STATUSES[0];
-            const tick = setInterval(() => {
-                si = Math.min(si + 1, STATUSES.length - 1);
-                loaderStatus.textContent = STATUSES[si];
-            }, 2500);
+            errorDiv.style.display = 'none';
 
             try {
-                const res  = await fetch('/extract', {
+                const res = await fetch('/extract', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
                     body: JSON.stringify({ url })
@@ -309,101 +590,39 @@
                 if (data.error) throw new Error(data.error);
                 render(data);
             } catch (e) {
-                errorDiv.innerHTML = `❌ ${e.message}`;
+                errorDiv.innerHTML = `Error: ${e.message}`;
                 errorDiv.style.display = 'block';
             } finally {
-                clearInterval(tick);
-                hideLoading();
+                loader.style.display = 'none';
             }
         }
 
-        /* ── Paste → instant fetch (300ms settle delay) ────── */
-        input.addEventListener('paste', e => {
-            const pasted = (e.clipboardData || window.clipboardData).getData('text').trim();
-            if (!isUrl(pasted)) return;
-            clearTimeout(timer);
-            autoHint.textContent = '⚡ Link detected — fetching...';
-            autoHint.classList.add('visible');
-            searchBox.classList.add('detecting');
-            timer = setTimeout(() => fetchVideo(pasted), 350);
-        });
+        fetchBtn.addEventListener('click', () => fetchVideo(input.value.trim()));
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') fetchVideo(input.value.trim()); });
 
-        /* ── Manual typing → 1.2s debounce ────────────────── */
-        input.addEventListener('input', () => {
-            clearTimeout(timer);
-            const val = input.value.trim();
-            if (!isUrl(val)) {
-                searchBox.classList.remove('detecting');
-                autoHint.classList.remove('visible');
-                return;
-            }
-            autoHint.textContent = '⏳ Auto-fetching in 1s...';
-            autoHint.classList.add('visible');
-            searchBox.classList.add('detecting');
-            timer = setTimeout(() => fetchVideo(val), 1200);
-        });
-
-        /* ── Button click ──────────────────────────────────── */
-        fetchBtn.addEventListener('click', () => {
-            clearTimeout(timer);
-            const val = input.value.trim();
-            if (val) fetchVideo(val);
-        });
-
-        /* ── Enter key ─────────────────────────────────────── */
-        input.addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                clearTimeout(timer);
-                const val = input.value.trim();
-                if (val) fetchVideo(val);
-            }
-        });
-
-        /* ── Render results ────────────────────────────────── */
         function render(data) {
-            document.getElementById('title').textContent    = data.title;
-            document.getElementById('thumb').src            = `/thumbnail-proxy?url=${encodeURIComponent(data.thumbnail)}`;
-            document.getElementById('source').textContent   = data.source;
-            document.getElementById('duration').textContent = data.duration || '00:00';
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('thumb').src = `/thumbnail-proxy?url=${encodeURIComponent(data.thumbnail)}`;
+            document.getElementById('source').textContent = data.source;
 
             const vList = document.getElementById('video-list');
             const aList = document.getElementById('audio-list');
             vList.innerHTML = aList.innerHTML = '';
 
             data.medias.forEach(m => {
-                const needsMerge = m.type === 'video' && !m.has_audio && data.best_audio_url;
-
-                const dlUrl = needsMerge
-                    ? `/merge-download?video_url=${enc(m.url)}&audio_url=${enc(data.best_audio_url)}&title=${enc(data.title)}`
-                    : `/direct-download?url=${enc(m.url)}&title=${enc(data.title)}&ext=${enc(m.extension.toLowerCase())}`;
-
-                const proxyUrl = needsMerge ? null
-                    : `/proxy-download?url=${enc(m.url)}&title=${enc(data.title)}&ext=${enc(m.extension.toLowerCase())}`;
-
-                const badge = (!m.has_audio && m.type === 'video')
-                    ? '<small style="color:#f59e0b;display:block;font-size:0.68rem;margin-top:2px;">+Audio merge</small>' : '';
-
-                const proxyBtn = proxyUrl
-                    ? `<a href="${proxyUrl}" target="_blank" class="dl-btn proxy-btn" title="Fallback: stream via server">Proxy</a>`
-                    : '';
-
+                const dlUrl = `/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}`;
                 const row = document.createElement('div');
                 row.className = 'format-row';
                 row.innerHTML = `
-                    <div class="badge-ext">${m.extension}</div>
-                    <div style="font-weight:700;line-height:1.3">${m.quality}${badge}</div>
-                    <div style="color:var(--text-dim);font-size:0.85rem">${m.size || ''}</div>
-                    <div style="display:flex;align-items:center;gap:6px">
-                        <a href="${dlUrl}" target="_blank" class="dl-btn">⬇ Download</a>${proxyBtn}
-                    </div>`;
+                    <div style="font-weight:700">${m.extension.toUpperCase()}</div>
+                    <div style="font-weight:600">${m.quality}</div>
+                    <div style="color:var(--text-gray); font-size:0.85rem">${m.size || ''}</div>
+                    <a href="${dlUrl}" target="_blank" class="dl-btn">Download</a>`;
                 (m.type === 'video' ? vList : aList).appendChild(row);
             });
-
             resultsBox.style.display = 'grid';
-            resultsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-
-        const enc = encodeURIComponent;
     </script>
 </body>
+
 </html>
