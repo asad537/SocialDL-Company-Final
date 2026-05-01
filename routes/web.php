@@ -1,7 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\AdminController;
+
+// ── Admin Routes ──────────────────────────────────────────────────────────────
+Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'doLogin'])->name('admin.login.post');
+Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/homepage', [AdminController::class, 'homepageEdit'])->name('admin.homepage');
+Route::post('/admin/homepage', [AdminController::class, 'homepageSave'])->name('admin.homepage.save');
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +28,8 @@ use App\Http\Controllers\VideoController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $settings = DB::table('homepage_settings')->first();
+    return view('home', compact('settings'));
 });
 
 // ── Extract: most expensive (Python subprocess) ──────────────────────────
