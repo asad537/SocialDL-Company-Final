@@ -11,28 +11,28 @@
         body{font-family:'Inter',sans-serif;background:#0F1117;color:#E2E8F0;display:flex;min-height:100vh;}
 
         /* SIDEBAR */
-        .sidebar{width:260px;background:#161B27;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;flex-shrink:0;position:fixed;height:100vh;z-index:100;}
-        .sidebar-logo{padding:1.8rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);}
-        .sidebar-logo .logo-wrap{display:flex;align-items:center;gap:0.8rem;}
-        .sidebar-logo .icon{width:42px;height:42px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;box-shadow:0 6px 20px rgba(255,184,0,0.35);}
-        .sidebar-logo h2{font-size:1.05rem;font-weight:700;color:#fff;}
-        .sidebar-logo p{font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:1px;}
-        .sidebar-nav{padding:1.2rem 0.8rem;flex:1;}
-        .nav-label{font-size:0.65rem;font-weight:600;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 0.7rem;margin-top:0.5rem;}
-        .nav-item{display:flex;align-items:center;gap:0.8rem;padding:0.7rem 0.9rem;border-radius:10px;color:rgba(255,255,255,0.5);font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;margin-bottom:2px;}
-        .nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
-        .nav-item.active{background:linear-gradient(135deg,rgba(255,184,0,0.15),rgba(255,140,0,0.1));color:#FFB800;border:1px solid rgba(255,184,0,0.15);}
-        .nav-item i{width:18px;text-align:center;font-size:0.9rem;}
-        .sidebar-footer{padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,0.06);}
-        .admin-badge{display:flex;align-items:center;gap:0.8rem;}
-        .admin-avatar{width:36px;height:36px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:#fff;font-weight:700;}
-        .admin-info p{font-size:0.82rem;font-weight:600;color:#fff;}
-        .admin-info span{font-size:0.72rem;color:rgba(255,255,255,0.3);}
-        .logout-btn{margin-left:auto;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:0.35rem 0.7rem;border-radius:8px;font-size:0.75rem;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+        .sidebar{width:220px;background:#161B27;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;flex-shrink:0;position:fixed;height:100vh;z-index:100;}
+        .sidebar-logo{padding:1.5rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+        .sidebar-logo .logo-wrap{display:flex;align-items:center;gap:0.6rem;}
+        .sidebar-logo .icon{width:38px;height:38px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;box-shadow:0 6px 20px rgba(255,184,0,0.35);}
+        .sidebar-logo h2{font-size:0.95rem;font-weight:700;color:#fff;}
+        .sidebar-logo p{font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:1px;}
+        .sidebar-nav{padding:1rem 0.6rem;flex:1;}
+        .nav-label{font-size:0.6rem;font-weight:600;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 0.7rem;margin-top:0.5rem;}
+        .nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-radius:8px;color:rgba(255,255,255,0.45);font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;margin-bottom:2px;}
+        .nav-item:hover{background:rgba(255,255,255,0.04);color:#fff;}
+        .nav-item.active{background:linear-gradient(135deg,rgba(255,184,0,0.12),rgba(255,140,0,0.08));color:#FFB800;border:1px solid rgba(255,184,0,0.1);}
+        .nav-item i{width:16px;text-align:center;font-size:0.85rem;}
+        .sidebar-footer{padding:0.8rem 1rem;border-top:1px solid rgba(255,255,255,0.06);}
+        .admin-badge{display:flex;align-items:center;gap:0.6rem;}
+        .admin-avatar{width:32px;height:32px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:#fff;font-weight:700;}
+        .admin-info p{font-size:0.78rem;font-weight:600;color:#fff;}
+        .admin-info span{font-size:0.68rem;color:rgba(255,255,255,0.25);}
+        .logout-btn{margin-left:auto;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:0.3rem 0.6rem;border-radius:6px;font-size:0.7rem;cursor:pointer;text-decoration:none;transition:all 0.2s;}
         .logout-btn:hover{background:rgba(239,68,68,0.2);}
 
         /* MAIN */
-        .main{margin-left:260px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+        .main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
         .topbar{background:#161B27;border-bottom:1px solid rgba(255,255,255,0.06);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
         .topbar h1{font-size:1.2rem;font-weight:700;color:#fff;}
         .topbar-right{display:flex;align-items:center;gap:1rem;}
@@ -124,8 +124,10 @@
         <div class="nav-label">Main</div>
         <a href="{{ route('admin.dashboard') }}" class="nav-item active"><i class="fas fa-th-large"></i> Dashboard</a>
         <a href="{{ route('admin.homepage') }}" class="nav-item"><i class="fas fa-home"></i> Home Page</a>
-        <a href="#" class="nav-item"><i class="fas fa-download"></i> Downloads</a>
-        <a href="#" class="nav-item"><i class="fas fa-chart-bar"></i> Analytics</a>
+        <a href="{{ route('admin.faqs') }}" class="nav-item"><i class="fas fa-question-circle"></i> Home FAQs</a>
+        <a href="{{ route('admin.faq_page') }}" class="nav-item"><i class="fas fa-list-ul"></i> FAQ Page</a>
+        <a href="{{ route('admin.blogs.index') }}" class="nav-item {{ Request::is('admin/blogs*') ? 'active' : '' }}"><i class="fas fa-blog"></i> Blogs</a>
+        <a href="{{ route('admin.guides.index') }}" class="nav-item {{ Request::is('admin/guides*') ? 'active' : '' }}"><i class="fas fa-book"></i> Guides</a>
         <div class="nav-label">Platforms</div>
         <a href="#" class="nav-item"><i class="fab fa-youtube"></i> YouTube</a>
         <a href="#" class="nav-item"><i class="fab fa-instagram"></i> Instagram</a>

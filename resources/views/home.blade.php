@@ -24,7 +24,27 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Prevent Inter from overriding Font Awesome icons */
+        .fa,
+        .fas,
+        .far,
+        .fab,
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 5 Free", "Font Awesome 5 Brands", sans-serif !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
         }
 
         body {
@@ -72,7 +92,7 @@
         }
 
         .logo img {
-            height: 60px;
+            height: 65px;
             width: auto;
             border-radius: 8px;
         }
@@ -102,8 +122,8 @@
         }
 
         .lang-dropdown {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 8px 16px;
             border-radius: 8px;
             font-size: 0.9rem;
@@ -112,7 +132,7 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
             position: relative;
             z-index: 1000;
         }
@@ -967,37 +987,63 @@
             display: block;
         }
 
-        .callout-top-left {
+        .callout-top-right {
             position: absolute;
-            left: -10px;
-            top: 15%;
+            right: 40px;
+            top: 12%;
             max-width: 200px;
         }
 
         .callout-middle-left {
             position: absolute;
-            left: -10px;
+            left: 40px;
             top: 42%;
             max-width: 200px;
         }
 
-        .callout-bottom-center {
+        .callout-bottom-right {
             position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: -20px;
+            top: 72%;
             max-width: 260px;
         }
 
         .callout-inner {
-            text-align: center;
-            margin-top: -34px;
-            margin-right: -40px;
+            /* Common styles */
+            max-width: 100%;
         }
 
-        .callout-bottom-center .callout-inner {
-            text-align: center;
-            margin-top: 0;
+        .callout-top-right .callout-inner {
+            text-align: left;
+            margin-top: -8px;
+            margin-right: 0;
+        }
+
+        .callout-top-right .callout-inner h3 {
+            margin-bottom: 0;
+        }
+
+        .callout-top-right .callout-inner p {
+            margin-top: 2px;
+        }
+
+        .callout-middle-left .callout-inner {
+            text-align: left;
+            margin-top: -53px;
+            margin-right: -38px;
+        }
+
+        .callout-middle-left .callout-inner h3 {
+            margin-bottom: 0;
+        }
+
+        .callout-middle-left .callout-inner p {
+            margin-top: 2px;
+        }
+
+        .callout-bottom-right .callout-inner {
+            text-align: left;
+            margin-top: -76px;
             margin-right: 0;
         }
 
@@ -1075,7 +1121,7 @@
 
         .howitworks-phone img {
             width: 100%;
-            max-width: 260px;
+            max-width: 350px;
             height: auto;
             display: block;
         }
@@ -1083,34 +1129,34 @@
         /* Left callouts */
         .hw-paste-link {
             position: absolute;
-            right: 75px;
-            top: 6%;
+            left: 33px;
+            top: 15%;
             max-width: 210px;
-            text-align: center;
+            text-align: left;
         }
 
         .hw-format-quality {
             position: absolute;
-            right: 75px;
-            top: 68%;
+            left: 42px;
+            top: 65%;
             max-width: 210px;
-            text-align: center;
+            text-align: left;
         }
 
         /* Right callout */
         .hw-download-video {
             position: absolute;
-            right: 75px;
-            top: 20%;
+            right: 32px;
+            top: 19%;
             max-width: 210px;
-            text-align: center;
+            text-align: left;
         }
 
         .hw-callout h3 {
             font-size: 0.95rem;
             font-weight: 800;
             color: #FFB800;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0;
         }
 
         .hw-callout p {
@@ -1118,8 +1164,138 @@
             color: #4B5563;
             line-height: 1.4;
             font-weight: 500;
-            text-align: center;
+            text-align: left;
+            margin-top: 2px;
         }
+
+        /* ── SEO Content Section ── */
+        #seo-content-wrap, #seo-content-wrap * {
+            font-family: 'Inter', sans-serif !important;
+        }
+        
+        /* ── Blog Section ── */
+        .blog-section {
+            padding: 3rem 0;
+            background: #fff;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .blog-featured {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-img-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f3f4f6;
+            margin-bottom: 1rem;
+            border: 1px solid #eee;
+        }
+
+        .featured-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .blog-meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #6B7280;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+        }
+
+        .blog-featured h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0F0F0F;
+            margin-bottom: 0.6rem;
+            line-height: 1.4;
+        }
+
+        .blog-featured p {
+            font-size: 0.88rem;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        .blog-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .blog-item-sm {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 1.2rem;
+            align-items: flex-start;
+        }
+
+        .sm-img-wrap {
+            width: 160px;
+            height: 90px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f3f4f6;
+            border: 1px solid #eee;
+        }
+
+        .sm-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #001f3f;
+            /* Matching the dark blue in the image provided */
+        }
+
+        .sm-info h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0F0F0F;
+            line-height: 1.4;
+            margin-top: 0.1rem;
+        }
+
+        .btn-read-all {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFB800;
+            color: #000;
+            font-weight: 700;
+            padding: 0.7rem 2.2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(255, 184, 0, 0.25);
+            align-self: flex-end;
+            margin-top: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-read-all:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 991px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── End Blog Section ── */
 
         /* ── End How It Works ── */
     </style>
@@ -1318,11 +1494,11 @@
 
                 <!-- Mobile Phone Image (Center) -->
                 <div class="phone-center">
-                    <img src="/images/img5.jpeg" alt="Video Saver App">
+                    <img src="/images/final1.png" alt="Video Saver App">
                 </div>
 
-                <!-- Top Left: Search -->
-                <div class="callout-top-left">
+                <!-- Top Right: Search -->
+                <div class="callout-top-right">
                     <div class="callout-inner">
                         <h3>Search</h3>
                         <p>Sub-caption: Discover the latest trends, insights, and useful information now.</p>
@@ -1337,8 +1513,8 @@
                     </div>
                 </div>
 
-                <!-- Bottom Center: Navigation Bar -->
-                <div class="callout-bottom-center">
+                <!-- Bottom Right: Navigation Bar -->
+                <div class="callout-bottom-right">
                     <div class="callout-inner">
                         <h3>Navigation Bar</h3>
                         <p>User can access Home page, Progress page, My File page.</p>
@@ -1366,7 +1542,7 @@
 
                 <!-- Center Phone -->
                 <div class="howitworks-phone">
-                    <img src="/images/img10.jpeg" alt="How Video Saver Works">
+                    <img src="/images/final2.png" alt="How Video Saver Works">
                 </div>
 
                 <!-- Left Top: Paste Link -->
@@ -1404,7 +1580,7 @@
 
                 @if(!empty($settings->hero_description))
                     <div style="font-size: 0.95rem; color: #000000ff; line-height: 1.8;">
-                        {!! $settings->hero_description !!}
+                        {!! App\Models\Blog::renderEditorJS($settings->hero_description) !!}
                     </div>
                 @else
                     <h2 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
@@ -1447,7 +1623,7 @@
 
             {{-- Read More / Read Less button --}}
             <button id="readMoreBtn" onclick="toggleReadMore()" class="hero-btn"
-                style="display:inline-block; font-size:0.9rem; padding:12px 28px; border-radius:30px; border:none; cursor:pointer; margin-top:0.5rem;color:white !important">
+                style="display:inline-block; font-size:0.9rem; padding:12px 28px; border-radius:30px; border:none; cursor:pointer; margin-top:0.5rem;">
                 Read More
             </button>
 
@@ -1487,101 +1663,254 @@
             </p>
 
             @if(count($platforms) > 0)
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem;">
-                @foreach($platforms as $p)
-                <a href="{{ $p['url'] ?? '#' }}" style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                    <div style="width:75px; height:75px; border-radius:50%; overflow:hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border:2px solid #f0f0f0;">
-                        @if(!empty($p['img']))
-                            <img src="{{ $p['img'] }}" alt="{{ $p['name'] }}" style="width:100%;height:100%;object-fit:cover;">
-                        @else
-                            <div style="width:100%;height:100%;background:{{ $p['color'] ?? '#333' }};display:flex;align-items:center;justify-content:center;">
-                                <i class="{{ $p['icon'] ?? 'fas fa-globe' }}" style="font-size:1.8rem;color:#fff;"></i>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem;">
+                    @foreach($platforms as $p)
+                        <a href="{{ $p['url'] ?? '#' }}"
+                            style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s;"
+                            onmouseover="this.style.transform='translateY(-5px)'"
+                            onmouseout="this.style.transform='translateY(0)'">
+                            <div
+                                style="width:75px; height:75px; border-radius:50%; overflow:hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border:2px solid #f0f0f0;">
+                                @if(!empty($p['img']))
+                                    <img src="{{ $p['img'] }}" alt="{{ $p['name'] }}"
+                                        style="width:100%;height:100%;object-fit:cover;">
+                                @else
+                                    <div
+                                        style="width:100%;height:100%;background:{{ $p['color'] ?? '#333' }};display:flex;align-items:center;justify-content:center;">
+                                        <i class="{{ $p['icon'] ?? 'fas fa-globe' }}" style="font-size:1.8rem;color:#fff;"></i>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-                    </div>
-                    <span style="font-size:0.8rem; font-weight:600; color:#555; text-transform:capitalize;">
-                        {{ $p['name'] }}
-                    </span>
-                </a>
-                @endforeach
-            </div>
+                            <span style="font-size:0.8rem; font-weight:600; color:#555; text-transform:capitalize;">
+                                {{ $p['name'] }}
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
             @endif
 
         </div>
     </section>
 
     <!-- Why Millions Choose Video Saver -->
-    <section style="padding: 4.5rem 0; background: #ffffff;">
+    <section style="padding: 3rem 0; background: #ffffff;">
         <div class="hero-container" style="max-width: 1050px;">
 
-            <div style="text-align:center; margin-bottom: 3rem;">
-                <h2 style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 0.75rem; letter-spacing:-0.02em;">
+            <div style="text-align:center; margin-bottom: 2.5rem;">
+                <h2
+                    style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 0.75rem; letter-spacing:-0.02em;">
                     Why Millions Choose Video Saver
                 </h2>
                 <p style="font-size: 0.93rem; color: #6B7280; max-width: 620px; margin: 0 auto; line-height: 1.75;">
-                    Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile and desktop browsers.
+                    Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few
+                    clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile
+                    and desktop browsers.
                 </p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;">
 
                 <!-- Card 1 -->
-                <div style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:2rem 1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
-                    <div style="width:54px;height:54px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;">
-                        <img src="/images/icon-rocket.svg" alt="Instant" style="width:28px;height:28px;object-fit:contain;">
+                <div
+                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                        <img src="/images/icon-rocket.svg" alt="Instant"
+                            style="width:35px;height:35px;object-fit:contain;">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Instant Link Analysis</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;">Paste a link and get results in seconds — often faster than other downloaders.</p>
+                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Instant Link
+                        Analysis</h3>
+                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Paste a
+                        link and get results in seconds — often faster than other downloaders.</p>
                 </div>
 
                 <!-- Card 2 -->
-                <div style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:2rem 1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
-                    <div style="width:54px;height:54px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;">
-                        <img src="/images/icon-globe.svg" alt="Multilingual" style="width:28px;height:28px;object-fit:contain;">
+                <div
+                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                        <img src="/images/icon-globe.svg" alt="Multilingual"
+                            style="width:35px;height:35px;object-fit:contain;">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Multilingual Experience</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;">Use HD Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
+                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Multilingual
+                        Experience</h3>
+                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Use HD
+                        Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
 
                 <!-- Card 3 -->
-                <div style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:2rem 1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
-                    <div style="width:54px;height:54px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;">
-                        <img src="/images/icon-download.svg" alt="Quality" style="width:28px;height:28px;object-fit:contain;">
+                <div
+                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                        <img src="/images/icon-download.svg" alt="Quality"
+                            style="width:35px;height:35px;object-fit:contain;">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Flexible Quality Choices</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;">Pick the quality you want from 144p up to 1080p+ (4K) when available.</p>
+                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Flexible Quality
+                        Choices</h3>
+                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Pick the
+                        quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
 
                 <!-- Card 4 -->
-                <div style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:2rem 1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
-                    <div style="width:54px;height:54px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;">
-                        <img src="/images/icon-layers.svg" alt="Platform" style="width:28px;height:28px;object-fit:contain;">
+                <div
+                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                        <img src="/images/icon-layers.svg" alt="Platform"
+                            style="width:35px;height:35px;object-fit:contain;">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Wide Platform Support</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;">Supports YouTube, TikTok, Instagram, Facebook, and more.</p>
+                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Wide Platform
+                        Support</h3>
+                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Supports
+                        YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
 
                 <!-- Card 5 -->
-                <div style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:2rem 1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
-                    <div style="width:54px;height:54px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;">
-                        <img src="/images/icon-settings.svg" alt="Device" style="width:28px;height:28px;object-fit:contain;">
+                <div
+                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                        <img src="/images/icon-settings.svg" alt="Device"
+                            style="width:35px;height:35px;object-fit:contain;">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Works on Any Device</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;">Download seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
+                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Works on Any Device
+                    </h3>
+                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Download
+                        seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
 
                 <!-- Card 6 -->
-                <div style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:2rem 1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
-                    <div style="width:54px;height:54px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;">
-                        <img src="/images/icon-shield.png" alt="Privacy" style="width:28px;height:28px;object-fit:contain;">
+                <div
+                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                        <img src="/images/icon-shield.png" alt="Privacy"
+                            style="width:35px;height:35px;object-fit:contain;">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Privacy-First by Design</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;">Your privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
+                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Privacy-First by
+                        Design</h3>
+                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Your
+                        privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>
 
             </div>
         </div>
     </section>
+
+    <!-- FAQ Section -->
+    @if(isset($faqs) && count($faqs) > 0)
+        <section style="padding: 3.5rem 0; background: #ffffff; border-top: 1px solid #F3F4F6;">
+            <div class="hero-container" style="max-width: 850px;">
+
+                <div style="text-align:center; margin-bottom: 2.5rem;">
+                    <h2
+                        style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 0; letter-spacing:-0.02em;">
+                        Frequently Asked Questions
+                    </h2>
+                </div>
+
+                <div id="faqAccordion" style="display:flex;flex-direction:column;gap:0.7rem;">
+                    @foreach($faqs as $faq)
+                        <div class="faq-wrap"
+                            style="border:1.5px solid #EBEBEB; border-radius:14px; overflow:hidden; background:#fff;">
+                            <button onclick="toggleFaq(this)"
+                                style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;">
+                                <span style="font-size:0.95rem;font-weight:500;color:#111827;">{{ $faq->question }}</span>
+                                <span class="faq-icon"
+                                    style="font-size:1.3rem;color:#111827;font-weight:300;line-height:1;flex-shrink:0;margin-left:1rem;">+</span>
+                            </button>
+                            <div class="faq-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease;">
+                                <p
+                                    style="padding:0 1.4rem 1.1rem;font-size:0.9rem;color:#6B7280;line-height:1.7;text-align:justify;margin:0;">
+                                    {{ $faq->answer }}
+                                </p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </section>
+
+        <script>
+            function toggleFaq(btn) {
+                const wrap = btn.parentElement;
+                const body = wrap.querySelector('.faq-body');
+                const icon = btn.querySelector('.faq-icon');
+                const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+
+                // Close all
+                document.querySelectorAll('.faq-wrap').forEach(w => {
+                    w.querySelector('.faq-body').style.maxHeight = '0px';
+                    w.querySelector('.faq-icon').textContent = '+';
+                    w.style.borderColor = '#EBEBEB';
+                });
+
+                if (!isOpen) {
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                    icon.textContent = '×';
+                    wrap.style.borderColor = '#D1D5DB';
+                }
+            }
+        </script>
+    @endif
+
+    <!-- Blog Section -->
+    @if(isset($blogs) && count($blogs) > 0)
+        <section class="blog-section">
+            <div class="hero-container" style="max-width: 1100px;">
+                <h2
+                    style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 2rem; letter-spacing:-0.02em;">
+                    Latest From Our Blog
+                </h2>
+
+                <div class="blog-grid">
+                    <!-- Featured Blog (First one) -->
+                    @php $featured = $blogs->first(); @endphp
+                    <div class="blog-featured">
+                        <a href="{{ $featured->slug }}" style="text-decoration:none;">
+                            <div class="featured-img-wrap">
+                                <img src="{{ $featured->featured_image ?: 'https://via.placeholder.com/800x450' }}"
+                                    alt="{{ $featured->image_alt }}">
+                            </div>
+                        </a>
+                        <div class="blog-meta-info">
+                            <span>{{ $featured->author_name ?: 'Admin' }}</span>
+                            <span>{{ $featured->created_at->format('M d, Y') }}</span>
+                        </div>
+                        <a href="{{ $featured->slug }}" style="text-decoration:none;">
+                            <h3>{{ $featured->title }}</h3>
+                        </a>
+                        <p>{{ Str::limit($featured->description, 180) }}</p>
+                    </div>
+
+                    <!-- Sidebar Blogs (Next 3) -->
+                    <div class="blog-sidebar">
+                        @foreach($blogs->skip(1) as $blog)
+                            <div class="blog-item-sm">
+                                <a href="{{ $blog->slug }}" class="sm-img-wrap">
+                                    <img src="{{ $blog->featured_image ?: 'https://via.placeholder.com/200x200' }}"
+                                        alt="{{ $blog->image_alt }}">
+                                </a>
+                                <div class="sm-info">
+                                    <div class="blog-meta-info" style="margin-bottom: 0.3rem;">
+                                        <span>{{ $blog->author_name ?: 'Admin' }}</span>
+                                        <span>{{ $blog->created_at->format('M d, Y') }}</span>
+                                    </div>
+                                    <a href="{{ $blog->slug }}" style="text-decoration:none;">
+                                        <h4>{{ $blog->title }}</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <a href="/blogs" class="btn-read-all">Read All</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <script type="text/javascript">
         function googleTranslateElementInit() {
@@ -1707,6 +2036,10 @@
             document.body.style.top = '0px';
         }, 500);
     </script>
+
+    @include('partials.footer')
+
+
 </body>
 
 </html>
