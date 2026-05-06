@@ -66,6 +66,11 @@
             z-index: 0;
         }
 
+        .platform-hero picture {
+            display: block;
+            line-height: 0;
+        }
+
         .hero-container {
             width: 100%;
             max-width: 1200px;
@@ -226,14 +231,92 @@
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .platform-hero {
-                padding: 6rem 1.2rem 4rem;
-                border-bottom-left-radius: 40px;
-                border-bottom-right-radius: 40px;
-                min-height: auto;
+                display: block;
+                height: auto;
+                min-height: 0;
+                max-height: none;
+                padding: 0 0 1.35rem;
+                margin: 84px 0 2rem;
+                overflow: hidden;
+                background: #fff;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                text-align: center;
+            }
+
+            .hero-bg-img {
+                position: relative;
+                top: auto;
+                right: auto;
+                display: block;
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                object-position: center top;
+                z-index: 0;
+            }
+
+            .platform-hero .hero-container {
+                max-width: 620px;
+                padding: 0 2rem;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                margin: 1.35rem auto 0;
+            }
+
+            .hero-badge-main,
+            .btn-hero-main {
+                display: none;
             }
 
             .platform-hero h1 {
-                font-size: 2.2rem;
+                font-size: clamp(2rem, 5.9vw, 2.35rem);
+                font-weight: 800;
+                line-height: 1.18;
+                color: #000;
+                margin: 0 auto 1.25rem;
+                max-width: 470px;
+                text-align: center;
+            }
+
+            .hero-subtext {
+                font-size: clamp(1.15rem, 4.15vw, 1.55rem);
+                line-height: 1.48;
+                color: #000;
+                max-width: 515px;
+                margin: 0 auto 1.9rem;
+                font-weight: 400;
+                text-align: center;
+            }
+
+            .hero-footer-badges {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: clamp(0.9rem, 3.2vw, 1.25rem);
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .footer-badge {
+                min-height: 50px;
+                justify-content: center;
+                gap: 0.65rem;
+                padding: 0.75rem 0.65rem;
+                border: 0;
+                border-radius: 999px;
+                background: #fff;
+                color: #000;
+                font-size: clamp(0.95rem, 3.2vw, 1.13rem);
+                font-weight: 800;
+                box-shadow: 0 5px 14px rgba(15, 23, 42, 0.13);
+                white-space: nowrap;
+            }
+
+            .footer-badge i {
+                color: #FFB800;
+                font-size: clamp(1.05rem, 3.6vw, 1.35rem);
             }
 
             .dl-icon-main {
@@ -261,6 +344,34 @@
         }
 
         /* ── Screenshots Showcase ── */
+        @media (max-width: 430px) {
+            .platform-hero {
+                margin-top: 78px;
+            }
+
+            .platform-hero .hero-container {
+                padding: 0 1.45rem;
+            }
+
+            .hero-content {
+                margin-top: 1.15rem;
+            }
+
+            .hero-subtext {
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-footer-badges {
+                gap: 0.7rem;
+            }
+
+            .footer-badge {
+                min-height: 46px;
+                padding: 0.65rem 0.45rem;
+                gap: 0.45rem;
+            }
+        }
+
         .instruction-list {
             list-style: none;
             padding: 0;
@@ -406,7 +517,10 @@
     @include('partials.header')
 
     <header class="platform-hero">
-        <img class="hero-bg-img" src="/images/downloader.jpg" alt="Download Guide Banner">
+        <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/download-hero.jpg">
+            <img class="hero-bg-img" src="/images/downloader.jpg" alt="Download Guide Banner">
+        </picture>
         <div class="hero-container">
             <div class="hero-content">
                 <div class="hero-badge-main">
@@ -422,9 +536,9 @@
                 </a>
 
                 <div class="hero-footer-badges">
-                    <div class="footer-badge"><i class="fas fa-search"></i> Get</div>
+                    <div class="footer-badge"><i class="fas fa-hand-pointer"></i> Get</div>
                     <div class="footer-badge"><i class="fas fa-download"></i> Install</div>
-                    <div class="footer-badge"><i class="fas fa-check-circle"></i> Enjoy</div>
+                    <div class="footer-badge"><i class="fas fa-check"></i> Enjoy</div>
                 </div>
             </div>
         </div>
