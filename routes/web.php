@@ -68,6 +68,10 @@ Route::get('/', function () {
     return view('home', compact('settings', 'faqs', 'blogs'));
 });
 
+Route::get('/download', function () {
+    return view('download');
+})->name('download');
+
 // ── Extract: most expensive (Python subprocess) ──────────────────────────
 // Rate limit: 10 requests per minute per IP
 Route::post('/extract', [VideoController::class, 'extract'])

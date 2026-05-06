@@ -88,7 +88,8 @@ class GuideController extends Controller
     public function publicShow($slug)
     {
         $blog = Guide::where('slug', $slug)->where('status', 1)->firstOrFail();
-        $related = Guide::where('status', 1)->where('id', '!=', $blog->id)->limit(3)->get();
-        return view('blog.show', compact('blog', 'related')); // Reusing blog show view
+        $related = Guide::where('status', 1)->where('id', '!=', $blog->id)->limit(5)->get();
+        $type = 'guide';
+        return view('blog.show', compact('blog', 'related', 'type'));
     }
 }

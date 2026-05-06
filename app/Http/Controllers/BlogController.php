@@ -88,8 +88,9 @@ class BlogController extends Controller
     public function show($slug)
     {
         $blog = Blog::where('slug', $slug)->firstOrFail();
-        $related = Blog::where('status', 1)->where('id', '!=', $blog->id)->limit(3)->get();
-        return view('blog.show', compact('blog', 'related'));
+        $related = Blog::where('status', 1)->where('id', '!=', $blog->id)->limit(5)->get();
+        $type = 'blog';
+        return view('blog.show', compact('blog', 'related', 'type'));
     }
 
     public function publicIndex(Request $request)
