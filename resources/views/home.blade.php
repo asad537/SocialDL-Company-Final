@@ -920,6 +920,7 @@
         @media (max-width: 480px) {
             .hero {
                 padding-bottom: 1.5rem;
+                margin-top: 5rem;
             }
 
             .hero picture {
