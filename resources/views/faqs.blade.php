@@ -240,31 +240,135 @@
 
         @media (max-width: 1024px) {
             .hero {
-                text-align: center;
-                padding: 8rem 0 300px 0;
-                height: auto;
-                min-height: 600px;
+                padding-top: 80px;
+                height: auto !important;
+                min-height: unset !important;
+                max-height: unset !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                overflow: hidden;
+                background: #fff;
+                margin-bottom: 2rem;
+            }
+
+            .hero picture {
+                display: block;
+                width: 100%;
+                flex-shrink: 0;
             }
 
             .hero-bg-img {
-                object-position: center bottom;
+                position: relative !important;
+                display: block;
+                width: 100%;
+                height: auto;
                 object-fit: contain;
+            }
+
+            .hero-container {
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                text-align: center;
+                padding: 1.2rem 1.25rem 2rem;
             }
 
             .hero-content {
                 max-width: 100%;
+                margin: 0 auto;
             }
 
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: clamp(1.45rem, 6vw, 1.75rem);
+                font-weight: 800;
+                line-height: 1.2;
+                margin-bottom: 1rem;
             }
 
             .hero-badges {
                 justify-content: center;
+                gap: 8px;
+            }
+
+            .hero-badge {
+                font-size: 0.8rem;
+                padding: 6px 14px;
             }
         }
 
-        /* FAQ Content */
+
+        /* ── CTA Section ── */
+        .faq-cta-wrap {
+            background: #FFC107;
+            border-radius: 28px;
+            padding: 2.2rem 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .faq-cta-text h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .faq-cta-text p {
+            font-size: 1rem;
+            color: #111827;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .faq-cta-btn {
+            background: #FF6807;
+            color: #fff;
+            text-decoration: none;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .faq-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 94, 20, 0.35);
+        }
+
+        @media (max-width: 768px) {
+            .faq-cta-wrap {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.8rem 1.5rem;
+                border-radius: 20px;
+                gap: 1.2rem;
+            }
+
+            .faq-cta-text h2 {
+                font-size: 1.5rem;
+            }
+
+            .faq-cta-text p {
+                font-size: 0.9rem;
+            }
+
+            .faq-cta-btn {
+                width: 100%;
+                text-align: center;
+                padding: 0.9rem 1.5rem;
+            }
+        }
+
         .category-section {
             margin-bottom: 4rem;
         }
@@ -360,7 +464,10 @@
     @include('partials.header')
 
     <section class="hero">
-        <img class="hero-bg-img" src="/images/faqs.jpg" alt="">
+        <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/faqsmobile.jpg">
+            <img class="hero-bg-img" src="/images/faqs.jpg" alt="Frequently Asked Questions">
+        </picture>
         <div class="hero-container">
             <div class="hero-content">
                 <div
@@ -412,19 +519,13 @@
     <!-- Download CTA Section -->
     <section style="padding: 1.5rem 0 4rem; background: #fff;">
         <div class="container" style="max-width: 1100px;">
-            <div
-                style="background: #FFC107; border-radius: 28px; padding: 2.2rem 3.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 300px;">
-                    <h2
-                        style="font-size: 2rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem; letter-spacing: -0.01em;">
-                        Ready to Start Downloading?</h2>
-                    <p style="font-size: 1rem; color: #111827; font-weight: 500; margin: 0; opacity: 0.9;">Join millions
-                        of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
+            <div class="faq-cta-wrap">
+                <div class="faq-cta-text">
+                    <h2>Ready to Start Downloading?</h2>
+                    <p>Join millions of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
                 </div>
                 <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
-                    style="background: #FF6807; color: #fff; text-decoration: none; padding: 1rem 2.2rem; border-radius: 50px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25); transition: all 0.3s ease; white-space: nowrap;"
-                    onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(255, 94, 20, 0.35)';"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 94, 20, 0.25)';">
+                    class="faq-cta-btn">
                     Download Video Saver
                 </a>
             </div>
