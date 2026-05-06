@@ -677,6 +677,25 @@
             font-size: 0.9rem;
         }
 
+        .features-intro-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #111827;
+            text-align: center !important;
+            margin: 0 auto 1rem;
+            max-width: 860px;
+        }
+
+        .features-intro-text {
+            font-size: 1.55rem;
+            line-height: 1.45;
+            color: #1f2937;
+            text-align: center !important;
+            max-width: 1050px;
+            margin: 0 auto 0.2rem;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 1024px) {
             header {
@@ -717,7 +736,7 @@
 
         @media (max-width: 768px) {
             header {
-                padding: 0.8rem 0;
+                padding: 0;
             }
 
             .header-container {
@@ -738,40 +757,234 @@
             }
 
             .hero {
-                padding: 7rem 0 250px 0;
-                min-height: 500px;
+                padding: 0 0 2rem;
+                min-height: auto;
+                height: auto;
+                background: #fff;
+                justify-content: flex-start;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero picture {
+                display: block;
+                width: min(100%, 480px);
+                margin: 0 auto;
+                overflow: hidden;
+            }
+
+            .hero-bg-img {
+                position: relative;
+                display: block;
+                width: 100%;
+                height: clamp(365px, 101vw, 480px);
+                margin: 0 auto;
+                object-fit: cover;
+                object-position: center top;
+            }
+
+            .hero-content {
+                display: block;
+                max-width: 430px;
+                margin: 1.15rem auto 0;
+                padding: 0 1.25rem;
             }
 
             .hero h1 {
-                font-size: 1.5rem;
+                max-width: 410px;
+                margin-left: auto;
+                margin-right: auto;
+                font-size: clamp(1.45rem, 6vw, 1.75rem);
+                font-weight: 800;
+                line-height: 1.16;
+                margin-bottom: 1.45rem;
             }
 
             .hero-btn {
-                font-size: 1rem;
-                padding: 14px 28px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 220px;
+                min-height: 48px;
+                font-size: 0.95rem;
+                padding: 0 1.5rem;
+                margin-bottom: 2.4rem;
+                box-shadow: 0 6px 10px rgba(17, 24, 39, 0.18);
+            }
+
+            .trust-row {
+                width: 100%;
+                max-width: 390px;
+                margin: 0 auto;
+                padding: 0 0.45rem;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                gap: 0.75rem;
+            }
+
+            .trust-item {
+                color: #111;
+                font-size: 0.95rem;
+                font-weight: 700;
+                gap: 9px;
+                white-space: nowrap;
+            }
+
+            .trust-item img,
+            .trust-item .trust-lookout-icon {
+                width: 32px;
+                height: 32px;
+                flex: 0 0 32px;
+            }
+
+            .trust-item .trust-lookout-icon {
+                color: #34c759;
+                font-size: 31px;
+                line-height: 1;
+            }
+
+            .features-intro-title {
+                font-size: clamp(1.45rem, 6vw, 2rem);
+                line-height: 1.25;
+                margin-bottom: 0.75rem;
+                text-align: center !important;
+            }
+
+            .features-intro-text {
+                font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+                line-height: 1.55;
+                padding: 0 0.2rem;
+                text-align: center !important;
+            }
+
+            .search-section {
+                padding: 2.25rem 0 !important;
+            }
+
+            .search-section h2 {
+                font-size: clamp(1.9rem, 7vw, 2.3rem) !important;
+                line-height: 1.18;
+                margin-bottom: 1rem !important;
+            }
+
+            #searchBox {
+                display: flex !important;
+                align-items: center;
+                gap: 0.35rem;
+                padding: 6px !important;
+                border-radius: 14px !important;
+            }
+
+            #searchBox i.fa-globe {
+                margin-left: 0.6rem !important;
+                font-size: 0.95rem !important;
+            }
+
+            #videoUrl {
+                min-width: 0;
+                flex: 1 1 auto;
+                width: 1%;
+                padding: 0.55rem 0.35rem !important;
+                font-size: 0.95rem !important;
+            }
+
+            #fetchBtn {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                padding: 8px 12px !important;
+                font-size: 0.86rem !important;
+                border-radius: 10px !important;
+            }
+
+            #fetchBtn i {
+                width: 20px !important;
+                height: 20px !important;
+                font-size: 0.62rem !important;
+            }
+
+            .search-section p {
+                margin-top: 0.7rem !important;
+                line-height: 1.35;
+            }
+
+            .search-section p a {
+                font-size: 0.92rem !important;
+            }
+
+            .search-section p span {
+                margin-left: 5px !important;
+                font-size: 0.92rem !important;
             }
         }
 
         @media (max-width: 480px) {
-            .logo img {
-                height: 40px;
+            .hero {
+                padding-bottom: 1.5rem;
             }
 
-            .hero {
-                padding: 6rem 0 200px 0;
-                min-height: 450px;
+            .hero picture {
+                width: 100%;
             }
 
             .hero h1 {
-                font-size: 1.3rem;
+                padding: 0 0.6rem;
             }
 
             .trust-row {
-                gap: 1rem;
+                max-width: 390px;
             }
 
             .trust-item {
-                font-size: 0.85rem;
+                font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+                gap: 7px;
+            }
+
+            .trust-item img,
+            .trust-item .trust-lookout-icon {
+                width: clamp(24px, 6.8vw, 32px);
+                height: clamp(24px, 6.8vw, 32px);
+                flex-basis: clamp(24px, 6.8vw, 32px);
+            }
+
+            .trust-item .trust-lookout-icon {
+                font-size: clamp(24px, 6.6vw, 31px);
+            }
+
+            .search-section h2 {
+                font-size: 1.3rem !important;
+            }
+
+            #searchBox i.fa-globe {
+                margin-left: 0.45rem !important;
+            }
+
+            #videoUrl {
+                padding: 0.5rem 0.2rem !important;
+                font-size: 0.92rem !important;
+            }
+
+            #fetchBtn {
+                padding: 8px 9px !important;
+                font-size: 0.82rem !important;
+                gap: 4px !important;
+            }
+
+            #fetchBtn i {
+                width: 18px !important;
+                height: 18px !important;
+            }
+
+            .search-section p a,
+            .search-section p span {
+                font-size: 0.84rem !important;
+            }
+
+            .features-intro-title {
+                font-size: clamp(1.3rem, 7vw, 1.6rem);
+            }
+
+            .features-intro-text {
+                font-size: clamp(0.88rem, 4.2vw, 1rem);
             }
         }
 
@@ -1168,6 +1381,138 @@
             margin-top: 2px;
         }
 
+        .mobile-overview-section {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .everything-section,
+            .howitworks-section {
+                display: none;
+            }
+
+            .mobile-overview-section {
+                display: block;
+                padding: 1.6rem 0 2rem;
+                background: #f3f4f6;
+            }
+
+            .mobile-overview-header {
+                text-align: center;
+                margin-bottom: 0.9rem;
+            }
+
+            .mobile-overview-header h2 {
+                font-size: 2.1rem !important;
+                line-height: 1.12 !important;
+                margin-bottom: 0.55rem;
+                text-align: center !important;
+            }
+
+            .mobile-overview-header p {
+                max-width: 340px;
+                margin: 0 auto;
+                font-size: 0.9rem;
+                line-height: 1.4;
+                color: #4B5563;
+                text-align: center !important;
+            }
+
+            .mobile-overview-block {
+                margin: 1rem auto 1.3rem;
+                max-width: 410px;
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: start;
+                column-gap: 0.3rem;
+                row-gap: 0.35rem;
+            }
+
+            .mobile-overview-phone {
+                /* width: 100%; */
+                max-width: 228px;
+                margin: 0 auto;
+                display: block;
+                grid-column: 2;
+                grid-row: 1 / span 2;
+            }
+
+            .mobile-overview-note {
+                color: #1f2937;
+                font-size: 0.78rem;
+                line-height: 1.2;
+                max-width: 132px;
+            }
+
+            .mobile-overview-note h4 {
+                color: #ffb800;
+                font-size: 0.84rem !important;
+                font-weight: 800;
+                margin-bottom: 0.2rem;               
+                margin-top: 0.5rem;
+            }
+
+            .mobile-overview-note p {
+                color: #1f2937;
+                font-size: 0.55rem;
+                line-height: 1.23;
+                margin: 0;
+            }
+
+            .mobile-overview-note.left-top {
+                grid-column: 1;
+                grid-row: 1;
+                justify-self: end;
+                text-align: right;
+                padding-right: 0;
+            }
+
+            .mobile-overview-note.left-bottom {
+                grid-column: 1;
+                grid-row: 2;
+                align-self: start;
+                justify-self: end;
+                text-align: right;
+                padding-right: 0;
+                margin-top: 0.1rem;
+            }
+
+            .mobile-overview-note.right-top {
+                grid-column: 3;
+                grid-row: 1;
+                justify-self: start;
+                text-align: left;
+                padding-left: 0;
+            }
+
+            .mobile-overview-note.right-bottom {
+                grid-column: 3;
+                grid-row: 2;
+                align-self: start;
+                justify-self: start;
+                text-align: left;
+                padding-left: 0;
+                margin-top: -4.9rem;
+            }
+            .mobile-overview-note.center-bottom {
+                grid-column: 2;
+                grid-row: 3;
+                margin: 0.15rem auto 0;
+                max-width: 200px;
+                text-align: center !important;
+            }
+            .mobile-overview-note.center-bottom h4,
+            .mobile-overview-note.center-bottom p {
+                text-align: center !important;
+            }
+
+            .mobile-overview-divider {
+                margin: 0.35rem auto 0.5rem;
+                width: 96%;
+                border-top: 1px dashed rgba(255, 184, 0, 0.35);
+            }
+        }
+
         /* ── SEO Content Section ── */
         #seo-content-wrap, #seo-content-wrap * {
             font-family: 'Inter', sans-serif !important;
@@ -1177,6 +1522,19 @@
         .blog-section {
             padding: 3rem 0;
             background: #fff;
+        }
+
+        .blog-section-inner {
+            max-width: 1100px;
+        }
+
+        .blog-section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0F0F0F;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+            text-align: left !important;
         }
 
         .blog-grid {
@@ -1289,9 +1647,226 @@
             transform: translateY(-2px);
         }
 
+        .why-choose-section {
+            padding: 3rem 0;
+            background: #ffffff;
+        }
+
+        .why-choose-container {
+            max-width: 1050px;
+        }
+
+        .why-choose-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .why-choose-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0F0F0F;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .why-choose-desc {
+            font-size: 0.93rem;
+            color: #6B7280;
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.75;
+            text-align: center !important;
+        }
+
+        .why-choose-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.2rem;
+        }
+
+        .why-choose-card {
+            background: #ffffff;
+            border: 1.5px solid #F0F1F3;
+            border-radius: 18px;
+            padding: 1.5rem 1.8rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .why-choose-icon {
+            width: 60px;
+            height: 60px;
+            background: #FEF3C7;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .why-choose-icon img {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+        }
+
+        .why-choose-card h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 0.45rem;
+            text-align: left !important;
+        }
+
+        .why-choose-card p {
+            font-size: 0.875rem;
+            color: #6B7280;
+            line-height: 1.65;
+            margin: 0;
+            text-align: left !important;
+        }
+
         @media (max-width: 991px) {
             .blog-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .why-choose-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .why-choose-section {
+                padding: 2rem 0;
+            }
+
+            .why-choose-header {
+                margin-bottom: 1.4rem;
+                text-align: left;
+            }
+
+            .why-choose-title {
+                font-size: 1.35rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .why-choose-desc {
+                max-width: 100%;
+                margin: 0;
+                font-size: 0.92rem;
+                line-height: 1.6;
+                text-align: left !important;
+            }
+
+            .why-choose-grid {
+                grid-template-columns: 1fr;
+                gap: 0.95rem;
+            }
+
+            .why-choose-card {
+                border-radius: 16px;
+                padding: 1.25rem 1.2rem;
+            }
+
+            .blog-section {
+                padding: 2.1rem 0 2.6rem;
+                background: #f3f4f6;
+            }
+
+            .blog-section-inner {
+                max-width: 560px;
+            }
+
+            .blog-section-title {
+                font-size: 2.85rem;
+                line-height: 1.15;
+                margin-bottom: 1.2rem;
+            }
+
+            .blog-grid {
+                margin-top: 0;
+                gap: 1rem;
+            }
+
+            .blog-featured {
+                background: #fff;
+                border: 1px solid #E5E7EB;
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+                padding-bottom: 1rem;
+            }
+
+            .featured-img-wrap {
+                margin-bottom: 0.9rem;
+                border-radius: 0;
+                border: none;
+                aspect-ratio: 16 / 10.5;
+            }
+
+            .blog-featured .blog-meta-info,
+            .blog-featured h3,
+            .blog-featured p {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .blog-featured .blog-meta-info {
+                font-size: 0.72rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .blog-featured h3 {
+                font-size: 1.55rem;
+                line-height: 1.3;
+                margin-bottom: 0.55rem;
+            }
+
+            .blog-featured p {
+                font-size: 0.82rem;
+                line-height: 1.55;
+                margin-bottom: 0;
+            }
+
+            .blog-sidebar {
+                gap: 0;
+                align-items: center;
+            }
+
+            .blog-item-sm {
+                display: none;
+            }
+
+            .btn-read-all {
+                align-self: center;
+                margin-top: 1.35rem;
+                min-width: 190px;
+                min-height: 56px;
+                border-radius: 999px;
+                font-size: 0.95rem;
+                font-weight: 800;
+                color: #fff;
+                box-shadow: 0 4px 12px rgba(255, 184, 0, 0.35);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .blog-section-title {
+                font-size: 2.1rem;
+            }
+
+            .blog-featured h3 {
+                font-size: 1.18rem;
+            }
+
+            .blog-featured p {
+                font-size: 0.72rem;
+            }
+
+            .btn-read-all {
+                min-width: 230px;
+                min-height: 60px;
+                font-size: 0.9rem;
             }
         }
 
@@ -1306,7 +1881,10 @@
     @include('partials.header')
 
     <section class="hero">
-        <img class="hero-bg-img" src="/images/hero_section.jpeg" alt="">
+        <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/Hero-Image.jpg">
+            <img class="hero-bg-img" src="/images/hero_section.jpeg" alt="Video Saver Hero">
+        </picture>
         <div class="hero-container">
             <div class="hero-content">
                 <h1>{!! $settings->hero_heading ?? 'HD Video & Music Downloader for<br>Seamless Downloads' !!}</h1>
@@ -1328,7 +1906,7 @@
                         <img src="/images/security1.png" alt="CM Security"> CM Security
                     </div>
                     <div class="trust-item">
-                        <img src="/images/security2.png" alt="Lookout"> Lookout
+                        <i class="fas fa-shield-alt trust-lookout-icon" aria-hidden="true"></i> Lookout
                     </div>
                 </div>
             </div>
@@ -1395,9 +1973,10 @@
 
             <!-- Features Area -->
             <div class="features-container" style="margin-top: 2.5rem; text-align: center;">
-                <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem;">More Than a Downloader Video
+                <h2 class="features-intro-title">More Than a Downloader Video
                     Saver Does It All</h2>
-
+                <p class="features-intro-text">Video Saver combines powerful features with a seamless experience, making
+                    downloads faster, smarter, and more flexible no matter what or where you save from.</p>
                 <!-- 1. Mobile Features -->
                 <div class="feature-item">
                     <div class="feature-image-wrap">
@@ -1568,6 +2147,52 @@
         </div>
     </section>
 
+    <section class="mobile-overview-section">
+        <div class="hero-container">
+            <div class="mobile-overview-header">
+                <h2>Everything You Need to Download</h2>
+                <p>From videos to audio and more download your content quickly and easily in one place.</p>
+            </div>
+
+            <div class="mobile-overview-block">
+                <div class="mobile-overview-note left-top">
+                    <h4>Search</h4>
+                    <p>Sub-caption: Discover the latest trends, insights, and useful information now.</p>
+                </div>
+                <img class="mobile-overview-phone" src="/images/mobile/Image%201%20New%20Mobile.png"
+                    alt="Everything you need app overview">
+                <div class="mobile-overview-note left-bottom">
+                    <h4>Supported Sites</h4>
+                    <p>Stay connected, share moments and grow your online presence fast.</p>
+                </div>
+                <div class="mobile-overview-note center-bottom">
+                    <h4>Navigation Bar</h4>
+                    <p>User can access Home page, Progress page, My File page.</p>
+                </div>
+            </div>
+
+            <div class="mobile-overview-divider"></div>
+
+            <div class="mobile-overview-block">
+                <div class="mobile-overview-note right-bottom">
+                    <h4>Paste Link</h4>
+                    <p>Paste your copied link here to fetch the video instantly.</p>
+                </div>
+                <img class="mobile-overview-phone" src="/images/mobile/Image%202%20Mobile%20New.png"
+                    alt="How it works app overview">
+                <div class="mobile-overview-note right-top">
+                    <h4>Download Video</h4>
+                    <p>Download your favorite videos easily and watch them offline anytime.</p>
+                </div>
+                <div class="mobile-overview-note center-bottom">
+                    <h4>Format &amp; Quality</h4>
+                    <p>Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
+                        source).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
 
     <!-- SEO Content Section -->
@@ -1693,104 +2318,77 @@
     </section>
 
     <!-- Why Millions Choose Video Saver -->
-    <section style="padding: 3rem 0; background: #ffffff;">
-        <div class="hero-container" style="max-width: 1050px;">
+    <section class="why-choose-section">
+        <div class="hero-container why-choose-container">
 
-            <div style="text-align:center; margin-bottom: 2.5rem;">
-                <h2
-                    style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 0.75rem; letter-spacing:-0.02em;">
-                    Why Millions Choose Video Saver
-                </h2>
-                <p style="font-size: 0.93rem; color: #6B7280; max-width: 620px; margin: 0 auto; line-height: 1.75;">
+            <div class="why-choose-header">
+                <h2 class="why-choose-title">Why Millions Choose Video Saver</h2>
+                <p class="why-choose-desc">
                     Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few
                     clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile
                     and desktop browsers.
                 </p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;">
+            <div class="why-choose-grid">
 
                 <!-- Card 1 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-rocket.svg" alt="Instant"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-icon">
+                        <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Instant Link
-                        Analysis</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Paste a
+                    <h3>Instant Link Analysis</h3>
+                    <p>Paste a
                         link and get results in seconds — often faster than other downloaders.</p>
                 </div>
 
                 <!-- Card 2 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-globe.svg" alt="Multilingual"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-icon">
+                        <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Multilingual
-                        Experience</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Use HD
+                    <h3>Multilingual Experience</h3>
+                    <p>Use HD
                         Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
 
                 <!-- Card 3 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-download.svg" alt="Quality"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-icon">
+                        <img src="/images/icon-download.svg" alt="Quality">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Flexible Quality
-                        Choices</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Pick the
+                    <h3>Flexible Quality Choices</h3>
+                    <p>Pick the
                         quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
 
                 <!-- Card 4 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-layers.svg" alt="Platform"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-icon">
+                        <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Wide Platform
-                        Support</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Supports
+                    <h3>Wide Platform Support</h3>
+                    <p>Supports
                         YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
 
                 <!-- Card 5 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-settings.svg" alt="Device"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-icon">
+                        <img src="/images/icon-settings.svg" alt="Device">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Works on Any Device
-                    </h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Download
+                    <h3>Works on Any Device</h3>
+                    <p>Download
                         seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
 
                 <!-- Card 6 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-shield.png" alt="Privacy"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-icon">
+                        <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Privacy-First by
-                        Design</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Your
+                    <h3>Privacy-First by Design</h3>
+                    <p>Your
                         privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>
 
@@ -1859,11 +2457,8 @@
     <!-- Blog Section -->
     @if(isset($blogs) && count($blogs) > 0)
         <section class="blog-section">
-            <div class="hero-container" style="max-width: 1100px;">
-                <h2
-                    style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 2rem; letter-spacing:-0.02em;">
-                    Latest From Our Blog
-                </h2>
+            <div class="hero-container blog-section-inner">
+                <h2 class="blog-section-title">Latest From Our Blog</h2>
 
                 <div class="blog-grid">
                     <!-- Featured Blog (First one) -->
