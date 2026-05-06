@@ -154,40 +154,114 @@
             padding: 0 1.5rem;
         }
 
-        /* Premium Header */
-        .faq-header {
-            background: var(--primary);
-            padding: 10rem 0 8rem;
-            /* Increased top padding for absolute header */
-            text-align: center;
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
+        /* ── Hero ── */
+        .hero {
             position: relative;
+            width: 100%;
+            height: 35vw;
+            /* Height scales with width to maintain aspect ratio */
+            min-height: 450px;
+            max-height: 650px;
+            display: flex;
+            align-items: center;
+            padding: 2vw 0;
             overflow: hidden;
+            background-color: #fff5f6;
             margin-bottom: 4rem;
         }
 
-        .faq-header h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #000;
-            line-height: 1.1;
-            margin: 0;
+        /* BG image — Exactly like homepage */
+        .hero-bg-img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center right;
+            z-index: 0;
+        }
+
+        .hero-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             position: relative;
             z-index: 2;
         }
 
-        .question-mark-bg {
-            position: absolute;
-            top: 50%;
-            right: 10%;
-            transform: translateY(-50%) rotate(15deg);
-            width: 350px;
-            opacity: 1;
-            z-index: 1;
-            pointer-events: none;
-            filter: brightness(0) saturate(100%);
-            /* Makes it solid dark */
+        .hero-content {
+            max-width: 45%;
+            margin-top: 70px;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: #111827;
+            margin-bottom: 2rem;
+        }
+
+        .hero-subtext {
+            font-size: 1.05rem;
+            color: #111827;
+            line-height: 1.5;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            font-weight: 500;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1.5px solid #F3F4F6;
+        }
+
+        .hero-badge i {
+            color: #FFB800;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                text-align: center;
+                padding: 8rem 0 300px 0;
+                height: auto;
+                min-height: 600px;
+            }
+
+            .hero-bg-img {
+                object-position: center bottom;
+                object-fit: contain;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-badges {
+                justify-content: center;
+            }
         }
 
         /* FAQ Content */
@@ -285,12 +359,27 @@
 
     @include('partials.header')
 
-    <header class="faq-header">
-        <div class="container">
-            <h1>Frequently<br>Asked Questions</h1>
-            <img src="/images/question1.svg" alt="" class="question-mark-bg" onerror="this.style.display='none'">
+    <section class="hero">
+        <img class="hero-bg-img" src="/images/faqs.jpg" alt="">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div
+                    style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: #FFB800; text-transform: uppercase; margin-bottom: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #FFB800;">
+                    <i class="fas fa-question-circle"></i> FAQ'S & HELP
+                </div>
+                <h1>Answers to Your<br>Common Questions</h1>
+                <p class="hero-subtext">Find everything you need to know about downloading videos, <br>quality settings,
+                    and
+                    platform support.</p>
+
+                <div class="hero-badges">
+                    <div class="hero-badge"><i class="fas fa-bolt"></i> Fast</div>
+                    <div class="hero-badge"><i class="fas fa-gem"></i> Quality</div>
+                    <div class="hero-badge"><i class="fas fa-shield-alt"></i> Secure</div>
+                </div>
+            </div>
         </div>
-    </header>
+    </section>
 
     <main class="container">
         @forelse($faqs as $category => $items)
@@ -319,6 +408,28 @@
             </div>
         @endforelse
     </main>
+
+    <!-- Download CTA Section -->
+    <section style="padding: 1.5rem 0 4rem; background: #fff;">
+        <div class="container" style="max-width: 1100px;">
+            <div
+                style="background: #FFC107; border-radius: 28px; padding: 2.2rem 3.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h2
+                        style="font-size: 2rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem; letter-spacing: -0.01em;">
+                        Ready to Start Downloading?</h2>
+                    <p style="font-size: 1rem; color: #111827; font-weight: 500; margin: 0; opacity: 0.9;">Join millions
+                        of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
+                </div>
+                <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+                    style="background: #FF6807; color: #fff; text-decoration: none; padding: 1rem 2.2rem; border-radius: 50px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25); transition: all 0.3s ease; white-space: nowrap;"
+                    onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(255, 94, 20, 0.35)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 94, 20, 0.25)';">
+                    Download Video Saver
+                </a>
+            </div>
+        </div>
+    </section>
 
     @include('partials.footer')
 

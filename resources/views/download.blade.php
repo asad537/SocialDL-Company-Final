@@ -39,191 +39,125 @@
             position: static !important;
         }
 
-        /* ── Header Styles for Download Page ── */
-        header.site-header {
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            z-index: 1000 !important;
-            padding: 1.2rem 0 !important;
-            background: transparent !important;
-            display: block !important;
-        }
-
-        header.site-header .header-container {
-            width: 100% !important;
-            max-width: 1200px !important;
-            margin: 0 auto !important;
-            padding: 0 2rem !important;
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-        }
-
-        header.site-header .logo {
-            display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            text-decoration: none !important;
-        }
-
-        header.site-header .logo img {
-            height: 65px !important;
-            width: auto !important;
-            border-radius: 8px !important;
-        }
-
-        header.site-header .nav-wrap {
-            display: flex !important;
-            align-items: center !important;
-            gap: 1.5rem !important;
-        }
-
-        header.site-header .nav-links {
-            display: flex !important;
-            gap: 1.5rem !important;
-            list-style: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        header.site-header .nav-links li {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        header.site-header .nav-links a {
-            text-decoration: none !important;
-            color: #000 !important;
-            font-weight: 600 !important;
-            font-size: 0.95rem !important;
-            transition: color 0.2s !important;
-        }
-
-        header.site-header .nav-links a:hover {
-            color: #fff !important;
-        }
-
-        /* Desktop Lang Dropdown only */
-        header.site-header .nav-wrap .lang-dropdown {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border: 1px solid rgba(0, 0, 0, 0.15) !important;
-            padding: 8px 16px !important;
-            border-radius: 8px !important;
-            font-size: 0.9rem !important;
-            font-weight: 700 !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-            cursor: pointer !important;
-            backdrop-filter: blur(10px) !important;
-            position: relative !important;
-            z-index: 1000 !important;
-            color: #000 !important;
-        }
-
-        /* Hide Mobile Lang on Desktop */
-        header.site-header .lang-dropdown-mobile {
-            display: none !important;
-        }
-
-        header.site-header .lang-menu {
-            position: absolute !important;
-            top: 110% !important;
-            right: 0 !important;
-            background: white !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 12px !important;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
-            width: 150px !important;
-            display: none;
-            flex-direction: column !important;
-            overflow: hidden !important;
-            z-index: 1001 !important;
-        }
-
-        header.site-header .lang-menu div {
-            padding: 10px 15px !important;
-            font-size: 0.85rem !important;
-            color: var(--text-dark) !important;
-            transition: background 0.2s !important;
-        }
-
-        header.site-header .lang-menu div:hover {
-            background: var(--bg-off) !important;
-            color: var(--primary) !important;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            header.site-header .lang-dropdown-mobile {
-                display: flex !important;
-            }
-            header.site-header .nav-wrap {
-                display: none !important;
-            }
-        }
-
-        /* ── Download Banner ── */
-        .download-header {
-            background: var(--primary);
-            padding: 8rem 0 4rem;
-            text-align: center;
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
+        /* ── Hero Redesign ── */
+        .platform-hero {
             position: relative;
+            width: 100%;
+            height: 35vw;
+            /* Height scales with width to maintain aspect ratio */
+            min-height: 450px;
+            max-height: 650px;
+            display: flex;
+            align-items: center;
+            padding: 2vw 0;
             overflow: hidden;
+            background-color: #fff5f6;
+            margin-bottom: 4rem;
         }
 
-        /* ── Floating Background Icons ── */
-        .bg-icon {
+        .hero-bg-img {
             position: absolute;
-            pointer-events: none;
-            user-select: none;
-            opacity: 0.9;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center right;
+            z-index: 0;
         }
 
-        .header-content {
+        .hero-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             position: relative;
             z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
         }
 
-        .dl-icon-main {
-            font-size: 3.5rem;
-            color: #000;
-            margin-bottom: 1.5rem;
-            display: inline-block;
+        .hero-content {
+            max-width: 45%;
+            margin-top: 70px;
         }
 
-        .download-header h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #000;
-            margin-bottom: 2rem;
+        .platform-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
             line-height: 1.2;
+            color: #111827;
+            margin-bottom: 1rem;
+            text-align: left;
         }
 
-        .btn-download-main {
-            display: inline-block;
-            background: var(--secondary);
-            color: #fff;
-            padding: 1.2rem 2.5rem;
+        .hero-subtext {
+            font-size: 0.95rem;
+            color: #4B5563;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .hero-badge-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            padding: 8px 18px;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #FFB800;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 1.5px solid #F3F4F6;
+        }
+
+        .btn-hero-main {
+            display: inline-block;
+            background: #FFB800;
+            color: #111827;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
             font-weight: 800;
             text-decoration: none;
-            box-shadow: 0 10px 20px rgba(255, 87, 34, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3);
             transition: all 0.3s ease;
+            margin-bottom: 1.2rem;
         }
 
-        .btn-download-main:hover {
+        .btn-hero-main:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 87, 34, 0.4);
-            background: #E64A19;
+            box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4);
+            background: #FFA000;
+        }
+
+        .hero-footer-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .footer-badge {
+            background: #fff;
+            border: 1.5px solid #F1F5F9;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .footer-badge i {
+            color: #FFB800;
+            font-size: 0.9rem;
         }
 
         /* ── Instruction Section ── */
@@ -291,17 +225,14 @@
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
-            .download-header {
-                padding: 6rem 1.2rem 3rem;
-                border-bottom-left-radius: 32px;
-                border-bottom-right-radius: 32px;
-                min-height: 300px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .platform-hero {
+                padding: 6rem 1.2rem 4rem;
+                border-bottom-left-radius: 40px;
+                border-bottom-right-radius: 40px;
+                min-height: auto;
             }
 
-            .download-header h1 {
+            .platform-hero h1 {
                 font-size: 2.2rem;
             }
 
@@ -378,17 +309,12 @@
 
         .screenshot-card {
             width: 100%;
-            max-width: 240px;
-            border-radius: 30px;
+            max-width: 200px;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
-            transition: transform 0.3s ease;
-            aspect-ratio: 9 / 18.5; /* Consistent mobile aspect ratio */
-            background: #f1f1f1;
-        }
-
-        .screenshot-card:hover {
-            transform: translateY(-10px);
+            aspect-ratio: 9 / 18.5;
+            /* Consistent mobile aspect ratio */
         }
 
         .screenshot-card img {
@@ -396,19 +322,80 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 30px;
+            border-radius: 20px;
         }
 
         @media (max-width: 768px) {
             .screenshots-flex {
-                gap: 2rem;
+                gap: 1.5rem;
                 margin-top: 2rem;
             }
+
             .screenshot-card {
-                max-width: 200px;
+                max-width: 160px;
             }
+
             .instruction-list li strong {
                 font-size: 1.1rem;
+            }
+        }
+
+        /* ── Bottom CTA ── */
+        .bottom-cta {
+            background: var(--primary);
+            border-radius: 24px;
+            padding: 2.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5rem;
+            margin-bottom: 4rem;
+            text-align: left;
+        }
+
+        .cta-content h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-content p {
+            font-size: 0.95rem;
+            color: #000;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .btn-cta {
+            background: #FF6807;
+            color: #fff;
+            padding: 1.1rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.05rem;
+            box-shadow: 0 10px 20px rgba(255, 104, 7, 0.2);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 104, 7, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .bottom-cta {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+                gap: 1.5rem;
+                margin-top: 3.5rem;
+            }
+
+            .cta-content h2 {
+                font-size: 1.4rem;
             }
         }
     </style>
@@ -418,39 +405,40 @@
 
     @include('partials.header')
 
-    <header class="download-header">
-        <!-- Left side icons -->
-        <img src="/images/music-alt.png" class="bg-icon"
-            style="top: 28%; left: 5%; transform: rotate(-15deg); width: 65px;" alt="">
-        <img src="/images/play-alt.png" class="bg-icon"
-            style="top: 55%; left: 12%; transform: rotate(10deg); width: 60px;" alt="">
-        <img src="/images/screen-play.png" class="bg-icon"
-            style="top: 15%; left: 28%; transform: rotate(-20deg); width: 70px;" alt="">
-        <!-- Right side icons -->
-        <img src="/images/screen-play.png" class="bg-icon"
-            style="top: 25%; right: 28%; transform: rotate(15deg); width: 65px;" alt="">
-        <img src="/images/music-alt.png" class="bg-icon"
-            style="top: 65%; right: 12%; transform: rotate(-10deg); width: 65px;" alt="">
-        <img src="/images/play-alt.png" class="bg-icon"
-            style="top: 29%; right: 5%; transform: rotate(15deg); width: 60px;" alt="">
+    <header class="platform-hero">
+        <img class="hero-bg-img" src="/images/downloader.jpg" alt="Download Guide Banner">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge-main">
+                    <i class="fas fa-file-download"></i> Download Guide
+                </div>
+                <h1>How to Install from <br> Play Store</h1>
+                <p class="hero-subtext">Follow these simple steps to download and install the app from Google Play
+                    Store.</p>
 
-        <div class="header-content">
-            <div class="dl-icon-main">
-                <i class="fas fa-download"></i>
+                <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+                    class="btn-hero-main">
+                    Download Video Saver
+                </a>
+
+                <div class="hero-footer-badges">
+                    <div class="footer-badge"><i class="fas fa-search"></i> Get</div>
+                    <div class="footer-badge"><i class="fas fa-download"></i> Install</div>
+                    <div class="footer-badge"><i class="fas fa-check-circle"></i> Enjoy</div>
+                </div>
             </div>
-            <h1>Download Video Saver</h1>
-            <a href="#" class="btn-download-main">Click Here to Download</a>
         </div>
     </header>
 
     <div class="container" style="max-width: 900px;">
         <h2 class="section-title">How to Install Video Saver</h2>
-        
+
         <div class="install-instructions">
             <ul class="instruction-list">
                 <li>
                     <strong>Tap on "Install"</strong>
-                    <p>When you find Video Saver on the Play Store, tap the “Install” button. The app will start downloading and installing automatically on your device.</p>
+                    <p>When you find Video Saver on the Play Store, tap the “Install” button. The app will start
+                        downloading and installing automatically on your device.</p>
                 </li>
             </ul>
         </div>
@@ -469,7 +457,8 @@
             <ul class="instruction-list">
                 <li>
                     <strong>Open & Explore the App</strong>
-                    <p>Once installation is complete, tap “Open” to launch the app. You’ll land on the home screen, where you can start saving videos and exploring features right away.</p>
+                    <p>Once installation is complete, tap “Open” to launch the app. You’ll land on the home screen,
+                        where you can start saving videos and exploring features right away.</p>
                 </li>
             </ul>
         </div>
@@ -481,6 +470,16 @@
             <div class="screenshot-card">
                 <img src="/images/screen4.png" alt="Video Saver App Screenshot 4">
             </div>
+        </div>
+
+        {{-- Bottom CTA Banner --}}
+        <div class="bottom-cta">
+            <div class="cta-content">
+                <h2>Ready to Start Downloading?</h2>
+                <p>Join millions of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
+            </div>
+            <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+                class="btn-cta">Download Video Saver</a>
         </div>
     </div>
 
@@ -498,7 +497,7 @@
     </script>
     <script type="text/javascript"
         src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-    </script>
+        </script>
 
 </body>
 

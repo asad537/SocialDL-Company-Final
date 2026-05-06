@@ -1,4 +1,4 @@
-<header class="site-header">
+<header class="site-header {{ $headerClass ?? '' }}">
     <div class="header-container">
 
         <!-- Mobile Hamburger (LEFT) — hidden on desktop -->
@@ -19,7 +19,35 @@
 
                 <li><a href="/faqs">FAQs</a></li>
                 <li><a href="/download">Download</a></li>
-                <li><a href="/#supported-platforms">Supported Platforms</a></li>
+                
+                @php
+                    $navPlatforms = \App\Models\Platform::where('status', 'active')->get();
+                @endphp
+                
+                <li class="nav-dropdown-wrap">
+                    <a href="javascript:void(0)" class="dropdown-trigger">Supported Platforms</a>
+                    <div class="nav-dropdown">
+                        <div class="dropdown-grid">
+                            @foreach($navPlatforms as $np)
+                            <a href="{{ route('platforms.show', $np->slug) }}" class="dropdown-item">
+                                <div class="item-icon">
+                                    @php
+                                        $iconClass = 'fas fa-globe';
+                                        if(stripos($np->name, 'facebook') !== false) $iconClass = 'fab fa-facebook';
+                                        elseif(stripos($np->name, 'youtube') !== false) $iconClass = 'fab fa-youtube';
+                                        elseif(stripos($np->name, 'instagram') !== false) $iconClass = 'fab fa-instagram';
+                                        elseif(stripos($np->name, 'whatsapp') !== false) $iconClass = 'fab fa-whatsapp';
+                                        elseif(stripos($np->name, 'tiktok') !== false) $iconClass = 'fab fa-tiktok';
+                                    @endphp
+                                    <i class="{{ $iconClass }}"></i>
+                                </div>
+                                <span>{{ $np->name }}</span>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </li>
+                
                 <li><a href="/blogs">Help Center</a></li>
             </ul>
             <div class="lang-dropdown" onclick="toggleLangMenu()">
@@ -56,11 +84,30 @@
             <img src="/images/logofinal.png" alt="Video Saver" style="height: 60px; width: auto;">
         </div>
         <ul>
-            <li><a href="/" onclick="toggleMobileMenu()">Home</a></li>
-            <li><a href="/#supported-platforms" onclick="toggleMobileMenu()">Supported Platforms</a></li>
-            <li><a href="/blogs" onclick="toggleMobileMenu()">Help Center</a></li>
             <li><a href="/faqs" onclick="toggleMobileMenu()">FAQs</a></li>
             <li><a href="/download" onclick="toggleMobileMenu()">Download</a></li>
+            
+            <li style="padding: 1.2rem 1.5rem; border-bottom: 1px solid #F3F4F6;">
+                <div style="font-size: 0.75rem; font-weight: 800; color: #9CA3AF; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.05em;">Platforms</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    @foreach($navPlatforms as $np)
+                    <a href="{{ route('platforms.show', $np->slug) }}" onclick="toggleMobileMenu()" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:#111827; font-size:0.9rem; font-weight:600; padding:8px; background:#F9FAFB; border-radius:8px;">
+                        @php
+                            $iconClass = 'fas fa-globe';
+                            if(stripos($np->name, 'facebook') !== false) $iconClass = 'fab fa-facebook';
+                            elseif(stripos($np->name, 'youtube') !== false) $iconClass = 'fab fa-youtube';
+                            elseif(stripos($np->name, 'instagram') !== false) $iconClass = 'fab fa-instagram';
+                            elseif(stripos($np->name, 'whatsapp') !== false) $iconClass = 'fab fa-whatsapp';
+                            elseif(stripos($np->name, 'tiktok') !== false) $iconClass = 'fab fa-tiktok';
+                        @endphp
+                        <i class="{{ $iconClass }}" style="color:#FFB800;"></i>
+                        {{ $np->name }}
+                    </a>
+                    @endforeach
+                </div>
+            </li>
+            
+            <li><a href="/blogs" onclick="toggleMobileMenu()">Help Center</a></li>
         </ul>
     </div>
 
@@ -92,8 +139,109 @@
     body {
         top: 0px !important;
     }
+    
+    body.has-fixed-header {
+        padding-top: 97px;
+    }
+    
+    @media (max-width: 768px) {
+        body.has-fixed-header {
+            padding-top: 80px;
+        }
+    }
 
     /* ── Header Styles ── */
+    .site-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 1rem 0;
+        background: {{ (Request::routeIs('home') || Request::is('*/platforms/*') || Request::is('supported-platforms/*') || Request::routeIs('platforms.show')) ? 'transparent' : '#fff' }};
+        box-shadow: {{ (Request::routeIs('home') || Request::is('*/platforms/*') || Request::is('supported-platforms/*') || Request::routeIs('platforms.show')) ? 'none' : '0 2px 10px rgba(0,0,0,0.05)' }};
+    }
+
+    .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo img {
+        height: 65px;
+        width: auto;
+    }
+
+    .nav-wrap {
+        display: flex;
+        align-items: center;
+        gap: 3.5rem;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+        align-items: center;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #111827;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+        color: #111827;
+    }
+
+    .lang-dropdown {
+        background: #F9FAFB;
+        border: 1px solid #E5E7EB;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .lang-menu {
+        position: absolute;
+        top: 110%;
+        right: 0;
+        background: white;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        width: 150px;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1001;
+    }
+
+    .lang-menu div {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        color: #111827;
+        transition: background 0.2s;
+    }
+
+    .lang-menu div:hover {
+        background: #F9FAFB;
+        color: #FFB800;
+    }
+
     .hamburger {
         display: none;
     }
@@ -107,7 +255,7 @@
     }
 
     .lang-dropdown-mobile {
-        display: none;
+        display: none !important;
     }
 
     @media (max-width: 768px) {
@@ -163,18 +311,29 @@
             order: 2;
             display: flex;
             justify-content: center;
+            align-items: center;
+        }
+
+        .site-header .logo img {
+            height: 65px !important; 
+            width: auto;
         }
 
         /* Lang dropdown: far right */
         .lang-dropdown-mobile {
             order: 3;
             display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
             border: 1px solid #000 !important;
-            /* Black border */
             background: #fff !important;
-            /* Solid white background for contrast */
             padding: 6px 12px !important;
             border-radius: 8px !important;
+        }
+
+        .lang-dropdown-mobile i {
+            font-size: 0.75rem;
+            margin-top: 2px; /* Moves arrow down slightly */
         }
 
         /* Sidebar Nav */
@@ -236,7 +395,7 @@
 
         /* Sticky Header on Mobile */
         .site-header {
-            position: sticky !important;
+            position: fixed !important;
             top: 0 !important;
             background: #ffffff !important;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
@@ -247,6 +406,191 @@
         .faq-header {
             padding-top: 4rem !important;
         }
+    }
+
+    /* ── Desktop Header ── */
+    @media (min-width: 769px) {
+        .site-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            background: transparent;
+        }
+
+        /* If white background is needed */
+        .site-header.header-white {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed;
+        }
+        
+        /* Make it transparent by default on desktop if no white class */
+        .site-header:not(.header-white) {
+            background: transparent;
+            box-shadow: none;
+            position: absolute;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 65px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-wrap {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .lang-dropdown {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #E5E7EB;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            backdrop-filter: blur(4px);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .lang-menu div {
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            color: #111827;
+            transition: background 0.2s;
+        }
+
+        .lang-menu div:hover {
+            background: #F9FAFB;
+            color: #FFB800;
+        }
+    }
+
+    /* ── Desktop Dropdown Styles ── */
+    .nav-dropdown-wrap {
+        position: relative;
+    }
+    .nav-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(15px);
+        background: #ffffff;
+        min-width: 280px;
+        border-radius: 16px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        padding: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        border: 1px solid rgba(0,0,0,0.05);
+        z-index: 1000;
+    }
+    .nav-dropdown-wrap:hover .nav-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(5px);
+    }
+    .dropdown-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 5px;
+    }
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        text-decoration: none;
+        color: #111827;
+        font-weight: 600;
+        font-size: 0.92rem;
+        border-radius: 10px;
+        transition: background 0.2s, color 0.2s;
+    }
+    .dropdown-item span {
+        color: #111827;
+        transition: color 0.2s;
+    }
+    .dropdown-item:hover {
+        background: #FFB800;
+        color: #ffffff !important;
+    }
+    .dropdown-item:hover span {
+        color: #ffffff !important;
+    }
+    .item-icon {
+        width: 32px;
+        height: 32px;
+        background: #FEF3C7;
+        color: #FFB800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-size: 0.95rem;
+    }
+    .dropdown-item:hover .item-icon {
+        background: #FFB800;
+        color: #fff;
     }
 </style>
 

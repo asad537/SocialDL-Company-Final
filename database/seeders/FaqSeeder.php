@@ -62,6 +62,18 @@ class FaqSeeder extends Seeder
                     ['q' => 'The video plays instead of downloading?', 'a' => 'On some browsers (like Chrome or Safari), the video might open in a new tab. Simply right-click the video and select "Save Video As..." or use the download button provided in the options menu.'],
                     ['q' => 'Why did my download fail?', 'a' => 'A download might fail if the video has been deleted, is restricted in your region, or if the platform has changed its security settings. Try refreshing the page or using a different browser.'],
                 ]
+            ],
+            // General Questions
+            [
+                'category' => 'General Questions',
+                'faqs' => [
+                    ['q' => 'Is there a limit on the number of downloads?', 'a' => 'No. You can download an unlimited number of videos and audio files with Video Saver. We do not impose any daily or monthly limits.'],
+                    ['q' => 'What video formats are supported?', 'a' => 'We primarily support MP4 for video and MP3 for audio. Depending on the source, you may also see options for WEBM, M4A, and different resolution tiers.'],
+                    ['q' => 'Can I download audio only?', 'a' => 'Yes! For most platforms like YouTube and SoundCloud, Video Saver provides a "Music" section where you can download the audio track as an MP3 file.'],
+                    ['q' => 'Is it legal to download videos?', 'a' => 'Downloading videos for personal, offline viewing is generally considered fair use. However, you should not redistribute or use downloaded content for commercial purposes without permission from the creator.'],
+                    ['q' => 'How do I save videos to my iPhone?', 'a' => 'On iOS, use the Safari browser. After clicking download, the file will go to your "Downloads" folder in the Files app. You can then move it to your Camera Roll.'],
+                    ['q' => 'Are the downloads safe and secure?', 'a' => 'Absolutely. Video Saver does not require any software installation or extensions. All processing happens on our secure servers, and we never store your personal data.'],
+                ]
             ]
         ];
 

@@ -109,45 +109,7 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-    <div class="sidebar-logo">
-        <div class="logo-wrap">
-            <div class="icon"><i class="fas fa-download"></i></div>
-            <div>
-                <h2>Video Saver</h2>
-                <p>Admin Dashboard</p>
-            </div>
-        </div>
-    </div>
-    <nav class="sidebar-nav">
-        <div class="nav-label">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="nav-item active"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="{{ route('admin.homepage') }}" class="nav-item"><i class="fas fa-home"></i> Home Page</a>
-        <a href="{{ route('admin.faqs') }}" class="nav-item"><i class="fas fa-question-circle"></i> Home FAQs</a>
-        <a href="{{ route('admin.faq_page') }}" class="nav-item"><i class="fas fa-list-ul"></i> FAQ Page</a>
-        <a href="{{ route('admin.blogs.index') }}" class="nav-item {{ Request::is('admin/blogs*') ? 'active' : '' }}"><i class="fas fa-blog"></i> Blogs</a>
-        <a href="{{ route('admin.guides.index') }}" class="nav-item {{ Request::is('admin/guides*') ? 'active' : '' }}"><i class="fas fa-book"></i> Guides</a>
-        <div class="nav-label">Platforms</div>
-        <a href="#" class="nav-item"><i class="fab fa-youtube"></i> YouTube</a>
-        <a href="#" class="nav-item"><i class="fab fa-instagram"></i> Instagram</a>
-        <a href="#" class="nav-item"><i class="fab fa-tiktok"></i> TikTok</a>
-        <a href="#" class="nav-item"><i class="fab fa-facebook"></i> Facebook</a>
-        <div class="nav-label">System</div>
-        <a href="#" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
-        <a href="#" class="nav-item"><i class="fas fa-shield-alt"></i> Security</a>
-    </nav>
-    <div class="sidebar-footer">
-        <div class="admin-badge">
-            <div class="admin-avatar">A</div>
-            <div class="admin-info">
-                <p>Administrator</p>
-                <span>Super Admin</span>
-            </div>
-            <a href="{{ route('admin.logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
-        </div>
-    </div>
-</aside>
+@include('partials.admin_sidebar')
 
 <!-- MAIN -->
 <div class="main">

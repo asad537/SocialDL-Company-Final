@@ -133,9 +133,15 @@
         .ce-popover__item:hover {
             background: #F8FAFC;
         }
-        .cdx-input {
-            background: #fff !important;
-            border: 1px solid #E2E8F0 !important;
+        /* Fix for ALL EditorJS inputs/popups on white background */
+        .ce-code__textarea, .ce-input, .cdx-input, .ce-link-autocomplete__input, 
+        .ce-inline-tool-input, .ce-inline-toolbar input, .ce-toolbar input {
+            color: #1E293B !important;
+            background: #ffffff !important;
+            border: 1px solid #CBD5E1 !important;
+        }
+        
+        .ce-inline-tool-input {
             color: #1E293B !important;
         }
 

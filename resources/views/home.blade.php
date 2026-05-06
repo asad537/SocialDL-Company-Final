@@ -196,7 +196,7 @@
             align-items: center;
             padding: 2vw 0;
             overflow: hidden;
-            background-color: #fdf2f2;
+            background-color: #fff5f6;
             /* Matches the light pink background of the image */
         }
 
@@ -1514,10 +1514,11 @@
         }
 
         /* ── SEO Content Section ── */
-        #seo-content-wrap, #seo-content-wrap * {
+        #seo-content-wrap,
+        #seo-content-wrap * {
             font-family: 'Inter', sans-serif !important;
         }
-        
+
         /* ── Blog Section ── */
         .blog-section {
             padding: 3rem 0;

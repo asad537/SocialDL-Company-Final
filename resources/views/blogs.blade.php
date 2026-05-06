@@ -159,18 +159,88 @@
             color: var(--primary);
         }
 
-        /* ── Blog Banner ── */
+        /* ── Blog Banner Redesign ── */
         .blog-header {
-            background: var(--primary);
-            padding: 10rem 0 4rem;
-            /* Reduced padding */
-            text-align: center;
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
             position: relative;
+            height: 35vw;
+            /* Height scales with width to maintain aspect ratio */
+            min-height: 450px;
+            max-height: 650px;
+            display: flex;
+            align-items: center;
+            padding: 2vw 0;
             overflow: hidden;
+            background-color: #fff5f6;
+            margin-bottom: 4rem;
+        }
+
+        /* BG image — Exactly like homepage */
+        .hero-bg-img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center right;
+            z-index: 0;
+        }
+
+        .hero-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 45%;
+            margin-top: 110px;
+        }
+
+        .blog-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: #111827;
             margin-bottom: 1.5rem;
-            /* Reduced margin */
+            text-align: left;
+        }
+
+        .hero-subtext {
+            font-size: 1.05rem;
+            color: #4B5563;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            background: #fff;
+            border: 1.5px solid #F1F5F9;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .hero-badge i {
+            color: #FFB800;
         }
 
         /* ── Floating Background Icons ── */
@@ -495,7 +565,9 @@
                 padding: 0 1.2rem;
             }
 
-            .filter-box { grid-column: 1 / -1; }
+            .filter-box {
+                grid-column: 1 / -1;
+            }
 
             .sidebar {
                 order: 2;
@@ -504,15 +576,22 @@
                 gap: 1rem;
             }
 
-            .blog-list { order: 1; }
+            .blog-list {
+                order: 1;
+            }
 
-            .blog-header { padding: 6rem 1.5rem 3.5rem; }
+            .blog-header {
+                padding: 6rem 1.5rem 3.5rem;
+            }
 
-            .blog-header h1 { font-size: 2.4rem; }
+            .blog-header h1 {
+                font-size: 2.4rem;
+            }
         }
 
         /* ── Mobile (≤ 768px) ── */
         @media (max-width: 768px) {
+
             /* Hero — taller on mobile with visible icons */
             .blog-header {
                 padding: 7rem 1.2rem 4rem;
@@ -606,9 +685,9 @@
                 margin-bottom: 0.8rem;
             }
 
-            .card-footer { 
-                font-size: 0.75rem; 
-                gap: 0.6rem; 
+            .card-footer {
+                font-size: 0.75rem;
+                gap: 0.6rem;
                 flex-wrap: wrap;
                 margin-top: auto;
             }
@@ -620,43 +699,77 @@
                 width: 100%;
             }
 
-            .sidebar .widget { margin-bottom: 1rem; padding: 1rem; }
+            .sidebar .widget {
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
 
-            .widget-title { font-size: 0.92rem; margin-bottom: 0.8rem; }
+            .widget-title {
+                font-size: 0.92rem;
+                margin-bottom: 0.8rem;
+            }
 
-            .popular-item { padding: 0.3rem 0; gap: 0.6rem; }
+            .popular-item {
+                padding: 0.3rem 0;
+                gap: 0.6rem;
+            }
 
-            .pop-img { width: 50px; height: 38px; }
+            .pop-img {
+                width: 50px;
+                height: 38px;
+            }
 
-            .pop-info h4 { font-size: 0.78rem; }
+            .pop-info h4 {
+                font-size: 0.78rem;
+            }
 
-            .pop-info span { font-size: 0.68rem; }
+            .pop-info span {
+                font-size: 0.68rem;
+            }
 
             /* Pagination */
-            .pagination { gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
+            .pagination {
+                gap: 0.3rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
 
-            .page-btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; min-width: 34px; }
+            .page-btn {
+                padding: 0.45rem 0.7rem;
+                font-size: 0.78rem;
+                min-width: 34px;
+            }
 
             /* Header */
-            .site-header .header-container { padding: 0 1rem; }
+            .site-header .header-container {
+                padding: 0 1rem;
+            }
         }
 
         /* ── Small phones (≤ 480px) ── */
         @media (max-width: 480px) {
-            .blog-header { padding: 5rem 1rem 2.5rem; }
+            .blog-header {
+                padding: 5rem 1rem 2.5rem;
+            }
 
-            .blog-header h1 { font-size: 1.55rem; }
+            .blog-header h1 {
+                font-size: 1.55rem;
+            }
 
-            .card-img { 
-                width: 100%; 
+            .card-img {
+                width: 100%;
                 height: 180px;
             }
 
-            .card-content h2 { font-size: 0.95rem; }
+            .card-content h2 {
+                font-size: 0.95rem;
+            }
 
-            .card-content { padding: 0.9rem 1rem; }
+            .card-content {
+                padding: 0.9rem 1rem;
+            }
 
-            .card-excerpt { 
+            .card-excerpt {
                 font-size: 0.82rem;
                 -webkit-line-clamp: 3;
             }
@@ -669,22 +782,24 @@
     @include('partials.header')
 
     <header class="blog-header">
-        <!-- Left side icons -->
-        <img src="/images/music-alt.png" class="bg-icon"
-            style="top: 28%; left: 5%; transform: rotate(-15deg); width: 65px; opacity: 0.9;" alt="">
-        <img src="/images/play-alt.png" class="bg-icon"
-            style="top: 55%; left: 12%; transform: rotate(10deg); width: 60px; opacity: 0.9;" alt="">
-        <img src="/images/screen-play.png" class="bg-icon"
-            style="top: 15%; left: 28%; transform: rotate(-20deg); width: 70px; opacity: 0.9;" alt="">
-        <!-- Right side icons -->
-        <img src="/images/screen-play.png" class="bg-icon"
-            style="top: 25%; right: 28%; transform: rotate(15deg); width: 65px; opacity: 0.9;" alt="">
-        <img src="/images/music-alt.png" class="bg-icon"
-            style="top: 65%; right: 12%; transform: rotate(-10deg); width: 65px; opacity: 0.9;" alt="">
-        <img src="/images/play-alt.png" class="bg-icon"
-            style="top: 29%; right: 5%; transform: rotate(15deg); width: 60px; opacity: 0.9;" alt="">
+        <img class="hero-bg-img" src="/images/blog.jpg" alt="Blog Banner">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div
+                    style="display: inline-flex; align-items: center; gap: 8px; background: #fff; padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: #FFB800; text-transform: uppercase; margin-bottom: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1.5px solid #F3F4F6;">
+                    <i class="fas fa-file-alt"></i> Blog
+                </div>
+                <h1>Tips, Guides &<br>Latest Updates</h1>
+                <p class="hero-subtext">Stay informed with helpful tips, how-tos, and updates to get the most out of the
+                    app.</p>
 
-        <h1>Video Download <br> Guides & Tips</h1>
+                <div class="hero-badges">
+                    <div class="hero-badge"><i class="fas fa-lightbulb"></i> Tips</div>
+                    <div class="hero-badge"><i class="fas fa-book-open"></i> Guides</div>
+                    <div class="hero-badge"><i class="fas fa-bell"></i> Updates</div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="container">
@@ -764,8 +879,9 @@
                 <h3 class="widget-title">Download Your Way</h3>
                 <p>Choose how you want to download and start using the app.</p>
                 <div class="dl-buttons">
-                    <a href="#" class="btn-dl btn-app">Via App</a>
-                    <a href="#" class="btn-dl btn-web">Via Web</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+                        class="btn-dl btn-app">Via App</a>
+                    <a href="/" class="btn-dl btn-web">Via Web</a>
                 </div>
             </div>
         </aside>
@@ -785,7 +901,7 @@
     </script>
     <script type="text/javascript"
         src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-    </script>
+        </script>
 
     <script>
         // Language Dropdown Toggle
@@ -807,7 +923,7 @@
                 };
                 const currentLangEl = document.getElementById('current-lang');
                 if (currentLangEl) currentLangEl.innerText = langNames[langCode];
-                
+
                 const currentLangMobileEl = document.getElementById('current-lang-mobile');
                 if (currentLangMobileEl) currentLangMobileEl.innerText = langNames[langCode];
             } else {
@@ -825,12 +941,12 @@
             const nav = document.getElementById('mobile-nav');
             const overlay = document.getElementById('mobile-overlay');
             const btn = document.getElementById('hamburger');
-            
+
             if (nav && overlay) {
                 nav.classList.toggle('open');
                 overlay.classList.toggle('open');
                 if (btn) btn.classList.toggle('open');
-                
+
                 // Prevent body scroll when menu is open
                 if (nav.classList.contains('open')) {
                     document.body.style.overflow = 'hidden';

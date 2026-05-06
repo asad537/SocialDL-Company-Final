@@ -44,8 +44,21 @@ Route::get('/admin/guides/{id}/edit', [GuideController::class, 'edit'])->name('a
 Route::post('/admin/guides/{id}', [GuideController::class, 'update'])->name('admin.guides.update');
 Route::delete('/admin/guides/{id}', [GuideController::class, 'destroy'])->name('admin.guides.delete');
 Route::get('/guide/{slug}', [GuideController::class, 'publicShow'])->name('guide.show');
+
+// Platform Admin Routes
+use App\Http\Controllers\PlatformController;
+Route::get('/admin/platforms', [PlatformController::class, 'index'])->name('admin.platforms.index');
+Route::get('/admin/platforms/create', [PlatformController::class, 'create'])->name('admin.platforms.create');
+Route::post('/admin/platforms', [PlatformController::class, 'store'])->name('admin.platforms.store');
+Route::get('/admin/platforms/{id}/edit', [PlatformController::class, 'edit'])->name('admin.platforms.edit');
+Route::post('/admin/platforms/{id}', [PlatformController::class, 'update'])->name('admin.platforms.update');
+Route::delete('/admin/platforms/{id}', [PlatformController::class, 'destroy'])->name('admin.platforms.delete');
+Route::post('/admin/platforms/{id}/faqs', [PlatformController::class, 'faqStore'])->name('admin.platforms.faqs.store');
+Route::delete('/admin/platforms/faqs/{faq_id}', [PlatformController::class, 'faqDelete'])->name('admin.platforms.faqs.delete');
+
 Route::get('/faqs', [App\Http\Controllers\AdminController::class, 'publicFaqs'])->name('public.faqs');
 Route::post('/admin/cms/upload-editor-image', [AdminController::class, 'uploadEditorImage'])->name('admin.cms.upload-editor-image');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +79,7 @@ Route::get('/', function () {
     $faqs = DB::table('faqs')->where('page', 'home')->where('is_active', true)->orderBy('sort_order')->get();
     $blogs = \App\Models\Blog::where('status', 1)->latest()->limit(4)->get();
     return view('home', compact('settings', 'faqs', 'blogs'));
-});
+})->name('home');
 
 Route::get('/download', function () {
     return view('download');
@@ -92,3 +105,6 @@ Route::get('/merge-download', [VideoController::class, 'mergeDownload'])
 // ── Thumbnail proxy: browser-cached, lightweight ─────────────────────────
 Route::get('/thumbnail-proxy', [VideoController::class, 'proxyThumbnail'])
     ->middleware('throttle:60,1');
+
+// Catch-all Public Platform Route (Must be last)
+Route::get('/{slug}', [PlatformController::class, 'show'])->name('platforms.show');
