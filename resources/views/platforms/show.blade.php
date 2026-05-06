@@ -68,6 +68,11 @@
             z-index: 0;
         }
 
+        .hero picture {
+            display: block;
+            line-height: 0;
+        }
+
         .hero-container {
             width: 100%;
             max-width: 1200px;
@@ -99,6 +104,11 @@
             font-weight: 500;
         }
 
+        .hero-mobile-title,
+        .hero-mobile-actions {
+            display: none;
+        }
+
         @media (max-width: 1024px) {
             .hero {
                 text-align: center;
@@ -122,6 +132,135 @@
         }
 
         /* ── Search Section ── */
+        @media (max-width: 768px) {
+            .hero {
+                display: block;
+                height: auto;
+                min-height: 0;
+                max-height: none;
+                padding: 0 0 1.35rem;
+                margin-top: 84px;
+                overflow: hidden;
+                background: #fff;
+                text-align: center;
+            }
+
+            .hero-bg-img {
+                position: relative;
+                top: auto;
+                right: auto;
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center top;
+                z-index: 0;
+            }
+
+            .hero picture {
+                height: clamp(500px, 102vw, 590px);
+                overflow: hidden;
+            }
+
+            .hero-container {
+                max-width: 620px;
+                padding: 0 2rem;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                margin: 1.25rem auto 0;
+            }
+
+            .hero-kicker,
+            .hero-desktop-title {
+                display: none !important;
+            }
+
+            .hero-mobile-title,
+            .hero-mobile-actions {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: clamp(2rem, 5.9vw, 2.35rem);
+                font-weight: 800;
+                line-height: 1.2;
+                color: #000;
+                margin: 0 auto 1.25rem;
+                max-width: 500px;
+                text-align: center;
+            }
+
+            .hero-subtext {
+                font-size: clamp(1.12rem, 4.1vw, 1.5rem);
+                line-height: 1.55;
+                color: #000;
+                max-width: 530px;
+                margin: 0 auto 1.65rem;
+                font-weight: 400;
+                text-align: center;
+            }
+
+            .hero-mobile-actions {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: clamp(0.85rem, 3vw, 1.25rem);
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .hero-mobile-pill {
+                min-height: 50px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.55rem;
+                padding: 0.75rem 0.65rem;
+                border-radius: 999px;
+                background: #fff;
+                color: #000;
+                font-size: clamp(0.95rem, 3.2vw, 1.13rem);
+                font-weight: 800;
+                line-height: 1;
+                box-shadow: 0 5px 14px rgba(15, 23, 42, 0.13);
+                white-space: nowrap;
+            }
+
+            .hero-mobile-pill i {
+                color: #FFB800;
+                font-size: clamp(1.05rem, 3.6vw, 1.3rem);
+            }
+        }
+
+        @media (max-width: 430px) {
+            .hero {
+                margin-top: 78px;
+            }
+
+            .hero-container {
+                padding: 0 1.45rem;
+            }
+
+            .hero-content {
+                margin-top: 1.05rem;
+            }
+
+            .hero-subtext {
+                margin-bottom: 1.35rem;
+            }
+
+            .hero-mobile-actions {
+                gap: 0.65rem;
+            }
+
+            .hero-mobile-pill {
+                min-height: 46px;
+                padding: 0.65rem 0.4rem;
+                gap: 0.42rem;
+            }
+        }
+
         .search-section {
             padding: 5rem 0;
             text-align: center;
@@ -199,6 +338,135 @@
 
         .search-container button:hover i {
             border-color: var(--primary);
+        }
+
+        .tutorial-wrap {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .tutorial-link {
+            color: #007BFF;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tutorial-link .yt-icon {
+            color: #FF0000;
+            font-size: 1.6rem;
+        }
+
+        .tutorial-link .tutorial-text {
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 2px;
+        }
+
+        .tutorial-link .tutorial-sub {
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                padding: 2.2rem 0;
+            }
+
+            .search-section h2 {
+                font-size: clamp(1.75rem, 8vw, 2.2rem);
+                line-height: 1.2;
+                margin-bottom: 1rem;
+                text-align: left;
+            }
+
+            .search-box-wrap {
+                max-width: 100%;
+            }
+
+            .search-container {
+                padding: 6px;
+                border-radius: 14px;
+                gap: 0.35rem;
+            }
+
+            .search-container i.fa-globe {
+                margin-left: 0.7rem;
+                font-size: 1rem;
+            }
+
+            .search-container input {
+                min-width: 0;
+                width: 1%;
+                flex: 1 1 auto;
+                padding: 0.65rem 0.35rem;
+                font-size: 1rem;
+            }
+
+            .search-container button {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                padding: 8px 12px;
+                border-radius: 10px;
+                font-size: 0.92rem;
+                gap: 6px;
+            }
+
+            .search-container button i {
+                width: 22px;
+                height: 22px;
+                font-size: 0.68rem;
+            }
+
+            .tutorial-wrap {
+                text-align: left;
+                margin-top: 1rem;
+            }
+
+            .tutorial-link {
+                gap: 6px;
+                flex-wrap: wrap;
+                font-size: 0.95rem;
+            }
+
+            .tutorial-link .yt-icon {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .search-section h2 {
+                font-size: clamp(1.45rem, 7.4vw, 1.9rem);
+            }
+
+            .search-container {
+                gap: 0.2rem;
+            }
+
+            .search-container i.fa-globe {
+                margin-left: 0.5rem;
+            }
+
+            .search-container input {
+                padding: 0.55rem 0.2rem;
+                font-size: 0.95rem;
+            }
+
+            .search-container button {
+                padding: 8px 9px;
+                font-size: 0.84rem;
+                gap: 4px;
+            }
+
+            .search-container button i {
+                width: 20px;
+                height: 20px;
+            }
+
+            .tutorial-link {
+                font-size: 0.86rem;
+            }
         }
 
         /* ── Loader & Results ── */
@@ -295,6 +563,207 @@
             color: #6B7280;
             line-height: 1.7;
         }
+
+        .why-choose-section {
+            padding: 3rem 0;
+            background: #fff;
+        }
+
+        .why-choose-heading {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .why-choose-heading h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0F0F0F;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .why-choose-heading p {
+            font-size: 0.93rem;
+            color: #6B7280;
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.75;
+        }
+
+        .why-choose-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.2rem;
+        }
+
+        .why-choose-card {
+            background: #fff;
+            border: 1.5px solid #F0F1F3;
+            border-radius: 18px;
+            padding: 1.5rem 1.8rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .why-choose-card-icon {
+            width: 60px;
+            height: 60px;
+            background: #FEF3C7;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .why-choose-card-icon img {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+        }
+
+        .why-choose-card h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 0.45rem;
+        }
+
+        .why-choose-card p {
+            font-size: 0.875rem;
+            color: #6B7280;
+            line-height: 1.65;
+            margin: 0;
+            text-align: left;
+        }
+
+        .download-cta-section {
+            padding: 1.5rem 0 4rem;
+            background: #fff;
+        }
+
+        .download-cta-card {
+            background: #FFC107;
+            border-radius: 28px;
+            padding: 2.2rem 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .download-cta-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .download-cta-content h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .download-cta-content p {
+            font-size: 1rem;
+            color: #111827;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .download-cta-btn {
+            background: #FF6807;
+            color: #fff;
+            text-decoration: none;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .download-cta-section {
+                padding: 1.25rem 0 2.4rem;
+            }
+
+            .download-cta-card {
+                border-radius: 30px;
+                padding: 2rem 1.35rem 2.2rem;
+                gap: 1.3rem;
+                justify-content: center;
+            }
+
+            .download-cta-content {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .download-cta-content h2 {
+                font-size: clamp(2rem, 10vw, 2.6rem);
+                line-height: 1.1;
+                margin-bottom: 0.75rem;
+                text-align: left;
+            }
+
+            .download-cta-content p {
+                font-size: clamp(1rem, 4.8vw, 1.3rem);
+                line-height: 1.42;
+                text-align: left;
+            }
+
+            .download-cta-btn {
+                width: 100%;
+                max-width: 360px;
+                min-height: 54px;
+                border-radius: 999px;
+                font-size: clamp(1rem, 4.4vw, 1.25rem);
+                padding: 0.9rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .why-choose-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .why-choose-section {
+                padding: 2rem 0;
+            }
+
+            .why-choose-heading {
+                margin-bottom: 1.4rem;
+            }
+
+            .why-choose-heading h2 {
+                font-size: 1.9rem;
+                line-height: 1.15;
+            }
+
+            .why-choose-heading p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .why-choose-grid {
+                grid-template-columns: 1fr;
+                gap: 0.95rem;
+            }
+
+            .why-choose-card {
+                padding: 1.2rem 1.05rem;
+            }
+        }
     </style>
 </head>
 
@@ -303,16 +772,25 @@
     @include('partials.header')
 
     <section class="hero">
-        <img class="hero-bg-img" src="/images/supporteds.jpg" alt="">
+        <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/support-hero.jpg">
+            <img class="hero-bg-img" src="/images/supporteds.jpg" alt="">
+        </picture>
         <div class="hero-container">
             <div class="hero-content">
-                <div
+                <div class="hero-kicker"
                     style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: #FFB800; text-transform: uppercase; margin-bottom: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #FFB800;">
                     <i class="fas fa-rocket"></i> SUPPORTED PLATFORMS
                 </div>
-                <h1>{{ $platform->h1 ?? 'Download Videos Instantly' }}</h1>
-                <p class="hero-subtext">Our app lets you download videos from your favorite social platforms fast, easy
-                    & seamless.</p>
+                <h1 class="hero-desktop-title">{{ $platform->h1 ?? 'Download Videos Instantly' }}</h1>
+                <h1 class="hero-mobile-title">Works on Your<br>Favourite Platforms</h1>
+                <p class="hero-subtext">Our app lets you download videos from all your favourite social platforms fast,
+                    easy &amp; seamless.</p>
+                <div class="hero-mobile-actions">
+                    <div class="hero-mobile-pill"><i class="fas fa-bolt"></i> Fast</div>
+                    <div class="hero-mobile-pill"><i class="fas fa-award"></i> Quality</div>
+                    <div class="hero-mobile-pill"><i class="fas fa-user-shield"></i> Secure</div>
+                </div>
             </div>
         </div>
     </section>
@@ -327,12 +805,11 @@
                     <button id="fetchBtn"><i><i class="fas fa-arrow-down"></i></i> Download</button>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <a href="#"
-                    style="color: #007BFF; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                    <i class="fab fa-youtube" style="color: #FF0000; font-size: 1.6rem;"></i>
-                    <span style="border-bottom: 2px solid #007BFF; padding-bottom: 2px;">How to download?</span>
-                    <span style="color: #6B7280; font-weight: 500;">Watch the tutorial</span>
+            <div class="tutorial-wrap">
+                <a href="#" class="tutorial-link">
+                    <i class="fab fa-youtube yt-icon"></i>
+                    <span class="tutorial-text">How to download?</span>
+                    <span class="tutorial-sub">Watch the tutorial</span>
                 </a>
             </div>
 
@@ -362,104 +839,77 @@
     @endif
 
     <!-- Why Millions Choose Video Saver -->
-    <section style="padding: 3rem 0; background: #ffffff;">
+    <section class="why-choose-section">
         <div class="hero-container" style="max-width: 1050px;">
 
-            <div style="text-align:center; margin-bottom: 2.5rem;">
-                <h2
-                    style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 0.75rem; letter-spacing:-0.02em;">
-                    Why Millions Choose Video Saver
-                </h2>
-                <p style="font-size: 0.93rem; color: #6B7280; max-width: 620px; margin: 0 auto; line-height: 1.75;">
+            <div class="why-choose-heading">
+                <h2>Why Millions Choose Video Saver</h2>
+                <p>
                     Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few
                     clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile
                     and desktop browsers.
                 </p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;">
+            <div class="why-choose-grid">
 
                 <!-- Card 1 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-rocket.svg" alt="Instant"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-card-icon">
+                        <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Instant Link
-                        Analysis</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Paste a
+                    <h3>Instant Link Analysis</h3>
+                    <p>Paste a
                         link and get results in seconds — often faster than other downloaders.</p>
                 </div>
 
                 <!-- Card 2 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-globe.svg" alt="Multilingual"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-card-icon">
+                        <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Multilingual
-                        Experience</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Use HD
+                    <h3>Multilingual Experience</h3>
+                    <p>Use HD
                         Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
 
                 <!-- Card 3 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-download.svg" alt="Quality"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-card-icon">
+                        <img src="/images/icon-download.svg" alt="Quality">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Flexible Quality
-                        Choices</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Pick the
+                    <h3>Flexible Quality Choices</h3>
+                    <p>Pick the
                         quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
 
                 <!-- Card 4 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-layers.svg" alt="Platform"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-card-icon">
+                        <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Wide Platform
-                        Support</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Supports
+                    <h3>Wide Platform Support</h3>
+                    <p>Supports
                         YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
 
                 <!-- Card 5 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-settings.svg" alt="Device"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-card-icon">
+                        <img src="/images/icon-settings.svg" alt="Device">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Works on Any Device
-                    </h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Download
+                    <h3>Works on Any Device</h3>
+                    <p>Download
                         seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
 
                 <!-- Card 6 -->
-                <div
-                    style="background:#ffffff; border:1.5px solid #F0F1F3; border-radius:18px; padding:1.5rem 1.8rem; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-                    <div
-                        style="width:60px;height:60px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                        <img src="/images/icon-shield.png" alt="Privacy"
-                            style="width:35px;height:35px;object-fit:contain;">
+                <div class="why-choose-card">
+                    <div class="why-choose-card-icon">
+                        <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
-                    <h3 style="font-size:1rem;font-weight:800;color:#0F172A;margin-bottom:0.45rem;">Privacy-First by
-                        Design</h3>
-                    <p style="font-size:0.875rem;color:#6B7280;line-height:1.65;margin:0;text-align:justify;">Your
+                    <h3>Privacy-First by Design</h3>
+                    <p>Your
                         privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>
 
@@ -490,19 +940,15 @@
     @endif
 
     <!-- Download CTA Section -->
-    <section style="padding: 1.5rem 0 4rem; background: #fff;">
+    <section class="download-cta-section">
         <div class="container" style="max-width: 1100px;">
-            <div
-                style="background: #FFC107; border-radius: 28px; padding: 2.2rem 3.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 300px;">
-                    <h2
-                        style="font-size: 2rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem; letter-spacing: -0.01em;">
-                        Ready to Start Downloading?</h2>
-                    <p style="font-size: 1rem; color: #111827; font-weight: 500; margin: 0; opacity: 0.9;">Join millions
-                        of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
+            <div class="download-cta-card">
+                <div class="download-cta-content">
+                    <h2>Ready to Start Downloading?</h2>
+                    <p>Join millions of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
                 </div>
                 <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
-                    style="background: #FF6807; color: #fff; text-decoration: none; padding: 1rem 2.2rem; border-radius: 50px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25); transition: all 0.3s ease; white-space: nowrap;"
+                    class="download-cta-btn"
                     onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(255, 94, 20, 0.35)';"
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 94, 20, 0.25)';">
                     Download Video Saver
