@@ -592,24 +592,72 @@
         /* ── Mobile (≤ 768px) ── */
         @media (max-width: 768px) {
 
-            /* Hero — taller on mobile with visible icons */
+            /* Hero — stack image then text */
             .blog-header {
-                padding: 7rem 1.2rem 4rem;
-                border-bottom-left-radius: 32px;
-                border-bottom-right-radius: 32px;
-                margin-bottom: 1rem;
-                text-align: center;
-                min-height: 350px;
+                padding-top: 80px;
+                height: auto !important;
+                min-height: unset !important;
+                max-height: unset !important;
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                overflow: hidden;
+                background: #fff;
+                margin-bottom: 0;
+            }
+
+            .blog-header picture {
+                display: block;
+                width: 100%;
+                flex-shrink: 0;
+            }
+
+            .blog-header .hero-bg-img {
+                position: relative !important;
+                display: block;
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .blog-header .hero-container {
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem 1.25rem 0.25rem;
+            }
+
+            .blog-header .hero-content {
+                max-width: 100%;
+                margin: 0 auto;
+                margin-top: 0;
             }
 
             .blog-header h1 {
-                font-size: 2rem;
-                line-height: 1.3;
-                position: relative;
-                z-index: 2;
+                font-size: clamp(1.6rem, 6vw, 2rem);
+                font-weight: 800;
+                line-height: 1.2;
+                text-align: center;
+                margin-bottom: 1rem;
+                position: static;
+            }
+
+            .hero-subtext {
+                text-align: center;
+                font-size: 0.95rem;
+            }
+
+            .hero-badges {
+                justify-content: center;
+                gap: 6px;
+                flex-wrap: nowrap;
+            }
+
+            .hero-badge {
+                font-size: 0.78rem;
+                padding: 7px 12px;
+                gap: 5px;
             }
 
             /* Make icons visible on mobile */
@@ -782,7 +830,10 @@
     @include('partials.header')
 
     <header class="blog-header">
-        <img class="hero-bg-img" src="/images/blog.jpg" alt="Blog Banner">
+        <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/blogmobile.jpg">
+            <img class="hero-bg-img" src="/images/blog.jpg" alt="Blog Banner">
+        </picture>
         <div class="hero-container">
             <div class="hero-content">
                 <div

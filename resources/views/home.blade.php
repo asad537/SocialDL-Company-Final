@@ -1387,6 +1387,7 @@
         }
 
         @media (max-width: 768px) {
+
             .everything-section,
             .howitworks-section {
                 display: none;
@@ -1449,7 +1450,7 @@
                 color: #ffb800;
                 font-size: 0.84rem !important;
                 font-weight: 800;
-                margin-bottom: 0.2rem;               
+                margin-bottom: 0.2rem;
                 margin-top: 0.5rem;
             }
 
@@ -1495,6 +1496,7 @@
                 padding-left: 0;
                 margin-top: -4.9rem;
             }
+
             .mobile-overview-note.center-bottom {
                 grid-column: 2;
                 grid-row: 3;
@@ -1502,6 +1504,7 @@
                 max-width: 200px;
                 text-align: center !important;
             }
+
             .mobile-overview-note.center-bottom h4,
             .mobile-overview-note.center-bottom p {
                 text-align: center !important;
@@ -1915,146 +1918,132 @@
         </div>
     </section>
 
-    <section class="search-section" style="padding: 3rem 0;">
-        <div class="hero-container">
-            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.2rem;">Paste Your Link & Download Instantly
+    @include('partials.downloader')
+    <!-- Supported Sites Section -->
+    @php
+        $platforms = json_decode($settings->platforms_data ?? '[]', true) ?: [];
+    @endphp
+    <section style="padding: 3rem 0 3.5rem; background: #fff; border-top: 1px solid #F3F4F6;">
+        <div class="hero-container" style="max-width: 1000px; text-align: center;">
+
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
+                {{ $settings->sites_heading ?? 'Download Videos from More Supported Sites' }}
             </h2>
-            <div class="search-box-wrap" style="max-width: 650px; margin: 0 auto;">
-                <div class="search-container" id="searchBox"
-                    style="border-radius: 12px; padding: 5px; border: 2px solid var(--primary);">
-                    <i class="fas fa-globe" style="font-size: 1.1rem; margin-left: 0.8rem; color: #9CA3AF;"></i>
-                    <input type="text" id="videoUrl" placeholder="Paste your link here" autocomplete="off"
-                        spellcheck="false" style="font-size: 0.95rem; padding: 0.6rem 0.8rem;">
-                    <button id="fetchBtn"
-                        style="border-radius: 10px; padding: 8px 22px; font-size: 0.9rem; font-weight: 600;">
-                        <i class="fas fa-arrow-down"
-                            style="background: none; border: 1.5px solid #000; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem;"></i>
-                        Download
-                    </button>
-                </div>
-            </div>
-            <p style="margin-top: 0.8rem; text-align: center; font-size: 0.85rem;">
-                <a href="#"
-                    style="color: #007BFF; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
-                    <i class="fab fa-youtube" style="color: #FF0000; font-size: 1.1rem;"></i> How to download?
-                </a>
-                <span style="color: #6B7280; margin-left: 6px;">Watch the tutorial</span>
+            <p style="font-size: 0.92rem; color: #6B7280; max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.7;">
+                {{ $settings->sites_description ?? 'Video Saver lets you download content from your favorite platforms.' }}
             </p>
 
-            <!-- Moved Results, Loader, and Error inside the flow -->
-            <div class="loader-box" id="loader" style="margin-top: 2rem;">
-                <div class="spinner"></div>
-                <p>Connecting to platform...</p>
+            @if(count($platforms) > 0)
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem;">
+                    @foreach($platforms as $p)
+                        <a href="{{ $p['url'] ?? '#' }}"
+                            style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s;"
+                            onmouseover="this.style.transform='translateY(-5px)'"
+                            onmouseout="this.style.transform='translateY(0)'">
+                            <div
+                                style="width:75px; height:75px; border-radius:50%; overflow:hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border:2px solid #f0f0f0;">
+                                @if(!empty($p['img']))
+                                    <img src="{{ $p['img'] }}" alt="{{ $p['name'] }}"
+                                        style="width:100%;height:100%;object-fit:cover;">
+                                @else
+                                    <div
+                                        style="width:100%;height:100%;background:{{ $p['color'] ?? '#333' }};display:flex;align-items:center;justify-content:center;">
+                                        <i class="{{ $p['icon'] ?? 'fas fa-globe' }}" style="font-size:1.8rem;color:#fff;"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <span style="font-size:0.8rem; font-weight:600; color:#555; text-transform:capitalize;">
+                                {{ $p['name'] }}
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+
+        </div>
+    </section>
+    <!-- Features Area -->
+    <div class="features-container" style="margin-top: 2.5rem; text-align: center;">
+        <h2 class="features-intro-title">More Than a Downloader Video
+            Saver Does It All</h2>
+        <p class="features-intro-text">Video Saver combines powerful features with a seamless experience, making
+            downloads faster, smarter, and more flexible no matter what or where you save from.</p>
+        <!-- 1. Mobile Features -->
+        <div class="feature-item">
+            <div class="feature-image-wrap">
+                <img src="/images/mobile1.png" alt="Mobile App" class="feature-image">
             </div>
-
-            <div class="skeleton-wrapper" id="skeleton" style="margin-top: 2rem;"></div>
-
-            <div id="error" style="margin-top: 2rem;"></div>
-
-            <div class="results-wrapper" id="results"
-                style="margin-top: 2rem; background: #f9fafb; border-radius: 20px; padding: 20px;">
-                <aside class="sidebar">
-                    <div class="thumb-box"><img id="thumb" src="" alt="thumbnail"></div>
-                    <h2 class="video-title" id="title">Video Title</h2>
-                    <div class="duration-badge">
-                        <i class="far fa-clock"></i> <span id="duration">00:00</span>
-                    </div>
-                </aside>
-
-                <main class="main-content" style="background: transparent;">
-                    <div class="section-header">
-                        <i class="fas fa-film" style="color: var(--primary);"></i> Video
-                    </div>
-                    <div id="video-list"></div>
-                    <div class="section-header" style="margin-top:20px;">
-                        <i class="fas fa-music" style="color: var(--primary);"></i> Music
-                    </div>
-                    <div id="audio-list"></div>
-                </main>
-            </div>
-
-            <!-- Features Area -->
-            <div class="features-container" style="margin-top: 2.5rem; text-align: center;">
-                <h2 class="features-intro-title">More Than a Downloader Video
-                    Saver Does It All</h2>
-                <p class="features-intro-text">Video Saver combines powerful features with a seamless experience, making
-                    downloads faster, smarter, and more flexible no matter what or where you save from.</p>
-                <!-- 1. Mobile Features -->
-                <div class="feature-item">
-                    <div class="feature-image-wrap">
-                        <img src="/images/mobile1.png" alt="Mobile App" class="feature-image">
-                    </div>
-                    <div class="feature-content">
-                        <h2>Experience High-Speed Downloads on Any Device</h2>
-                        <p>Our downloader is fully optimized for mobile devices. Save your favorite videos in high
-                            resolution directly to your phone gallery with just a single tap. Works seamlessly in your
-                            browser without any app installation.</p>
-                        <ul class="feature-list">
-                            <li><i class="fas fa-check-circle"></i> 100% Free & Unlimited</li>
-                            <li><i class="fas fa-check-circle"></i> Support for 4K & HD</li>
-                            <li><i class="fas fa-check-circle"></i> No Registration Required</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 2. Status & Media Saver -->
-                <div class="feature-item reverse">
-                    <div class="feature-image-wrap">
-                        <img src="/images/mobile4.png" alt="Status Saver" class="feature-image">
-                    </div>
-                    <div class="feature-content">
-                        <h2>Status & Media Saver</h2>
-                        <h3>Save WhatsApp statuses, Instagram photos, and more before they disappear.</h3>
-                        <p>Never miss out on your favorite social moments again. Video Saver makes it easy to download
-                            and keep status videos, stories, and images directly on your device. Quickly browse, save,
-                            and revisit content anytime you want.</p>
-                    </div>
-                </div>
-
-                <!-- 3. Smarter, Faster Downloads -->
-                <div class="feature-item">
-                    <div class="feature-image-wrap">
-                        <img src="/images/mobile5.png" alt="Fast Downloads" class="feature-image">
-                    </div>
-                    <div class="feature-content">
-                        <h2>Smarter, Faster Downloads</h2>
-                        <h3>Save high-quality videos and music in just a few taps quick, smooth, and hassle-free.</h3>
-                        <p>Choose the quality that fits your needs, from standard to ultra-clear formats. With improved
-                            performance and optimized speed, Video Saver delivers a faster and more reliable downloading
-                            experience.</p>
-                    </div>
-                </div>
-
-                <!-- 4. Video to MP3 Converter -->
-                <div class="feature-item reverse">
-                    <div class="feature-image-wrap">
-                        <img src="/images/mobile2.png" alt="Video to MP3" class="feature-image">
-                    </div>
-                    <div class="feature-content">
-                        <h2>Video to MP3 Converter</h2>
-                        <h3>Turn your favorite videos into MP3 and create your own music collection with ease.</h3>
-                        <p>Video Saver doubles as a powerful audio converter for music lovers. Download tracks, extract
-                            audio from videos, and save them in high-quality MP3 format. It’s a fast, smooth, and
-                            reliable way to build your personal library.</p>
-                    </div>
-                </div>
-
-                <!-- 5. Endless Wallpaper Collection -->
-                <div class="feature-item">
-                    <div class="feature-image-wrap">
-                        <img src="/images/mobile3.png" alt="Wallpapers" class="feature-image">
-                    </div>
-                    <div class="feature-content">
-                        <h2>Endless Wallpaper Collection</h2>
-                        <h3>Browse a vast library of stunning wallpapers and download your favorites with ease.</h3>
-                        <p>The Video Saver app offers a wide range of categories, including nature, abstract, minimal,
-                            and more. Discover fresh designs daily, get personalized recommendations, and save
-                            high-quality wallpapers directly to your device.</p>
-                    </div>
-                </div>
-
+            <div class="feature-content">
+                <h2>Experience High-Speed Downloads on Any Device</h2>
+                <p>Our downloader is fully optimized for mobile devices. Save your favorite videos in high
+                    resolution directly to your phone gallery with just a single tap. Works seamlessly in your
+                    browser without any app installation.</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> 100% Free & Unlimited</li>
+                    <li><i class="fas fa-check-circle"></i> Support for 4K & HD</li>
+                    <li><i class="fas fa-check-circle"></i> No Registration Required</li>
+                </ul>
             </div>
         </div>
+
+        <!-- 2. Status & Media Saver -->
+        <div class="feature-item reverse">
+            <div class="feature-image-wrap">
+                <img src="/images/mobile4.png" alt="Status Saver" class="feature-image">
+            </div>
+            <div class="feature-content">
+                <h2>Status & Media Saver</h2>
+                <h3>Save WhatsApp statuses, Instagram photos, and more before they disappear.</h3>
+                <p>Never miss out on your favorite social moments again. Video Saver makes it easy to download
+                    and keep status videos, stories, and images directly on your device. Quickly browse, save,
+                    and revisit content anytime you want.</p>
+            </div>
+        </div>
+
+        <!-- 3. Smarter, Faster Downloads -->
+        <div class="feature-item">
+            <div class="feature-image-wrap">
+                <img src="/images/mobile5.png" alt="Fast Downloads" class="feature-image">
+            </div>
+            <div class="feature-content">
+                <h2>Smarter, Faster Downloads</h2>
+                <h3>Save high-quality videos and music in just a few taps quick, smooth, and hassle-free.</h3>
+                <p>Choose the quality that fits your needs, from standard to ultra-clear formats. With improved
+                    performance and optimized speed, Video Saver delivers a faster and more reliable downloading
+                    experience.</p>
+            </div>
+        </div>
+
+        <!-- 4. Video to MP3 Converter -->
+        <div class="feature-item reverse">
+            <div class="feature-image-wrap">
+                <img src="/images/mobile2.png" alt="Video to MP3" class="feature-image">
+            </div>
+            <div class="feature-content">
+                <h2>Video to MP3 Converter</h2>
+                <h3>Turn your favorite videos into MP3 and create your own music collection with ease.</h3>
+                <p>Video Saver doubles as a powerful audio converter for music lovers. Download tracks, extract
+                    audio from videos, and save them in high-quality MP3 format. It’s a fast, smooth, and
+                    reliable way to build your personal library.</p>
+            </div>
+        </div>
+
+        <!-- 5. Endless Wallpaper Collection -->
+        <div class="feature-item">
+            <div class="feature-image-wrap">
+                <img src="/images/mobile3.png" alt="Wallpapers" class="feature-image">
+            </div>
+            <div class="feature-content">
+                <h2>Endless Wallpaper Collection</h2>
+                <h3>Browse a vast library of stunning wallpapers and download your favorites with ease.</h3>
+                <p>The Video Saver app offers a wide range of categories, including nature, abstract, minimal,
+                    and more. Discover fresh designs daily, get personalized recommendations, and save
+                    high-quality wallpapers directly to your device.</p>
+            </div>
+        </div>
+
+    </div>
+    </div>
     </section>
 
     <!-- Everything You Need Section -->
@@ -2275,49 +2264,7 @@
         }
     </script>
 
-    <!-- Supported Sites Section -->
-    @php
-        $platforms = json_decode($settings->platforms_data ?? '[]', true) ?: [];
-    @endphp
-    <section style="padding: 3rem 0 3.5rem; background: #fff; border-top: 1px solid #F3F4F6;">
-        <div class="hero-container" style="max-width: 1000px; text-align: center;">
 
-            <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
-                {{ $settings->sites_heading ?? 'Download Videos from More Supported Sites' }}
-            </h2>
-            <p style="font-size: 0.92rem; color: #6B7280; max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.7;">
-                {{ $settings->sites_description ?? 'Video Saver lets you download content from your favorite platforms.' }}
-            </p>
-
-            @if(count($platforms) > 0)
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem;">
-                    @foreach($platforms as $p)
-                        <a href="{{ $p['url'] ?? '#' }}"
-                            style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s;"
-                            onmouseover="this.style.transform='translateY(-5px)'"
-                            onmouseout="this.style.transform='translateY(0)'">
-                            <div
-                                style="width:75px; height:75px; border-radius:50%; overflow:hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border:2px solid #f0f0f0;">
-                                @if(!empty($p['img']))
-                                    <img src="{{ $p['img'] }}" alt="{{ $p['name'] }}"
-                                        style="width:100%;height:100%;object-fit:cover;">
-                                @else
-                                    <div
-                                        style="width:100%;height:100%;background:{{ $p['color'] ?? '#333' }};display:flex;align-items:center;justify-content:center;">
-                                        <i class="{{ $p['icon'] ?? 'fas fa-globe' }}" style="font-size:1.8rem;color:#fff;"></i>
-                                    </div>
-                                @endif
-                            </div>
-                            <span style="font-size:0.8rem; font-weight:600; color:#555; text-transform:capitalize;">
-                                {{ $p['name'] }}
-                            </span>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
-
-        </div>
-    </section>
 
     <!-- Why Millions Choose Video Saver -->
     <section class="why-choose-section">

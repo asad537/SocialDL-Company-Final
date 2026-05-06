@@ -84,6 +84,7 @@
             <img src="/images/logofinal.png" alt="Video Saver" style="height: 60px; width: auto;">
         </div>
         <ul>
+            <li><a href="/" onclick="toggleMobileMenu()">Home</a></li>
             <li><a href="/faqs" onclick="toggleMobileMenu()">FAQs</a></li>
             <li><a href="/download" onclick="toggleMobileMenu()">Download</a></li>
             
