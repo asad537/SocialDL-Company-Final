@@ -1196,28 +1196,28 @@
 
         .phone-center img {
             width: 100%;
-            max-width: 260px;
+            max-width: 295px;
             height: auto;
             display: block;
         }
 
         .callout-top-right {
             position: absolute;
-            right: 40px;
+            right: -4px;
             top: 12%;
             max-width: 200px;
         }
 
         .callout-middle-left {
             position: absolute;
-            left: 40px;
+            left: 2px;
             top: 42%;
             max-width: 200px;
         }
 
         .callout-bottom-right {
             position: absolute;
-            right: -20px;
+            right: -69px;
             top: 72%;
             max-width: 260px;
         }
@@ -1897,11 +1897,11 @@
                     {{ $settings->hero_button_text ?? 'Download Video Saver' }}
                 </a>
 
-                <!-- @if(!empty($settings->hero_description))
-                <div class="hero-description" style="margin-top:1rem;font-size:0.9rem;color:rgba(255,255,255,0.8);max-width:500px;line-height:1.6;">
+                <!-- @if (!empty($settings->hero_description))
+<div class="hero-description" style="margin-top:1rem;font-size:0.9rem;color:rgba(255,255,255,0.8);max-width:500px;line-height:1.6;">
                     {!! $settings->hero_description !!}
                 </div>
-                @endif -->
+@endif -->
 
                 <div class="trust-row">
                     <div class="trust-item">
@@ -1933,22 +1933,23 @@
                 {{ $settings->sites_description ?? 'Video Saver lets you download content from your favorite platforms.' }}
             </p>
 
-            @if(count($platforms) > 0)
+            @if (count($platforms) > 0)
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem;">
-                    @foreach($platforms as $p)
+                    @foreach ($platforms as $p)
                         <a href="{{ $p['url'] ?? '#' }}"
                             style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s;"
                             onmouseover="this.style.transform='translateY(-5px)'"
                             onmouseout="this.style.transform='translateY(0)'">
                             <div
                                 style="width:75px; height:75px; border-radius:50%; overflow:hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border:2px solid #f0f0f0;">
-                                @if(!empty($p['img']))
+                                @if (!empty($p['img']))
                                     <img src="{{ $p['img'] }}" alt="{{ $p['name'] }}"
                                         style="width:100%;height:100%;object-fit:cover;">
                                 @else
                                     <div
                                         style="width:100%;height:100%;background:{{ $p['color'] ?? '#333' }};display:flex;align-items:center;justify-content:center;">
-                                        <i class="{{ $p['icon'] ?? 'fas fa-globe' }}" style="font-size:1.8rem;color:#fff;"></i>
+                                        <i class="{{ $p['icon'] ?? 'fas fa-globe' }}"
+                                            style="font-size:1.8rem;color:#fff;"></i>
                                     </div>
                                 @endif
                             </div>
@@ -2059,7 +2060,7 @@
                 <!-- BG Floating Icons -->
                 <i class="fas fa-photo-video hw-bg-icon" style="top: 5%; left: 2%; font-size: 5.5rem;"></i>
                 <i class="fas fa-mobile-alt hw-bg-icon" style="bottom: 15%; left: 6%; font-size: 4rem;"></i>
-                <i class="fas fa-wifi hw-bg-icon" style="top: 10%; right: 4%; font-size: 4.5rem;"></i>
+                <i class="fas fa-wifi hw-bg-icon" style="top: -5%; right: 9%; font-size: 4.5rem;"></i>
                 <i class="fas fa-cloud-download-alt hw-bg-icon" style="bottom: 10%; right: 5%; font-size: 5rem;"></i>
 
                 <!-- Mobile Phone Image (Center) -->
@@ -2103,9 +2104,9 @@
             <div class="howitworks-wrapper">
 
                 <!-- BG Floating Icons -->
-                <i class="fas fa-film hw-bg-icon" style="top: 5%; left: 3%; font-size: 6rem;"></i>
-                <i class="fas fa-music hw-bg-icon" style="bottom: 10%; left: 8%; font-size: 4rem;"></i>
-                <i class="fas fa-video hw-bg-icon" style="top: 15%; right: 5%; font-size: 5rem;"></i>
+                <i class="fas fa-film hw-bg-icon" style="top: -5%; left: 3%; font-size: 6rem;"></i>
+                <i class="fas fa-music hw-bg-icon" style="bottom: 2%; left: 8%; font-size: 4rem;"></i>
+                <i class="fas fa-video hw-bg-icon" style="top: 4%; right: 14%; font-size: 5rem;"></i>
                 <i class="fas fa-headphones hw-bg-icon" style="bottom: 20%; right: 3%; font-size: 4.5rem;"></i>
                 <i class="fas fa-download hw-bg-icon" style="top: 50%; left: 15%; font-size: 3.5rem;"></i>
                 <i class="fas fa-compact-disc hw-bg-icon" style="top: 40%; right: 15%; font-size: 4rem;"></i>
@@ -2194,7 +2195,7 @@
             <div id="seo-content-wrap"
                 style="position:relative; overflow:hidden; max-height:380px; transition: max-height 0.5s ease; text-align:justify;">
 
-                @if(!empty($settings->hero_description))
+                @if (!empty($settings->hero_description))
                     <div style="font-size: 0.95rem; color: #000000ff; line-height: 1.8;">
                         {!! App\Models\Blog::renderEditorJS($settings->hero_description) !!}
                     </div>
@@ -2203,7 +2204,8 @@
                         By Platform: Download From Any Social Media
                     </h2>
                     <p style="font-size: 0.95rem; color: #000000ff; line-height: 1.8; margin-bottom: 1.5rem;">
-                        If you're looking for a fast, reliable, and completely free video downloader that supports all major
+                        If you're looking for a fast, reliable, and completely free video downloader that supports all
+                        major
                         platforms — you've found it. Video Saver lets you effortlessly save videos, reels, stories, and
                         audio
                         from YouTube, Instagram, TikTok, Facebook, Twitter, and many more.
@@ -2213,7 +2215,8 @@
                         High-Quality Downloads: MP4, MP3 & More
                     </h2>
                     <p style="font-size: 0.95rem; color: #4B5563; line-height: 1.8; margin-bottom: 1.5rem;">
-                        With Video Saver, you can download content in multiple formats and resolutions — from standard 480p
+                        With Video Saver, you can download content in multiple formats and resolutions — from standard
+                        480p
                         to
                         stunning 4K Ultra HD. Whether you need a crisp video file or just the audio track as MP3, our
                         downloader
@@ -2346,7 +2349,7 @@
     </section>
 
     <!-- FAQ Section -->
-    @if(isset($faqs) && count($faqs) > 0)
+    @if (isset($faqs) && count($faqs) > 0)
         <section style="padding: 3.5rem 0; background: #ffffff; border-top: 1px solid #F3F4F6;">
             <div class="hero-container" style="max-width: 850px;">
 
@@ -2358,16 +2361,18 @@
                 </div>
 
                 <div id="faqAccordion" style="display:flex;flex-direction:column;gap:0.7rem;">
-                    @foreach($faqs as $faq)
+                    @foreach ($faqs as $faq)
                         <div class="faq-wrap"
                             style="border:1.5px solid #EBEBEB; border-radius:14px; overflow:hidden; background:#fff;">
                             <button onclick="toggleFaq(this)"
                                 style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;">
-                                <span style="font-size:0.95rem;font-weight:500;color:#111827;">{{ $faq->question }}</span>
+                                <span
+                                    style="font-size:0.95rem;font-weight:500;color:#111827;">{{ $faq->question }}</span>
                                 <span class="faq-icon"
                                     style="font-size:1.3rem;color:#111827;font-weight:300;line-height:1;flex-shrink:0;margin-left:1rem;">+</span>
                             </button>
-                            <div class="faq-body" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease;">
+                            <div class="faq-body"
+                                style="max-height:0;overflow:hidden;transition:max-height 0.3s ease;">
                                 <p
                                     style="padding:0 1.4rem 1.1rem;font-size:0.9rem;color:#6B7280;line-height:1.7;text-align:justify;margin:0;">
                                     {{ $faq->answer }}
@@ -2404,7 +2409,7 @@
     @endif
 
     <!-- Blog Section -->
-    @if(isset($blogs) && count($blogs) > 0)
+    @if (isset($blogs) && count($blogs) > 0)
         <section class="blog-section">
             <div class="hero-container blog-section-inner">
                 <h2 class="blog-section-title">Latest From Our Blog</h2>
@@ -2431,7 +2436,7 @@
 
                     <!-- Sidebar Blogs (Next 3) -->
                     <div class="blog-sidebar">
-                        @foreach($blogs->skip(1) as $blog)
+                        @foreach ($blogs->skip(1) as $blog)
                             <div class="blog-item-sm">
                                 <a href="{{ $blog->slug }}" class="sm-img-wrap">
                                     <img src="{{ $blog->featured_image ?: 'https://via.placeholder.com/200x200' }}"
@@ -2465,9 +2470,8 @@
             }, 'google_translate_element');
         }
     </script>
-    <script type="text/javascript"
-        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-        </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
 
     <script>
         const input = document.getElementById('videoUrl');
@@ -2567,14 +2571,14 @@
             if (menu) menu.style.display = 'none';
         }
 
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             if (!event.target.closest('.lang-dropdown')) {
                 const menu = document.getElementById('lang-menu');
                 if (menu) menu.style.display = 'none';
             }
         }
         // Auto-Hide Google Translate Banner
-        setInterval(function () {
+        setInterval(function() {
             const banner = document.querySelector('.goog-te-banner-frame');
             if (banner) banner.remove();
             document.body.style.top = '0px';

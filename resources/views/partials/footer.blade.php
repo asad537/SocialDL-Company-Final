@@ -164,11 +164,19 @@
             <div>
                 <h4 class="footer-col-title">Supported Platforms</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Instagram Video Downloader</a></li>
-                    <li><a href="#">Facebook Video Downloader</a></li>
-                    <li><a href="#">TikTok Video Downloader</a></li>
-                    <li><a href="#">Twitter Video Downloader</a></li>
-                    <li><a href="#">WhatsApp Status Downloader</a></li>
+                    @php
+                        $footerPlatforms = \App\Models\Platform::where('status', 'active')
+                            ->orderBy('name')
+                            ->get();
+                    @endphp
+
+                    @forelse($footerPlatforms as $platform)
+                        <li>
+                            <a href="{{ route('platforms.show', $platform->slug) }}">{{ $platform->name }}</a>
+                        </li>
+                    @empty
+                        <li><a href="javascript:void(0)">No platforms available</a></li>
+                    @endforelse
                 </ul>
             </div>
 
@@ -176,9 +184,9 @@
             <div>
                 <h4 class="footer-col-title">Legal</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Term of Service</a></li>
-                    <li><a href="#">Disclaimer</a></li>
+                    <li><a href="{{ route('legal.privacy') }}">Privacy Policy</a></li>
+                    <li><a href="{{ route('legal.terms') }}">Term of Service</a></li>
+                    <li><a href="{{ route('legal.disclaimer') }}">Disclaimer</a></li>
                 </ul>
             </div>
 
