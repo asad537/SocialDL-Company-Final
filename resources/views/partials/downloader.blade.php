@@ -83,6 +83,241 @@
         margin-left: 5px;
     }
 
+    /* ── Tutorial Modal ── */
+    .tutorial-dropdown {
+        display: none;
+        margin-top: 0.55rem;
+        width: 100%;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0.6rem 12.5rem 0.3rem;
+    }
+
+    .tutorial-dropdown.open {
+        display: block;
+    }
+
+    .tutorial-steps {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 0;
+    }
+
+    .tutorial-step {
+        text-align: center;
+    }
+
+    .tutorial-step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #FFB800;
+        color: #111827;
+        font-weight: 800;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+
+    .tutorial-step-card {
+        border: 1.5px solid #F3E9C7;
+        border-radius: 14px;
+        background: #fff;
+        padding: 8px 8px 10px;
+        min-height: 208px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tutorial-thumb {
+        width: 100%;
+        max-width: 152px;
+        height: 54px;
+        border: 1px solid #F3E9C7;
+        border-radius: 8px;
+        background: #FFFCF2;
+        margin-bottom: 10px;
+        position: relative;
+        overflow: hidden;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tutorial-thumb-ui {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        border: 1px solid #E5E7EB;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tutorial-thumb-ui::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 6px;
+        border-radius: 4px;
+        background: #F7E7A5;
+    }
+
+    .tutorial-thumb.step-1 .tutorial-thumb-ui::before {
+        right: 26px;
+    }
+
+    .tutorial-thumb.step-1 .tutorial-thumb-ui::after {
+        content: "🔗";
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-52%);
+        font-size: 11px;
+        opacity: 0.7;
+    }
+
+    .tutorial-thumb.step-2 .tutorial-thumb-ui::before {
+        width: calc(100% - 56px);
+    }
+
+    .tutorial-thumb.step-2 .tutorial-thumb-ui::after {
+        content: "➜";
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 42px;
+        height: 100%;
+        background: #FFB800;
+        color: #fff;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+
+    .tutorial-thumb.step-3 .tutorial-thumb-ui::before {
+        right: 24px;
+    }
+
+    .tutorial-thumb.step-3 .tutorial-thumb-ui::after {
+        content: "📋";
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-52%);
+        font-size: 11px;
+        opacity: 0.75;
+    }
+
+    .tutorial-thumb.step-4 .tutorial-thumb-ui {
+        border: none;
+        background: transparent;
+    }
+
+    .tutorial-thumb.step-4 .tutorial-thumb-ui::before,
+    .tutorial-thumb.step-4 .tutorial-thumb-ui::after {
+        display: none;
+    }
+
+    .tutorial-thumb-row {
+        height: 46%;
+        border: 1px solid #E5E7EB;
+        border-radius: 4px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 3px;
+    }
+
+    .tutorial-thumb-row + .tutorial-thumb-row {
+        margin-top: 2px;
+    }
+
+    .tutorial-badge {
+        background: #1FBF63;
+        color: #fff;
+        border-radius: 2px;
+        font-size: 7px;
+        font-weight: 700;
+        padding: 0 3px;
+        line-height: 1.45;
+    }
+
+    .tutorial-txt {
+        color: #374151;
+        font-size: 6.5px;
+        font-weight: 600;
+        margin-left: 3px;
+    }
+
+    .tutorial-mini-btn {
+        border: 1px solid #D1D5DB;
+        border-radius: 2px;
+        font-size: 6px;
+        padding: 1px 3px;
+        color: #111827;
+        background: #fff;
+        line-height: 1;
+    }
+
+    .tutorial-thumb.step-5 .tutorial-thumb-ui::before {
+        display: none;
+    }
+
+    .tutorial-thumb.step-5 .tutorial-thumb-ui {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 6px;
+    }
+
+    .tutorial-dl-btn {
+        border: 1px solid #E5E7EB;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 7px;
+        font-weight: 700;
+        color: #111827;
+        background: #fff;
+        white-space: nowrap;
+    }
+
+    .tutorial-arrow {
+        font-size: 9px;
+        color: #111827;
+    }
+
+    .tutorial-folder {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+
+    .tutorial-step-card h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 5px;
+        line-height: 1.25;
+    }
+
+    .tutorial-step-card p {
+        font-size: 0.8rem;
+        line-height: 1.45;
+        color: #4B5563;
+        margin: 0;
+    }
+
     /* ── Loader ── */
     .loader-box {
         display: none;
@@ -387,6 +622,34 @@
             flex-shrink: 0;
             white-space: nowrap;
         }
+
+        .tutorial-dropdown {
+            max-height: 80vh;
+            overflow: auto;
+            padding: 0.7rem 1rem;
+        }
+
+        .tutorial-steps {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .tutorial-step-card {
+            min-height: auto;
+        }
+
+        .tutorial-thumb {
+            max-width: 220px;
+            height: 64px;
+        }
+
+        .tutorial-step-card h4 {
+            font-size: 1rem;
+        }
+
+        .tutorial-step-card p {
+            font-size: 0.85rem;
+        }
     }
 </style>
 
@@ -442,6 +705,85 @@
     </div>
 </section>
 
+<div class="tutorial-dropdown" id="tutorialDropdown" aria-hidden="true">
+        <div class="tutorial-steps">
+            <div class="tutorial-step">
+                <div class="tutorial-step-num">1</div>
+                <div class="tutorial-step-card">
+                    <div class="tutorial-thumb step-1" aria-hidden="true">
+                        <div class="tutorial-thumb-ui"></div>
+                    </div>
+                    <h4>Copy the Video Link</h4>
+                    <p>Find the video you want and copy its link from YouTube, TikTok, Instagram, Facebook, or any
+                        supported platform.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-step">
+                <div class="tutorial-step-num">2</div>
+                <div class="tutorial-step-card">
+                    <div class="tutorial-thumb step-2" aria-hidden="true">
+                        <div class="tutorial-thumb-ui"></div>
+                    </div>
+                    <h4>Open VideoSaver.com</h4>
+                    <p>Launch your browser and go to VidsSaver.com the fastest online video downloader.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-step">
+                <div class="tutorial-step-num">3</div>
+                <div class="tutorial-step-card">
+                    <div class="tutorial-thumb step-3" aria-hidden="true">
+                        <div class="tutorial-thumb-ui"></div>
+                    </div>
+                    <h4>Paste Your Link</h4>
+                    <p>Paste the copied video URL into the smart search box on our homepage. Auto-detects platform.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-step">
+                <div class="tutorial-step-num">4</div>
+                <div class="tutorial-step-card">
+                    <div class="tutorial-thumb step-4" aria-hidden="true">
+                        <div class="tutorial-thumb-ui">
+                            <div class="tutorial-thumb-row">
+                                <span class="tutorial-badge">MP4</span>
+                                <span class="tutorial-txt">144p</span>
+                                <span class="tutorial-txt">449.1 KB</span>
+                                <span class="tutorial-mini-btn">Download</span>
+                            </div>
+                            <div class="tutorial-thumb-row">
+                                <span class="tutorial-badge">MP3</span>
+                                <span class="tutorial-txt">128kbps</span>
+                                <span class="tutorial-txt">13.7 MB</span>
+                                <span class="tutorial-mini-btn">Download</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>Choose Format &amp; Quality</h4>
+                    <p>Select MP4 (video) or MP3 (audio), and pick quality up to 4K Ultra HD based on source
+                        availability.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-step">
+                <div class="tutorial-step-num">5</div>
+                <div class="tutorial-step-card">
+                    <div class="tutorial-thumb step-5" aria-hidden="true">
+                        <div class="tutorial-thumb-ui">
+                            <span class="tutorial-dl-btn">↓ Download</span>
+                            <span class="tutorial-arrow">➜</span>
+                            <span class="tutorial-folder">📁</span>
+                        </div>
+                    </div>
+                    <h4>Download &amp; Save</h4>
+                    <p>Click "Download" file starts automatically. Find it in your device's "Downloads" folder
+                        instantly.</p>
+                </div>
+            </div>
+        </div>
+</div>
+
 <script>
     (function () {
         const input   = document.getElementById('videoUrl');
@@ -450,8 +792,20 @@
         const resultsBox = document.getElementById('results');
         const errorDiv = document.getElementById('dl-error');
         const csrf    = document.querySelector('meta[name="csrf-token"]')?.content;
+        const tutorialLink = document.querySelector('.tutorial-link');
+        const tutorialDropdown = document.getElementById('tutorialDropdown');
 
         let originalUrl = '';
+
+        function openTutorialDropdown() {
+            tutorialDropdown.classList.add('open');
+            tutorialDropdown.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeTutorialDropdown() {
+            tutorialDropdown.classList.remove('open');
+            tutorialDropdown.setAttribute('aria-hidden', 'true');
+        }
 
         async function fetchVideo(url) {
             if (!url) return;
@@ -536,5 +890,30 @@
 
         fetchBtn.addEventListener('click', () => fetchVideo(input.value.trim()));
         input.addEventListener('keydown', e => { if (e.key === 'Enter') fetchVideo(input.value.trim()); });
+
+        if (tutorialLink && tutorialDropdown) {
+            tutorialLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (tutorialDropdown.classList.contains('open')) {
+                    closeTutorialDropdown();
+                } else {
+                    openTutorialDropdown();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && tutorialDropdown.classList.contains('open')) {
+                    closeTutorialDropdown();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!tutorialDropdown.classList.contains('open')) return;
+                if (!tutorialDropdown.contains(e.target) && !tutorialLink.contains(e.target)) {
+                    closeTutorialDropdown();
+                }
+            });
+        }
     })();
 </script>
