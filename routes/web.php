@@ -85,13 +85,11 @@ Route::get('/', function () {
 Route::get('/download', function () {
     return view('download');
 })->name('download');
-
 Route::view('/privacy-policy', 'legal.privacy-policy')->name('legal.privacy');
 Route::view('/terms-of-service', 'legal.terms-of-service')->name('legal.terms');
 Route::view('/disclaimer', 'legal.disclaimer')->name('legal.disclaimer');
 
-// ── Extract: most expensive (Python subprocess) ──────────────────────────
-// Rate limit: 10 requests per minute per IP
+// ── Extract: yt-dlp extraction (cached <1ms, uncached ~2-3s) ─────────────
 Route::post('/extract', [VideoController::class, 'extract'])
     ->middleware('throttle:30,1');
 
