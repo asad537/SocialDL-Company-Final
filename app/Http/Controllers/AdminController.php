@@ -42,14 +42,106 @@ class AdminController extends Controller
     {
         if (!session('admin_logged_in')) return redirect()->route('admin.login');
 
+        $data = $this->getDashboardData();
+        $stats      = $data['stats'];
+        $recentLogs = $data['recentLogs'];
+        $weeklyData = $data['weeklyData'];
+        $platformData = $data['platformData'];
+
+        return view('admin.dashboard', compact('stats', 'recentLogs', 'weeklyData', 'platformData'));
+    }
+
+    /**
+     * AJAX endpoint — returns fresh dashboard data as JSON.
+     */
+    public function dashboardData()
+    {
+        if (!session('admin_logged_in')) return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json($this->getDashboardData());
+    }
+
+    /**
+     * Build all dashboard stats from the download_logs table.
+     */
+    private function getDashboardData(): array
+    {
+        // ── Top stats ────────────────────────────────────────────────────
+        $totalDownloads   = DB::table('download_logs')->where('type', 'download')->count();
+        $todayDownloads   = DB::table('download_logs')->where('type', 'download')->whereDate('created_at', today())->count();
+        $totalExtractions = DB::table('download_logs')->where('type', 'extraction')->count();
+        $activeUsers      = DB::table('download_logs')
+            ->where('created_at', '>=', now()->subMinutes(30))
+            ->distinct('ip_address')
+            ->count('ip_address');
+
         $stats = [
-            'total_downloads'   => Cache::get('stat_total_downloads', 0),
-            'today_downloads'   => Cache::get('stat_today_downloads', 0),
-            'total_extractions' => Cache::get('stat_total_extractions', 0),
-            'active_users'      => Cache::get('stat_active_users', 0),
+            'total_downloads'   => $totalDownloads,
+            'today_downloads'   => $todayDownloads,
+            'total_extractions' => $totalExtractions,
+            'active_users'      => $activeUsers,
         ];
-        $recentLogs = Cache::get('recent_download_logs', []);
-        return view('admin.dashboard', compact('stats', 'recentLogs'));
+
+        // ── Last 7 days bar chart ────────────────────────────────────────
+        $weeklyData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date  = now()->subDays($i);
+            $count = DB::table('download_logs')
+                ->whereDate('created_at', $date->toDateString())
+                ->count();
+            $weeklyData[] = [
+                'label' => $date->format('D'),
+                'count' => $count,
+            ];
+        }
+
+        // ── Platform breakdown ───────────────────────────────────────────
+        $platformColors = [
+            'YouTube'    => '#FF0000',
+            'Instagram'  => '#E4405F',
+            'TikTok'     => '#00F2EA',
+            'Facebook'   => '#1877F2',
+            'Twitter'    => '#1DA1F2',
+            'Pinterest'  => '#E60023',
+            'Vimeo'      => '#1AB7EA',
+            'Dailymotion'=> '#0066DC',
+            'Other'      => '#6B7280',
+        ];
+
+        $total = DB::table('download_logs')->count() ?: 1;
+        $rawPlatforms = DB::table('download_logs')
+            ->select('platform', DB::raw('COUNT(*) as cnt'))
+            ->groupBy('platform')
+            ->orderByDesc('cnt')
+            ->limit(5)
+            ->get();
+
+        $platformData = $rawPlatforms->map(function ($row) use ($total, $platformColors) {
+            return [
+                'name'  => $row->platform,
+                'color' => $platformColors[$row->platform] ?? '#6B7280',
+                'pct'   => (int) round(($row->cnt / $total) * 100),
+            ];
+        })->values()->toArray();
+
+        // If no data yet, show placeholder
+        if (empty($platformData)) {
+            $platformData = [
+                ['name' => 'YouTube',   'color' => '#FF0000', 'pct' => 0],
+                ['name' => 'Instagram', 'color' => '#E4405F', 'pct' => 0],
+                ['name' => 'TikTok',    'color' => '#00F2EA', 'pct' => 0],
+                ['name' => 'Facebook',  'color' => '#1877F2', 'pct' => 0],
+                ['name' => 'Twitter',   'color' => '#1DA1F2', 'pct' => 0],
+            ];
+        }
+
+        // ── Recent 20 activity logs ──────────────────────────────────────
+        $recentLogs = DB::table('download_logs')
+            ->orderByDesc('created_at')
+            ->limit(20)
+            ->get()
+            ->toArray();
+
+        return compact('stats', 'weeklyData', 'platformData', 'recentLogs');
     }
 
     public function homepageEdit()

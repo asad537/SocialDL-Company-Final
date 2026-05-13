@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Cleanup old downloaded files and stale records hourly
+        $schedule->job(new \App\Jobs\CleanupMediaJob)->hourly();
     }
 
     /**

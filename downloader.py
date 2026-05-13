@@ -38,6 +38,8 @@ def get_video_info(url):
                 'skip': ['dash', 'hls'],
             },
         },
+        # ── COMPATIBILITY: Force H.264 to ensure Mac/iPhone playback ────────
+        'format_sort': ['vcodec:h264', 'res', 'acodec:m4a'],
     }
 
     try:
@@ -106,10 +108,11 @@ def get_video_info(url):
                     'quality':   'Best Quality',
                     'extension': (info.get('ext') or 'mp4').upper(),
                     'size':      '',
+                    'raw_size':  0,
                     'type':      'video',
                     'has_audio': True,
                 })
-                processed.add(root_url[:40])
+                processed.add('best_root')
 
             # ── 2. Format list ───────────────────────────────────────────────
             for f in formats:
@@ -120,12 +123,11 @@ def get_video_info(url):
 
                 if not f_url or not f_url.startswith('http'):
                     continue
-                if f_url[:40] in processed:
-                    continue
 
                 # File size string
                 filesize = f.get('filesize') or f.get('filesize_approx')
                 size_str = ''
+                sz = 0
                 if filesize:
                     sz = float(filesize)
                     for unit in ['B', 'KB', 'MB', 'GB']:
@@ -144,13 +146,25 @@ def get_video_info(url):
                         or f.get('format_id')
                         or 'HD'
                     )
-                    key = f"v-{quality}-{is_audio}"
+                    
+                    # Skip 'storyboard' or 'm3u8'/'dash' manifests as they aren't direct video files
+                    if 'storyboard' in quality.lower() or ext.lower() in ['m3u8', 'mpd']:
+                        continue
+
+                    # Fallback to direct MP4 download if missing format_note
+                    if quality == 'HD' and 'mp4' in ext.lower():
+                        quality = 'MP4 Video'
+
+                    # Deduplicate by quality and approximate size
+                    approx_size = round(sz) if size_str and sz else 0
+                    key = f"v-{quality}-{is_audio}-{approx_size}"
                     if key not in processed:
                         result['medias'].append({
                             'url':       f_url,
                             'quality':   quality,
                             'extension': ext.upper(),
                             'size':      size_str,
+                            'raw_size':  float(filesize) if filesize else 0,
                             'type':      'video',
                             'has_audio': is_audio,
                         })
@@ -165,20 +179,35 @@ def get_video_info(url):
                             'quality':   f"{abr}kbps",
                             'extension': ext.upper(),
                             'size':      size_str,
+                            'raw_size':  float(filesize) if filesize else 0,
                             'type':      'audio',
                             'has_audio': True,
                         })
                         processed.add(key)
 
-            # ── Sort: High quality video → Low quality video → Audio ─────────
-            import re
+            # ── Sort: Video+Audio → Video Only → Audio ─────────────
             def sort_key(m):
-                if m['type'] == 'audio':
-                    return (-1, 0)
-                match = re.search(r'(\d+)', str(m.get('quality', '')))
-                return (1, int(match.group(1)) if match else 0)
+                if m['type'] == 'video':
+                    type_score = 2 if m.get('has_audio') else 1
+                else:
+                    type_score = 0
+                return (type_score, m.get('raw_size') or 0)
 
             result['medias'].sort(key=sort_key, reverse=True)
+
+            # For non-YouTube platforms, users usually just want the single best video.
+            # Hide the clutter of raw DASH chunks.
+            if 'youtube.com' not in url and 'youtu.be' not in url:
+                best_video = next((m for m in result['medias'] if m['type'] == 'video'), None)
+                best_audio = next((m for m in result['medias'] if m['type'] == 'audio'), None)
+                filtered = []
+                if best_video:
+                    # Give it a clean name
+                    best_video['quality'] = 'Best Quality'
+                    filtered.append(best_video)
+                if best_audio:
+                    filtered.append(best_audio)
+                result['medias'] = filtered
 
             if not result['medias']:
                 return {'error': 'No downloadable formats found for this URL.'}

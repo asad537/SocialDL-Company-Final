@@ -10,6 +10,7 @@ Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login
 Route::post('/admin/login', [AdminController::class, 'doLogin'])->name('admin.login.post');
 Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/dashboard-data', [AdminController::class, 'dashboardData'])->name('admin.dashboard.data');
 Route::get('/admin/homepage', [AdminController::class, 'homepageEdit'])->name('admin.homepage');
 Route::post('/admin/homepage', [AdminController::class, 'homepageSave'])->name('admin.homepage.save');
 
@@ -92,21 +93,35 @@ Route::view('/disclaimer', 'legal.disclaimer')->name('legal.disclaimer');
 // ── Extract: most expensive (Python subprocess) ──────────────────────────
 // Rate limit: 10 requests per minute per IP
 Route::post('/extract', [VideoController::class, 'extract'])
-    ->middleware('throttle:10,1');
+    ->middleware('throttle:30,1');
 
-// ── Direct download: zero server load (CDN redirect) ────────────────────
-// No rate limit needed — server only sends a 302 response
+// ── Direct download: zero server load (302 redirect to CDN) ──────────────
 Route::get('/direct-download', [VideoController::class, 'directDownload']);
 
-// ── Proxy download: fallback streaming ──────────────────────────────────
+// ── Proxy download: streaming with CDN auth headers ──────────────────────
 Route::get('/proxy-download', [VideoController::class, 'proxyDownload'])
     ->middleware('throttle:20,1');
 
-// ── Merge download: FFmpeg (heavy, 1080p+ only) ──────────────────────────
+// ── Merge download: FFmpeg -c copy streaming merge ───────────────────────
 Route::get('/merge-download', [VideoController::class, 'mergeDownload'])
-    ->middleware('throttle:5,1');
+    ->middleware('throttle:10,1');
 
-// ── Thumbnail proxy: browser-cached, lightweight ─────────────────────────
+// ── Queue download: background download via aria2c + queue ───────────────
+Route::post('/queue-download', [VideoController::class, 'queueDownload'])
+    ->middleware('throttle:10,1');
+
+// ── Download status: check background download progress ──────────────────
+Route::get('/download-status/{id}', [VideoController::class, 'downloadStatus']);
+
+// ── Download file: serve completed download ──────────────────────────────
+Route::get('/download-file/{id}', [VideoController::class, 'downloadFile']);
+
+// ── HLS Streaming ────────────────────────────────────────────────────────
+Route::get('/stream/{mediaId}', [VideoController::class, 'stream']);
+Route::get('/stream/{mediaId}/{segment}', [VideoController::class, 'streamSegment'])
+    ->where('segment', '.*\.ts');
+
+// ── Thumbnail proxy: browser-cached 1 hour ───────────────────────────────
 Route::get('/thumbnail-proxy', [VideoController::class, 'proxyThumbnail'])
     ->middleware('throttle:60,1');
 

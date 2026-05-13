@@ -2,180 +2,302 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DownloadMediaJob;
+use App\Jobs\MergeMediaJob;
+use App\Jobs\GenerateHlsJob;
+use App\Models\MediaDownload;
+use App\Services\CacheService;
+use App\Services\FFmpegService;
+use App\Services\MediaExtractorService;
+use App\Services\PlatformDetector;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VideoController extends Controller
 {
     /*
     |----------------------------------------------------------------------
+    | PRODUCTION-GRADE MEDIA DOWNLOADER CONTROLLER
+    |----------------------------------------------------------------------
+    |
+    | ARCHITECTURE:
+    |   - CacheService:          Redis + MySQL dual-layer cache
+    |   - MediaExtractorService: yt-dlp CLI (--dump-single-json, fastest)
+    |   - FFmpegService:         Merge + HLS (-c copy, no re-encode)
+    |   - PlatformDetector:      URL → platform + media ID
+    |   - Queue Jobs:            Downloads, merges, HLS in background
+    |
     | LOAD ANALYSIS:
-    |   /extract       → Heavy (Python process). CACHED per URL for 30 min.
-    |                    1,000,000 users asking same URL = 1 Python call.
-    |   /direct-download → ZERO server load. Browser downloads from CDN.
-    |   /proxy-download  → Minor (fallback only). Streams 128KB chunks.
-    |   /merge-download  → FFmpeg (only 1080p+, unavoidable).
-    |   /thumbnail-proxy → Cached in browser for 1 hour.
+    |   /extract        → Cached <1ms (Redis). Uncached ~2-3s (yt-dlp).
+    |   /direct-download → ZERO server load (302 redirect to CDN).
+    |   /proxy-download  → Streaming proxy with CDN auth headers.
+    |   /merge-download  → FFmpeg -c copy streaming (no re-encode).
+    |   /download-status → Check background download progress.
+    |   /stream          → HLS .m3u8 streaming endpoint.
+    |   /thumbnail-proxy → Browser-cached 1 hour.
     |----------------------------------------------------------------------
     */
 
+    /** @var CacheService */
+    private $cacheService;
+
+    /** @var MediaExtractorService */
+    private $extractorService;
+
+    /** @var FFmpegService */
+    private $ffmpegService;
+
+    public function __construct()
+    {
+        $this->cacheService     = new CacheService();
+        $this->extractorService = new MediaExtractorService();
+        $this->ffmpegService    = new FFmpegService();
+    }
+
+    /* ================================================================== */
+    /*  EXTRACT — Core metadata extraction                                */
+    /* ================================================================== */
+
     /**
-     * Extract video info — result cached per URL for 30 minutes.
-     * Same URL from 1,000,000 users = only 1 Python subprocess call.
+     * Extract video info from any supported URL.
+     *
+     * PERFORMANCE:
+     *   - Redis HIT:  <1ms response
+     *   - MySQL HIT:  ~5ms response (warms Redis)
+     *   - Full miss:  ~2-3s (yt-dlp CLI)
+     *
+     * POST /extract
      */
     public function extract(Request $request)
     {
+        // Release session lock for concurrent requests
+        if (session()->isStarted()) session()->save();
+
         $url = trim($request->input('url', ''));
         if (!$url) {
             return response()->json(['error' => 'URL is required'], 400);
         }
 
-        // Validate it looks like a URL
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             return response()->json(['error' => 'Invalid URL format'], 400);
         }
 
-        // ── Cache key: sha256 of the URL (safe for cache storage) ──────────
-        $cacheKey = 'video_info_' . hash('sha256', $url);
+        // ── Detect platform + media ID ──────────────────────────────────
+        $detected = PlatformDetector::detect($url);
+        $platform = $detected['platform'];
+        $mediaId  = $detected['id'];
 
-        // ── Return cached result instantly if available ─────────────────────
-        if (Cache::has($cacheKey)) {
-            return response()->json(Cache::get($cacheKey))
+        // ── Check dual-layer cache (Redis → MySQL) ──────────────────────
+        $cached = $this->cacheService->get($platform, $mediaId);
+        if ($cached) {
+            $this->logEvent('extraction', $url, 'MP4', '—', true, $cached['title'] ?? null);
+            return response()->json($cached)
                 ->header('X-Cache', 'HIT')
-                ->header('X-Cache-TTL', Cache::getStore()->get($cacheKey . '_ttl') ?? '1800');
+                ->header('X-Platform', $platform)
+                ->header('X-Media-ID', $mediaId);
         }
 
-        // ── Not cached: run Python extraction ──────────────────────────────
-        $pythonScript = base_path('downloader.py');
-        $pythonExe    = base_path('venv/bin/python3');
-
-        // Fallback to system python3 if venv not present
-        if (!file_exists($pythonExe)) {
-            $pythonExe = trim(shell_exec('which python3')) ?: 'python3';
+        // ── Extract via yt-dlp (CLI primary, Python fallback) ───────────
+        try {
+            $data = $this->extractorService->extract($url);
+        } catch (\Throwable $e) {
+            $this->logEvent('extraction', $url, 'MP4', '—', false);
+            Log::error('Extraction failed', ['url' => $url, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Extraction failed: ' . $e->getMessage()], 500);
         }
 
-        $command = escapeshellarg($pythonExe)
-            . ' ' . escapeshellarg($pythonScript)
-            . ' ' . escapeshellarg($url)
-            . ' 2>&1';
-
-        $output = shell_exec($command);
-
-        if (!$output) {
-            return response()->json(['error' => 'Extraction failed — Python returned no output.'], 500);
+        if (!$data || !empty($data['error'])) {
+            $this->logEvent('extraction', $url, 'MP4', '—', false);
+            return response()->json($data ?: ['error' => 'No data extracted'], 422);
         }
 
-        // Strip any debug lines before the JSON payload
-        $jsonStart = strpos($output, '{');
-        if ($jsonStart === false) {
-            return response()->json(['error' => 'Script output error: ' . substr($output, 0, 300)], 500);
-        }
-        $output = substr($output, $jsonStart);
+        // ── Store in dual-layer cache (Redis + MySQL) ───────────────────
+        $this->cacheService->put($platform, $mediaId, $url, $data);
 
-        $data = json_decode($output, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return response()->json(['error' => 'JSON parse error: ' . json_last_error_msg()], 500);
-        }
-
-        // Don't cache error responses
-        if (!empty($data['error'])) {
-            return response()->json($data, 422);
-        }
-
-        // ── Cache for 30 minutes ────────────────────────────────────────────
-        // CDN URLs from YouTube/Instagram typically stay valid for ~6 hours,
-        // so 30 minutes is safe. Adjust as needed.
-        Cache::put($cacheKey, $data, now()->addMinutes(30));
+        // ── Log extraction ──────────────────────────────────────────────
+        $this->logEvent('extraction', $url, 'MP4', '—', true, $data['title'] ?? null);
 
         return response()->json($data)
-            ->header('X-Cache', 'MISS');
+            ->header('X-Cache', 'MISS')
+            ->header('X-Platform', $platform)
+            ->header('X-Media-ID', $mediaId)
+            ->header('X-Extraction-Ms', $data['extraction_ms'] ?? 0);
     }
 
+    /* ================================================================== */
+    /*  DIRECT DOWNLOAD — Zero server load                                */
+    /* ================================================================== */
+
     /**
-     * Direct download — ZERO server load.
-     * Redirects the browser straight to the platform CDN URL.
-     * Server only sends a 302 redirect response (< 1KB), then done.
+     * Redirect to CDN URL directly.
+     * Server only sends a 302 — ZERO bandwidth used.
+     *
+     * GET /direct-download
      */
     public function directDownload(Request $request)
     {
-        $url = $request->query('url');
+        $url  = $request->query('url');
+        $ext  = $request->query('ext', 'mp4');
+        $qual = $request->query('quality', '—');
+        $orig = $request->query('source_url', $url);
+
         if (!$url) return abort(400, 'URL parameter is required.');
 
-        // Redirect browser directly to CDN — no bandwidth used on server
+        $this->logEvent('download', $orig ?: $url, $ext, $qual, true);
+
         return redirect()->away($url);
     }
 
+    /* ================================================================== */
+    /*  PROXY DOWNLOAD — Streaming with CDN auth headers                  */
+    /* ================================================================== */
+
     /**
-     * Proxy download — fallback when CDN rejects a plain browser redirect.
-     * Uses large 128KB read buffer for efficiency.
+     * Stream file through server with proper Referer/UA headers.
+     * Fallback when CDN rejects direct browser access.
+     *
+     * GET /proxy-download
      */
     public function proxyDownload(Request $request)
     {
+        if (session()->isStarted()) session()->save();
+
         $url   = $request->query('url');
         $title = $request->query('title', 'video');
-        $ext   = $request->query('ext', 'mp4');
+        $ext   = strtolower($request->query('ext', 'mp4'));
+        $qual  = $request->query('quality', '—');
+        $orig  = $request->query('source_url', '');
 
         if (!$url) return abort(400);
 
-        $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80)
-            . '.' . strtolower($ext);
+        $this->logEvent('download', $orig ?: $url, $ext, $qual, true, $title);
 
-        return response()->streamDownload(function () use ($url) {
+        // ── Platform detection for Referer ──────────────────────────────
+        $detected = PlatformDetector::detect($orig ?: $url);
+        $platform = $detected['platform'];
+        $referer  = $detected['referer'];
+
+        // Also check CDN host patterns
+        if ($platform === 'Other') {
+            $cdnDetected = PlatformDetector::detect($url);
+            if ($cdnDetected['platform'] !== 'Other') {
+                $platform = $cdnDetected['platform'];
+                $referer  = $cdnDetected['referer'];
+            }
+        }
+
+        // ── Validate CDN URL is alive (HEAD request) ────────────────────
+        $check = curl_init($url);
+        curl_setopt_array($check, [
+            CURLOPT_NOBODY         => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_MAXREDIRS      => 5,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_USERAGENT      => config('downloader.extraction.user_agent'),
+            CURLOPT_HTTPHEADER     => ['Referer: ' . $referer],
+        ]);
+        curl_exec($check);
+        $httpCode = (int) curl_getinfo($check, CURLINFO_HTTP_CODE);
+        curl_close($check);
+
+        if ($httpCode >= 400) {
+            return response()->json([
+                'error' => 'Download link has expired. Please extract the video again to get a fresh link.'
+            ], 410);
+        }
+
+        // ── Stream response ─────────────────────────────────────────────
+        $safeTitle = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) ?: 'video';
+        $filename  = $safeTitle . '.' . ($ext ?: 'mp4');
+
+        return response()->streamDownload(function () use ($url, $referer) {
+            // ── Kill ALL output buffering for maximum streaming speed ────
+            while (ob_get_level() > 0) ob_end_flush();
+            ob_implicit_flush(true);
+
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS      => 10,
                 CURLOPT_RETURNTRANSFER => false,
                 CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_BUFFERSIZE     => 131072,  // 128 KB
+                CURLOPT_BUFFERSIZE     => 262144,  // 256KB buffer
                 CURLOPT_TIMEOUT        => 0,
-                CURLOPT_CONNECTTIMEOUT => 15,
-                CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                CURLOPT_HTTPHEADER     => ['Referer: https://www.youtube.com/'],
+                CURLOPT_CONNECTTIMEOUT => 20,
+                CURLOPT_LOW_SPEED_LIMIT=> 1000,    // abort if <1KB/s
+                CURLOPT_LOW_SPEED_TIME => 30,      // for 30 seconds
+                CURLOPT_USERAGENT      => config('downloader.extraction.user_agent'),
+                CURLOPT_HTTPHEADER     => [
+                    'Referer: ' . $referer,
+                    'Accept: */*',
+                    'Accept-Language: en-US,en;q=0.5',
+                    'Connection: keep-alive',
+                ],
                 CURLOPT_WRITEFUNCTION  => function ($ch, $chunk) {
                     echo $chunk;
+                    flush();
                     return strlen($chunk);
                 },
             ]);
             curl_exec($ch);
             curl_close($ch);
         }, $filename, [
-            'Content-Type'      => 'application/octet-stream',
-            'Cache-Control'     => 'no-cache',
-            'X-Accel-Buffering' => 'no',
+            'Content-Type'        => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Cache-Control'       => 'no-cache, no-store, must-revalidate',
+            'X-Accel-Buffering'   => 'no',
         ]);
     }
 
+    /* ================================================================== */
+    /*  MERGE DOWNLOAD — FFmpeg streaming merge                           */
+    /* ================================================================== */
+
     /**
-     * Merge-download — FFmpeg stitches separate video+audio streams.
-     * Only needed for YouTube 1080p+ (DASH format). Unavoidable server work.
-     * -reconnect flags allow FFmpeg to survive slow CDN connections.
+     * Merge video+audio using FFmpeg and stream result.
+     * Uses -c copy (no re-encoding) for maximum speed.
+     *
+     * GET /merge-download
      */
     public function mergeDownload(Request $request)
     {
+        if (session()->isStarted()) session()->save();
+
         $vUrl  = $request->query('video_url');
         $aUrl  = $request->query('audio_url');
         $title = $request->query('title', 'video');
+        $orig  = $request->query('source_url', $vUrl);
 
-        if (!$vUrl || !$aUrl) return abort(400);
+        if (!$vUrl) return abort(400);
+
+        $this->logEvent('download', $orig ?: $vUrl, 'mp4', '1080p+', true, $title);
+
+        // Get referer for CDN auth
+        $detected  = PlatformDetector::detect($orig ?: $vUrl);
+        $referer   = $detected['referer'];
+        $userAgent = config('downloader.extraction.user_agent');
 
         $fileName = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
 
-        $command = 'ffmpeg'
-            . ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
-            . ' -i ' . escapeshellarg($vUrl)
-            . ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
-            . ' -i ' . escapeshellarg($aUrl)
-            . ' -c:v copy -c:a aac'
-            . ' -map 0:v:0 -map 1:a:0'
-            . ' -f mp4 -movflags frag_keyframe+empty_moov'
-            . ' pipe:1 2>/dev/null';
+        // Build ffmpeg command using FFmpegService
+        $command = $this->ffmpegService->buildStreamMergeCommand($vUrl, $aUrl, $referer, $userAgent);
 
         return response()->streamDownload(function () use ($command) {
+            // Kill all output buffering for instant streaming
+            while (ob_get_level() > 0) ob_end_flush();
+            ob_implicit_flush(true);
+
             $handle = popen($command, 'r');
             if ($handle) {
                 while (!feof($handle)) {
-                    echo fread($handle, 131072); // 128 KB chunk
-                    flush();
+                    $data = fread($handle, 262144); // 256KB chunks
+                    if ($data !== false && $data !== '') {
+                        echo $data;
+                        flush();
+                    }
                 }
                 pclose($handle);
             }
@@ -185,9 +307,193 @@ class VideoController extends Controller
         ]);
     }
 
+    /* ================================================================== */
+    /*  BACKGROUND DOWNLOAD — Queue-based                                 */
+    /* ================================================================== */
+
     /**
-     * Thumbnail proxy — cached in browser for 1 hour.
-     * Server only fetches once per unique thumbnail URL.
+     * Queue a background download (aria2c + optional merge).
+     *
+     * POST /queue-download
+     */
+    public function queueDownload(Request $request)
+    {
+        $url      = $request->input('url');
+        $audioUrl = $request->input('audio_url');
+        $title    = $request->input('title', 'video');
+        $quality  = $request->input('quality', 'best');
+        $format   = $request->input('format', 'mp4');
+        $orig     = $request->input('source_url', $url);
+
+        if (!$url) return response()->json(['error' => 'URL is required'], 400);
+
+        $detected = PlatformDetector::detect($orig ?: $url);
+
+        // Create download record
+        $download = MediaDownload::create([
+            'url'        => $orig ?: $url,
+            'platform'   => $detected['platform'],
+            'format'     => $format,
+            'quality'    => $quality,
+            'status'     => MediaDownload::STATUS_PENDING,
+            'title'      => $title,
+            'ip_address' => $request->ip(),
+        ]);
+
+        $safeTitle = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) ?: 'download';
+        $filename  = $safeTitle . '_' . $download->id . '.' . $format;
+
+        // Dispatch appropriate job
+        if ($audioUrl) {
+            MergeMediaJob::dispatch(
+                $download->id,
+                $url,
+                $audioUrl,
+                $filename,
+                $detected['referer']
+            );
+        } else {
+            DownloadMediaJob::dispatch(
+                $download->id,
+                $url,
+                $filename,
+                $detected['referer'],
+                $detected['platform']
+            );
+        }
+
+        return response()->json([
+            'download_id' => $download->id,
+            'status'      => 'queued',
+            'message'     => 'Download queued successfully.',
+        ]);
+    }
+
+    /* ================================================================== */
+    /*  DOWNLOAD STATUS — Check progress                                  */
+    /* ================================================================== */
+
+    /**
+     * Check the status of a queued download.
+     *
+     * GET /download-status/{id}
+     */
+    public function downloadStatus($id)
+    {
+        $download = MediaDownload::find($id);
+        if (!$download) {
+            return response()->json(['error' => 'Download not found'], 404);
+        }
+
+        $response = [
+            'id'       => $download->id,
+            'status'   => $download->status,
+            'progress' => $download->progress,
+            'format'   => $download->format,
+            'quality'  => $download->quality,
+        ];
+
+        if ($download->status === MediaDownload::STATUS_COMPLETED) {
+            $response['file_url']  = url('/download-file/' . $download->id);
+            $response['file_size'] = $download->file_size;
+        }
+
+        if ($download->status === MediaDownload::STATUS_FAILED) {
+            $response['error'] = $download->error_message;
+        }
+
+        return response()->json($response);
+    }
+
+    /* ================================================================== */
+    /*  DOWNLOAD FILE — Serve completed download                          */
+    /* ================================================================== */
+
+    /**
+     * Serve a completed download file.
+     *
+     * GET /download-file/{id}
+     */
+    public function downloadFile($id)
+    {
+        $download = MediaDownload::find($id);
+        if (!$download || $download->status !== MediaDownload::STATUS_COMPLETED) {
+            return abort(404, 'File not ready or not found.');
+        }
+
+        if (!$download->file_path || !file_exists($download->file_path)) {
+            return abort(410, 'File has been cleaned up.');
+        }
+
+        $filename = substr(preg_replace('/[^A-Za-z0-9\-_.]/', '_', $download->title ?: 'download'), 0, 80)
+            . '.' . ($download->format ?: 'mp4');
+
+        return response()->download($download->file_path, $filename, [
+            'Content-Type' => 'application/octet-stream',
+        ]);
+    }
+
+    /* ================================================================== */
+    /*  HLS STREAMING                                                     */
+    /* ================================================================== */
+
+    /**
+     * Stream HLS playlist.
+     *
+     * GET /stream/{mediaId}
+     */
+    public function stream($mediaId)
+    {
+        $hlsDir = config('downloader.hls_dir', storage_path('app/hls'));
+        $playlistPath = $hlsDir . '/' . $mediaId . '/playlist.m3u8';
+
+        if (!file_exists($playlistPath)) {
+            return response()->json([
+                'error'  => 'Stream not ready. Please request generation first.',
+                'status' => 'not_found',
+            ], 404);
+        }
+
+        return response()->file($playlistPath, [
+            'Content-Type'                => 'application/vnd.apple.mpegurl',
+            'Cache-Control'               => 'public, max-age=3600',
+            'Access-Control-Allow-Origin' => '*',
+        ]);
+    }
+
+    /**
+     * Serve HLS segment (.ts file).
+     *
+     * GET /stream/{mediaId}/{segment}
+     */
+    public function streamSegment($mediaId, $segment)
+    {
+        // Sanitize to prevent path traversal
+        $safeMediaId = preg_replace('/[^A-Za-z0-9_\-]/', '', $mediaId);
+        $safeSegment = preg_replace('/[^A-Za-z0-9_\-.]/', '', $segment);
+
+        $hlsDir  = config('downloader.hls_dir', storage_path('app/hls'));
+        $segPath = $hlsDir . '/' . $safeMediaId . '/' . $safeSegment;
+
+        if (!file_exists($segPath)) {
+            return abort(404);
+        }
+
+        return response()->file($segPath, [
+            'Content-Type'                => 'video/MP2T',
+            'Cache-Control'               => 'public, max-age=86400',
+            'Access-Control-Allow-Origin' => '*',
+        ]);
+    }
+
+    /* ================================================================== */
+    /*  THUMBNAIL PROXY                                                   */
+    /* ================================================================== */
+
+    /**
+     * Proxy thumbnail with browser caching.
+     *
+     * GET /thumbnail-proxy
      */
     public function proxyThumbnail(Request $request)
     {
@@ -208,7 +514,33 @@ class VideoController extends Controller
 
         return response($data)
             ->header('Content-Type', $type ?: 'image/jpeg')
-            ->header('Cache-Control', 'public, max-age=3600')   // Browser caches 1 hour
+            ->header('Cache-Control', 'public, max-age=3600')
             ->header('Expires', gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
+    }
+
+    /* ================================================================== */
+    /*  PRIVATE HELPERS                                                   */
+    /* ================================================================== */
+
+    /**
+     * Log an extraction or download event.
+     */
+    private function logEvent($type, $url, $format = 'MP4', $quality = '—', $status = true, $title = null, $ip = null)
+    {
+        try {
+            DB::table('download_logs')->insert([
+                'type'       => $type,
+                'platform'   => PlatformDetector::platformName($url),
+                'format'     => strtoupper($format),
+                'quality'    => $quality,
+                'ip_address' => $ip ?? request()->ip(),
+                'status'     => $status,
+                'title'      => $title ? substr($title, 0, 255) : null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } catch (\Throwable $e) {
+            // Never let logging crash the main request
+        }
     }
 }

@@ -861,13 +861,38 @@
             const videoMedias = (data.medias || []).filter(m => m.type === 'video');
             const audioMedias = (data.medias || []).filter(m => m.type === 'audio');
 
+            // Detect if source platform needs proxy (CDN requires Referer/headers)
+            const needsProxy = !['YouTube', 'youtube', 'Vimeo', 'vimeo'].includes(data.source || '');
+
             function renderRow(m) {
-                const dlUrl = `/proxy-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}`;
+                let dlUrl;
+                let noAudioBadge = '';
+                let speedBadge = '';
+
+                if (m.type === 'video' && m.has_audio === false) {
+                    // Video-only: needs FFmpeg merge
+                    if (audioMedias.length > 0) {
+                        const bestAudioUrl = audioMedias[0].url;
+                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&audio_url=${encodeURIComponent(bestAudioUrl)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}`;
+                    } else {
+                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}`;
+                        noAudioBadge = `<span style="color: #EF4444; font-size: 0.7rem; font-weight: bold; margin-left: 5px;" title="No audio"><i class="fas fa-volume-mute"></i></span>`;
+                    }
+                } else if (m.has_audio && !needsProxy) {
+                    // ⚡ DIRECT CDN DOWNLOAD — Full speed, zero server load
+                    // YouTube/Vimeo CDN URLs work directly in browser
+                    dlUrl = `/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&quality=${encodeURIComponent(m.quality)}&source_url=${encodeURIComponent(originalUrl)}`;
+                    speedBadge = `<span style="color: #10B981; font-size: 0.65rem; margin-left: 4px;" title="Direct CDN — Maximum speed">⚡</span>`;
+                } else {
+                    // Proxy download — needed for Instagram, TikTok, Facebook (CDN requires Referer)
+                    dlUrl = `/proxy-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&source_url=${encodeURIComponent(originalUrl)}`;
+                }
+
                 const row = document.createElement('div');
                 row.className = 'format-row';
                 row.innerHTML = `
                     <span class="format-badge">${m.extension.toUpperCase()}</span>
-                    <span class="quality-text">${m.quality}</span>
+                    <span class="quality-text">${m.quality}${noAudioBadge}${speedBadge}</span>
                     <span class="size-text">${m.size || ''}</span>
                     <a href="${dlUrl}" class="dl-btn"><i class="fas fa-download"></i> Download</a>
                 `;
