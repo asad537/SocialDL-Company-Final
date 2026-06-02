@@ -207,6 +207,9 @@ class MediaExtractorService
             'medias'       => [],
         ];
 
+        $source = strtolower($info['extractor_key'] ?? '');
+        $isYouTube = (strpos($source, 'youtube') !== false);
+
         foreach ($info['formats'] ?? [] as $f) {
             if (empty($f['url'])) continue;
 
@@ -221,6 +224,12 @@ class MediaExtractorService
             $ext = strtolower($f['ext'] ?? '');
             $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
             $type = $isAudio ? 'audio' : 'video';
+            $hasAudio = (!empty($f['acodec']) && $f['acodec'] !== 'none');
+
+            // For non-YouTube platforms, skip video-only (DASH) formats to avoid showing partial/broken streams
+            if (!$isYouTube && $type === 'video' && !$hasAudio) {
+                continue;
+            }
 
             // Skip AV1 video codec formats (av01) - not natively supported by Apple QuickTime/macOS/iOS
             $vcodec = strtolower($f['vcodec'] ?? '');
