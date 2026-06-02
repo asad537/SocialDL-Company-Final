@@ -221,6 +221,13 @@ class MediaExtractorService
             $ext = strtolower($f['ext'] ?? '');
             $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
             $type = $isAudio ? 'audio' : 'video';
+            $hasAudio = (!empty($f['acodec']) && $f['acodec'] !== 'none');
+
+            // For non-YouTube platforms, skip video-only DASH formats to avoid duplicates and non-audio formats
+            $isYouTube = (strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
+            if (!$isYouTube && $type === 'video' && !$hasAudio) {
+                continue;
+            }
 
             // Skip AV1 video codec formats (av01) - not natively supported by Apple QuickTime/macOS/iOS
             $vcodec = strtolower($f['vcodec'] ?? '');
