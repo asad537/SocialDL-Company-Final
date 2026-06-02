@@ -50,7 +50,7 @@ return [
 
         // Platform-specific extractor args for speed
         'extractor_args' => [
-            'youtube' => 'youtube:player_client=web,mweb',
+            // 'youtube' => 'youtube:player_client=web,mweb',
         ],
     ],
 

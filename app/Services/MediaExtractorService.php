@@ -74,8 +74,10 @@ class MediaExtractorService
 
         // Platform-specific optimizations
         if ($isYouTube) {
-            $extArgs = $this->config['extraction']['extractor_args']['youtube'] ?? 'youtube:player_client=android,web,mweb,ios';
-            $cmd .= ' --extractor-args ' . escapeshellarg($extArgs);
+            $extArgs = $this->config['extraction']['extractor_args']['youtube'] ?? null;
+            if ($extArgs) {
+                $cmd .= ' --extractor-args ' . escapeshellarg($extArgs);
+            }
         }
 
         // User agent
