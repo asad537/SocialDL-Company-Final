@@ -24,16 +24,21 @@ class MediaExtractorService
     {
         $startTime = microtime(true);
         $platform = PlatformDetector::detect($url);
-        $supportedByRapidApi = ['YouTube', 'TikTok', 'Instagram', 'Facebook'];
+
+        // Platforms where RapidAPI is PRIMARY (yt-dlp needs auth or proxy blocks them)
+        $rapidApiPrimary  = ['LinkedIn', 'Snapchat'];
+        // Platforms where RapidAPI is FALLBACK if yt-dlp fails
+        $rapidApiFallback = ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat'];
 
         $result = null;
-        $supportedByRapidApi = ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn'];
 
-        // Try yt-dlp first
-        $result = $this->extractViaCli($url);
+        // Skip yt-dlp for platforms where it always fails (auth / proxy block)
+        if (!in_array($platform['platform'], $rapidApiPrimary)) {
+            $result = $this->extractViaCli($url);
+        }
 
-        // Fallback to RapidAPI if yt-dlp fails and platform is supported
-        if (!$result && in_array($platform['platform'], $supportedByRapidApi)) {
+        // Fallback (or primary for LinkedIn/Snapchat) to RapidAPI
+        if (!$result && in_array($platform['platform'], $rapidApiFallback)) {
             $result = $this->extractViaRapidApi($url);
         }
 
