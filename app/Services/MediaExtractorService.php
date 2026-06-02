@@ -210,6 +210,22 @@ class MediaExtractorService
         $source = strtolower($info['extractor_key'] ?? '');
         $isYouTube = (strpos($source, 'youtube') !== false);
 
+        // For non-YouTube platforms, pre-scan to see if there are any combined (video+audio) formats.
+        // Only filter out video-only formats if combined ones exist (Instagram DASH case).
+        // If ALL formats are "video-only" (Snapchat, TikTok, LinkedIn), show them all.
+        $hasCombinedVideoFormat = false;
+        if (!$isYouTube) {
+            foreach ($info['formats'] ?? [] as $f) {
+                if (empty($f['url'])) continue;
+                $fIsAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
+                $fHasAudio = (!empty($f['acodec']) && $f['acodec'] !== 'none');
+                if (!$fIsAudio && $fHasAudio) {
+                    $hasCombinedVideoFormat = true;
+                    break;
+                }
+            }
+        }
+
         foreach ($info['formats'] ?? [] as $f) {
             if (empty($f['url'])) continue;
 
@@ -226,8 +242,9 @@ class MediaExtractorService
             $type = $isAudio ? 'audio' : 'video';
             $hasAudio = (!empty($f['acodec']) && $f['acodec'] !== 'none');
 
-            // For non-YouTube platforms, skip video-only (DASH) formats to avoid showing partial/broken streams
-            if (!$isYouTube && $type === 'video' && !$hasAudio) {
+            // For non-YouTube platforms, skip video-only (DASH) formats ONLY IF combined formats exist.
+            // (Prevents Instagram DASH fragments, but keeps Snapchat/TikTok/LinkedIn single streams)
+            if (!$isYouTube && $hasCombinedVideoFormat && $type === 'video' && !$hasAudio) {
                 continue;
             }
 
