@@ -57,11 +57,27 @@ class DownloadService
             return ['success' => false, 'path' => null, 'size' => 0, 'error' => 'Invalid download directory'];
         }
 
+        $proxySession = null;
+        if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $url, $matches)) {
+            $proxySession = $matches[1];
+            $url = preg_replace('/([?&])proxy_session=[a-zA-Z0-9]+&?/', '$1', $url);
+            $url = rtrim($url, '?&');
+        }
+
+        $proxy = null;
+        $isYouTube = (strpos($url, 'googlevideo.com') !== false || strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
+        if ($isYouTube) {
+            $configuredProxy = config('downloader.ytdlp_proxy');
+            if ($configuredProxy) {
+                $proxy = \App\Services\MediaExtractorService::getStickyProxy($configuredProxy, $proxySession);
+            }
+        }
+
         // Try aria2c first (fastest), fallback to cURL
         if ($this->hasAria2c()) {
-            $result = $this->downloadWithAria2c($url, $safeFilename, $referer);
+            $result = $this->downloadWithAria2c($url, $safeFilename, $referer, $proxy);
         } else {
-            $result = $this->downloadWithCurl($url, $outputPath, $referer);
+            $result = $this->downloadWithCurl($url, $outputPath, $referer, $proxy);
         }
 
         return $result;
@@ -70,7 +86,7 @@ class DownloadService
     /**
      * Download using aria2c (16 connections, ultra-fast).
      */
-    private function downloadWithAria2c($url, $filename, $referer = null)
+    private function downloadWithAria2c($url, $filename, $referer = null, $proxy = null)
     {
         $connections   = $this->config['connections'] ?? 16;
         $splits        = $this->config['splits'] ?? 16;
@@ -101,9 +117,7 @@ class DownloadService
             $cmd .= ' --referer=' . escapeshellarg($referer);
         }
 
-        $proxy = config('downloader.ytdlp_proxy');
-        $isYouTube = (strpos($url, 'googlevideo.com') !== false || strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
-        if ($proxy && $isYouTube) {
+        if ($proxy) {
             $cmd .= ' --all-proxy=' . escapeshellarg($proxy);
         }
 
@@ -147,7 +161,7 @@ class DownloadService
     /**
      * Fallback: download with cURL.
      */
-    private function downloadWithCurl($url, $outputPath, $referer = null)
+    private function downloadWithCurl($url, $outputPath, $referer = null, $proxy = null)
     {
         $startTime = microtime(true);
         $fp = fopen($outputPath, 'wb');
@@ -156,7 +170,7 @@ class DownloadService
         }
 
         $ch = curl_init($url);
-        curl_setopt_array($ch, [
+        $options = [
             CURLOPT_FILE           => $fp,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS      => 10,
@@ -165,17 +179,17 @@ class DownloadService
             CURLOPT_CONNECTTIMEOUT => 20,
             CURLOPT_BUFFERSIZE     => 131072,
             CURLOPT_USERAGENT      => config('downloader.extraction.user_agent', 'Mozilla/5.0'),
-        ]);
+        ];
 
         if ($referer) {
-            curl_setopt($ch, CURLOPT_REFERER, $referer);
+            $options[CURLOPT_REFERER] = $referer;
         }
 
-        $proxy = config('downloader.ytdlp_proxy');
-        $isYouTube = (strpos($url, 'googlevideo.com') !== false || strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
-        if ($proxy && $isYouTube) {
-            curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        if ($proxy) {
+            $options[CURLOPT_PROXY] = $proxy;
         }
+
+        curl_setopt_array($ch, $options);
 
         $success = curl_exec($ch);
         $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);

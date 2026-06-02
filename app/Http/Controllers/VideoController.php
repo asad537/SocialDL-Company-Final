@@ -55,6 +55,13 @@ class VideoController extends Controller
 
         if (!$url) return abort(400);
 
+        $proxySession = null;
+        if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $url, $matches)) {
+            $proxySession = $matches[1];
+            $url = preg_replace('/([?&])proxy_session=[a-zA-Z0-9]+&?/', '$1', $url);
+            $url = rtrim($url, '?&');
+        }
+
         $this->logEvent('download', $sourceUrl, $ext, 'HD', true, $title);
 
         $detected = PlatformDetector::detect($sourceUrl);
@@ -62,6 +69,9 @@ class VideoController extends Controller
         $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.' . $ext;
         $proxy = config('downloader.ytdlp_proxy');
+        if ($proxy && $proxySession) {
+            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+        }
 
         // Resolve Content-Type
         $contentType = 'application/octet-stream';

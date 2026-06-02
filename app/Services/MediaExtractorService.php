@@ -86,7 +86,9 @@ class MediaExtractorService
 
         // Proxy support
         $proxy = $this->config['ytdlp_proxy'] ?? null;
+        $sessionId = null;
         if ($proxy) {
+            $proxy = self::getStickyProxy($proxy, $sessionId);
             $cmd .= ' --proxy ' . escapeshellarg($proxy);
         }
 
@@ -99,7 +101,7 @@ class MediaExtractorService
         $output = $this->execWithTimeout($cmd, $timeout);
 
         if ($output) {
-            $parsed = $this->parseYtdlpJson($output, $url);
+            $parsed = $this->parseYtdlpJson($output, $url, $sessionId);
             if ($parsed) return $parsed;
             
             Log::error("MediaExtractor: CLI Output parsing failed. Output: " . substr($output, 0, 500));
@@ -176,7 +178,7 @@ class MediaExtractorService
     /**
      * Parse raw yt-dlp --dump-single-json output.
      */
-    private function parseYtdlpJson($jsonString, $originalUrl)
+    private function parseYtdlpJson($jsonString, $url, $sessionId = null)
     {
         $info = json_decode($jsonString, true);
         if (!$info || json_last_error() !== JSON_ERROR_NONE) return null;
@@ -210,9 +212,14 @@ class MediaExtractorService
             $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
             $type = $isAudio ? 'audio' : 'video';
 
+            $mediaUrl = $f['url'];
+            if ($sessionId) {
+                $mediaUrl .= (strpos($mediaUrl, '?') !== false ? '&' : '?') . 'proxy_session=' . $sessionId;
+            }
+
             $result['medias'][] = [
                 'format_id' => $f['format_id'] ?? '',
-                'url'       => $f['url'],
+                'url'       => $mediaUrl,
                 'quality'   => $f['format_note'] ?? ($f['height'] ? $f['height'].'p' : 'HD'),
                 'extension' => strtoupper($f['ext'] ?? 'MP4'),
                 'size'      => $this->formatSize($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
@@ -317,5 +324,33 @@ class MediaExtractorService
         proc_close($process);
 
         return $output ?: null;
+    }
+
+    public static function getStickyProxy($proxyUrl, &$sessionId = null)
+    {
+        if (!$proxyUrl) return null;
+        
+        $parsed = parse_url($proxyUrl);
+        if (!$parsed || empty($parsed['pass'])) return $proxyUrl;
+        
+        if (strpos($parsed['pass'], '_session-') !== false) {
+            if (preg_match('/_session-([a-zA-Z0-9]+)/', $parsed['pass'], $matches)) {
+                $sessionId = $matches[1];
+            }
+            return $proxyUrl;
+        }
+        
+        if (!$sessionId) {
+            $sessionId = substr(md5(uniqid(microtime(), true)), 0, 8);
+        }
+        
+        $newPass = $parsed['pass'] . '_session-' . $sessionId . '_lifetime-15m';
+        
+        $scheme = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : 'http://';
+        $user = isset($parsed['user']) ? $parsed['user'] : '';
+        $host = isset($parsed['host']) ? $parsed['host'] : '';
+        $port = isset($parsed['port']) ? ':' . $parsed['port'] : '';
+        
+        return $scheme . $user . ':' . $newPass . '@' . $host . $port;
     }
 }
