@@ -101,6 +101,12 @@ class DownloadService
             $cmd .= ' --referer=' . escapeshellarg($referer);
         }
 
+        $proxy = config('downloader.ytdlp_proxy');
+        $isYouTube = (strpos($url, 'googlevideo.com') !== false || strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
+        if ($proxy && $isYouTube) {
+            $cmd .= ' --all-proxy=' . escapeshellarg($proxy);
+        }
+
         $cmd .= ' ' . escapeshellarg($url);
         $cmd .= ' 2>&1';
 
@@ -163,6 +169,12 @@ class DownloadService
 
         if ($referer) {
             curl_setopt($ch, CURLOPT_REFERER, $referer);
+        }
+
+        $proxy = config('downloader.ytdlp_proxy');
+        $isYouTube = (strpos($url, 'googlevideo.com') !== false || strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
+        if ($proxy && $isYouTube) {
+            curl_setopt($ch, CURLOPT_PROXY, $proxy);
         }
 
         $success = curl_exec($ch);
