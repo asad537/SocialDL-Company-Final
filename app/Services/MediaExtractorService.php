@@ -87,7 +87,7 @@ class MediaExtractorService
         // Proxy support
         $proxy = $this->config['ytdlp_proxy'] ?? null;
         $sessionId = null;
-        if ($proxy) {
+        if ($proxy && $isYouTube) {
             $proxy = self::getStickyProxy($proxy, $sessionId);
             $cmd .= ' --proxy ' . escapeshellarg($proxy);
         }
