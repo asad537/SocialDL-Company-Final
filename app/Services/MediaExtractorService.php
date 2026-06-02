@@ -60,7 +60,7 @@ class MediaExtractorService
             . ' --dump-single-json'
             . ' --no-warnings'
             . ' --no-playlist'
-            . ' --no-check-certificates'
+            . ' --no-check-certificate'
             . ' --geo-bypass'
             . ' --format-sort "vcodec:h264,res,acodec:m4a"'
             . ' --socket-timeout 30'
