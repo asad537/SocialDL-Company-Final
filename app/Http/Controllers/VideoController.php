@@ -29,6 +29,21 @@ class VideoController extends Controller
         }
     }
 
+    public function directDownload(Request $request)
+    {
+        $url = $request->query('url');
+        if (!$url) return abort(400);
+
+        $title = $request->query('title', 'video');
+        $ext = $request->query('ext', 'mp4');
+        $quality = $request->query('quality', 'HD');
+        $sourceUrl = $request->query('source_url', $url);
+
+        $this->logEvent('download', $sourceUrl, $ext, $quality, true, $title);
+
+        return redirect()->away($url);
+    }
+
     public function proxyDownload(Request $request)
     {
         if (session()->isStarted()) session()->save();
@@ -46,6 +61,7 @@ class VideoController extends Controller
         $referer = $detected['referer'];
         $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.' . $ext;
+        $proxy = config('downloader.ytdlp_proxy');
 
         // Resolve Content-Type
         $contentType = 'application/octet-stream';
@@ -53,7 +69,7 @@ class VideoController extends Controller
         elseif ($ext === 'mp3') $contentType = 'audio/mpeg';
         elseif ($ext === 'webm') $contentType = 'video/webm';
 
-        return new StreamedResponse(function () use ($url, $referer, $userAgent) {
+        return new StreamedResponse(function () use ($url, $referer, $userAgent, $proxy) {
             $headers = [
                 'Referer: ' . $referer,
                 'User-Agent: ' . $userAgent,
@@ -62,7 +78,7 @@ class VideoController extends Controller
             ];
 
             $ch = curl_init($url);
-            curl_setopt_array($ch, [
+            $options = [
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_MAXREDIRS      => 10,
                 CURLOPT_RETURNTRANSFER => false,
@@ -76,7 +92,13 @@ class VideoController extends Controller
                     flush();
                     return strlen($chunk);
                 },
-            ]);
+            ];
+
+            if ($proxy) {
+                $options[CURLOPT_PROXY] = $proxy;
+            }
+
+            curl_setopt_array($ch, $options);
             curl_exec($ch);
             curl_close($ch);
         }, 200, [

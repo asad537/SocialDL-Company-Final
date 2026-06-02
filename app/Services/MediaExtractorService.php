@@ -196,6 +196,14 @@ class MediaExtractorService
 
         foreach ($info['formats'] ?? [] as $f) {
             if (empty($f['url'])) continue;
+
+            // Skip storyboard and mhtml preview formats
+            if (isset($f['format_id']) && (strpos($f['format_id'], 'sb') === 0 || strpos($f['format_id'], 'storyboard') !== false)) {
+                continue;
+            }
+            if (isset($f['ext']) && strtolower($f['ext']) === 'mhtml') {
+                continue;
+            }
             
             $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
             $type = $isAudio ? 'audio' : 'video';

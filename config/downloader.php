@@ -46,11 +46,11 @@ return [
         'retries'        => 2,
         'no_check_cert'  => true,
         'geo_bypass'     => true,
-        'user_agent'     => 'com.google.android.youtube/19.09.37 (Linux; U; Android 11)',
+        'user_agent'     => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
 
         // Platform-specific extractor args for speed
         'extractor_args' => [
-            'youtube' => 'youtube:player_client=android,web,mweb,ios',
+            'youtube' => 'youtube:player_client=web,mweb',
         ],
     ],
 
