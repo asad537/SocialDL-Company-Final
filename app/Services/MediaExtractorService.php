@@ -27,8 +27,9 @@ class MediaExtractorService
         $supportedByRapidApi = ['YouTube', 'TikTok', 'Instagram', 'Facebook'];
 
         $result = null;
+        $supportedByRapidApi = ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn'];
 
-        // Try yt-dlp first (with cookies)
+        // Try yt-dlp first
         $result = $this->extractViaCli($url);
 
         // Fallback to RapidAPI if yt-dlp fails and platform is supported
@@ -84,10 +85,10 @@ class MediaExtractorService
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
         $cmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Proxy support
+        // Proxy support — only for YouTube (prevents 403 blocks on LinkedIn, Snapchat, TikTok)
         $proxy = $this->config['ytdlp_proxy'] ?? null;
         $sessionId = null;
-        if ($proxy) {
+        if ($proxy && $isYouTube) {
             $proxy = self::getStickyProxy($proxy, $sessionId);
             $cmd .= ' --proxy ' . escapeshellarg($proxy);
         }
