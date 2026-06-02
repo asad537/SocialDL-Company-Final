@@ -703,6 +703,24 @@
             </main>
         </div>
     </div>
+
+    <!-- Beautiful Progress Modal -->
+    <div id="progressModal" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1.5rem; transition: all 0.3s ease;">
+        <div class="modal-content" style="background:#161B27; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:2rem; width:100%; max-width:480px; text-align:center; color:#fff; box-shadow:0 20px 40px rgba(0,0,0,0.5);">
+            <h3 id="modalTitle" style="font-size:1.15rem; font-weight:700; margin-bottom:1rem; color:#fff;">Processing Video</h3>
+            <p id="modalStatus" style="font-size:0.88rem; color:rgba(255,255,255,0.6); margin-bottom:1.5rem;">Preparing download...</p>
+            
+            <!-- Progress Bar -->
+            <div style="background:rgba(255,255,255,0.05); height:8px; border-radius:4px; overflow:hidden; margin-bottom:1.5rem; position:relative;">
+                <div id="modalProgressBar" style="width:0%; height:100%; background:linear-gradient(135deg,#FFB800,#FF8C00); border-radius:4px; transition:width 0.3s ease;"></div>
+            </div>
+
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <button id="modalCloseBtn" style="display:none; background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.6rem 1.2rem; border-radius:8px; font-weight:600; cursor:pointer;" onclick="closeModal()">Close</button>
+                <a id="modalDlBtn" style="display:none; background:linear-gradient(135deg,#FFB800,#FF8C00); color:#fff; padding:0.6rem 1.2rem; border-radius:8px; font-weight:600; text-decoration:none; box-shadow:0 4px 15px rgba(255,184,0,0.25);" href="#">Download Now</a>
+            </div>
+        </div>
+    </div>
 </section>
 
 <div class="tutorial-dropdown" id="tutorialDropdown" aria-hidden="true">
@@ -796,6 +814,89 @@
         const tutorialDropdown = document.getElementById('tutorialDropdown');
 
         let originalUrl = '';
+
+        const progressModal = document.getElementById('progressModal');
+        const modalStatus = document.getElementById('modalStatus');
+        const modalProgressBar = document.getElementById('modalProgressBar');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalDlBtn = document.getElementById('modalDlBtn');
+        let pollInterval = null;
+
+        window.closeModal = function() {
+            progressModal.style.display = 'none';
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+        };
+
+        async function startMergeDownload(url, title) {
+            progressModal.style.display = 'flex';
+            modalStatus.textContent = 'Adding to download queue...';
+            modalProgressBar.style.width = '0%';
+            modalCloseBtn.style.display = 'none';
+            modalDlBtn.style.display = 'none';
+            modalProgressBar.style.background = 'linear-gradient(135deg,#FFB800,#FF8C00)';
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                if (data.error) throw new Error(data.error);
+                if (data.status === 'queued') {
+                    const downloadId = data.download_id;
+                    modalStatus.textContent = 'Waiting in queue...';
+                    modalProgressBar.style.width = '10%';
+                    
+                    pollInterval = setInterval(async () => {
+                        try {
+                            const statusRes = await fetch(`/download-status/${downloadId}`);
+                            const statusData = await statusRes.json();
+                            
+                            if (statusData.error) throw new Error(statusData.error);
+                            
+                            if (statusData.status === 'downloading') {
+                                const prog = statusData.progress || 0;
+                                modalStatus.textContent = `Downloading video components... (${prog}%)`;
+                                modalProgressBar.style.width = `${Math.min(15 + prog * 0.65, 80)}%`;
+                            } else if (statusData.status === 'merging') {
+                                modalStatus.textContent = 'Merging audio & video (High Quality)...';
+                                modalProgressBar.style.width = '90%';
+                            } else if (statusData.status === 'completed') {
+                                clearInterval(pollInterval);
+                                pollInterval = null;
+                                modalStatus.textContent = 'Download ready!';
+                                modalProgressBar.style.width = '100%';
+                                modalProgressBar.style.background = '#00C853';
+                                
+                                modalCloseBtn.style.display = 'block';
+                                modalDlBtn.href = statusData.file_url;
+                                modalDlBtn.style.display = 'block';
+                                
+                                // Auto trigger download
+                                window.location.href = statusData.file_url;
+                            } else if (statusData.status === 'failed') {
+                                throw new Error('Processing failed on server.');
+                            }
+                        } catch (e) {
+                            clearInterval(pollInterval);
+                            pollInterval = null;
+                            modalStatus.textContent = `Error: ${e.message}`;
+                            modalProgressBar.style.background = '#EF4444';
+                            modalProgressBar.style.width = '100%';
+                            modalCloseBtn.style.display = 'block';
+                        }
+                    }, 2000);
+                } else {
+                    throw new Error('Unexpected server response');
+                }
+            } catch (e) {
+                modalStatus.textContent = `Failed: ${e.message}`;
+                modalProgressBar.style.background = '#EF4444';
+                modalProgressBar.style.width = '100%';
+                modalCloseBtn.style.display = 'block';
+            }
+        }
 
         function openTutorialDropdown() {
             tutorialDropdown.classList.add('open');
@@ -896,6 +997,15 @@
                     <span class="size-text">${m.size || ''}</span>
                     <a href="${dlUrl}" class="dl-btn"><i class="fas fa-download"></i> Download</a>
                 `;
+
+                const dlBtn = row.querySelector('.dl-btn');
+                if (dlUrl.includes('/merge-download')) {
+                    dlBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        startMergeDownload(dlUrl, data.title);
+                    });
+                }
+
                 return row;
             }
 
