@@ -26,7 +26,7 @@ class MediaExtractorService
         $platform = PlatformDetector::detect($url);
 
         // Platforms where RapidAPI is PRIMARY (yt-dlp needs auth or proxy blocks them)
-        $rapidApiPrimary  = ['LinkedIn', 'Snapchat', 'TikTok'];
+        $rapidApiPrimary  = ['LinkedIn', 'Snapchat'];
         // Platforms where RapidAPI is FALLBACK if yt-dlp fails
         $rapidApiFallback = ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat'];
 
@@ -282,7 +282,10 @@ class MediaExtractorService
                 'size'      => $this->formatSize($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
                 'raw_size'  => (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
                 'type'      => $type,
-                'has_audio' => (!empty($f['acodec']) && $f['acodec'] !== 'none'),
+                // For non-YouTube: if no combined format exists and this IS a video,
+                // it's a single progressive stream (TikTok/Snapchat) — treat as has_audio = true
+                'has_audio' => (!empty($f['acodec']) && $f['acodec'] !== 'none')
+                               || (!$isYouTube && !$hasCombinedVideoFormat && $type === 'video'),
             ];
         }
 
