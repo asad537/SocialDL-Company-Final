@@ -155,6 +155,15 @@ class MediaExtractorService
             foreach ($apiData['medias'] ?? [] as $m) {
                 $type = $m['type'] ?? 'video';
                 $isAudio = ($type === 'audio');
+                
+                $ext = strtolower($m['extension'] ?? ($isAudio ? 'MP3' : 'MP4'));
+                if ($type === 'video' && $ext === 'webm') {
+                    continue;
+                }
+                if ($type === 'audio' && in_array($ext, ['webm', 'opus'])) {
+                    continue;
+                }
+
                 $result['medias'][] = [
                     'url'       => $m['url'],
                     'quality'   => $m['quality'] ?? ($isAudio ? ($m['bitrate'] ?? '128k') : 'HD'),
@@ -208,9 +217,19 @@ class MediaExtractorService
             if (isset($f['ext']) && strtolower($f['ext']) === 'mhtml') {
                 continue;
             }
-            
+
+            $ext = strtolower($f['ext'] ?? '');
             $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
             $type = $isAudio ? 'audio' : 'video';
+
+            // Skip WEBM video formats (not compatible with iOS/macOS natively)
+            if ($type === 'video' && $ext === 'webm') {
+                continue;
+            }
+            // Skip WEBM/Opus audio formats
+            if ($type === 'audio' && in_array($ext, ['webm', 'opus'])) {
+                continue;
+            }
 
             $mediaUrl = $f['url'];
             if ($sessionId) {
