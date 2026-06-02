@@ -862,7 +862,7 @@
             const audioMedias = (data.medias || []).filter(m => m.type === 'audio');
 
             // Detect if source platform needs proxy (CDN requires Referer/headers)
-            const needsProxy = !['YouTube', 'youtube', 'Vimeo', 'vimeo'].includes(data.source || '');
+            const needsProxy = !['Vimeo', 'vimeo'].includes(data.source || '');
 
             function renderRow(m) {
                 let dlUrl;

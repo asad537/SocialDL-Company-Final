@@ -8,6 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'ytdlp_path'   => env('YTDLP_PATH', base_path('venv/bin/yt-dlp')),
+    'ytdlp_proxy'  => env('YTDLP_PROXY'),
     'python_path'   => env('PYTHON_PATH', base_path('venv/bin/python3')),
     'ffmpeg_path'   => env('FFMPEG_PATH', '/usr/local/bin/ffmpeg'),
     'ffprobe_path'  => env('FFPROBE_PATH', '/usr/local/bin/ffprobe'),
@@ -45,11 +46,11 @@ return [
         'retries'        => 2,
         'no_check_cert'  => true,
         'geo_bypass'     => true,
-        'user_agent'     => 'Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+        'user_agent'     => 'com.google.android.youtube/19.09.37 (Linux; U; Android 11)',
 
         // Platform-specific extractor args for speed
         'extractor_args' => [
-            'youtube' => 'youtube:player_client=android,web',
+            'youtube' => 'youtube:player_client=android,web,mweb,ios',
         ],
     ],
 

@@ -149,7 +149,30 @@ class AdminController extends Controller
         if (!session('admin_logged_in')) return redirect()->route('admin.login');
         $settings = DB::table('homepage_settings')->first();
         $faqs = DB::table('faqs')->orderBy('sort_order')->get();
-        return view('admin.homepage', compact('settings', 'faqs'));
+        
+        // Decode platforms or provide defaults
+        $platforms = [];
+        if ($settings && $settings->platforms_data) {
+            $platforms = json_decode($settings->platforms_data, true);
+        }
+        
+        if (empty($platforms)) {
+            $platforms = [
+                ['name' => 'YouTube', 'icon' => 'fab fa-youtube'],
+                ['name' => 'Instagram', 'icon' => 'fab fa-instagram'],
+                ['name' => 'TikTok', 'icon' => 'fab fa-tiktok'],
+                ['name' => 'Facebook', 'icon' => 'fab fa-facebook'],
+                ['name' => 'Twitter', 'icon' => 'fab fa-twitter'],
+            ];
+        }
+
+        $allIcons = [
+            'fab fa-youtube', 'fab fa-instagram', 'fab fa-tiktok', 'fab fa-facebook', 
+            'fab fa-twitter', 'fab fa-pinterest', 'fab fa-vimeo-v', 'fab fa-dailymotion', 
+            'fas fa-video', 'fas fa-download', 'fas fa-link', 'fas fa-globe'
+        ];
+
+        return view('admin.homepage', compact('settings', 'faqs', 'platforms', 'allIcons'));
     }
 
     public function homepageSave(Request $request)

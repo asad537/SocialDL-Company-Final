@@ -38,7 +38,8 @@ class Guide extends Model
                     $tag = ($block['data']['style'] === 'ordered') ? 'ol' : 'ul';
                     $html .= "<{$tag} style='margin-bottom:1.5rem; padding-left:1.5rem; color:#334155;'>";
                     foreach ($block['data']['items'] as $item) {
-                        $html .= "<li style='margin-bottom:0.5rem; line-height:1.6;'>{$item}</li>";
+                        $itemText = is_array($item) ? ($item['content'] ?? $item['text'] ?? json_encode($item)) : $item;
+                        $html .= "<li style='margin-bottom:0.5rem; line-height:1.6;'>{$itemText}</li>";
                     }
                     $html .= "</{$tag}>";
                     break;
@@ -66,7 +67,8 @@ class Guide extends Model
                         $html .= "<tr style='{$bg}'>";
                         foreach ($row as $cell) {
                             $fw = ($idx === 0) ? 'font-weight:700;' : '';
-                            $html .= "<td style='padding:1rem; border:1px solid #E2E8F0; color:#334155; {$fw}'>{$cell}</td>";
+                            $cellText = is_array($cell) ? ($cell['content'] ?? $cell['text'] ?? json_encode($cell)) : $cell;
+                            $html .= "<td style='padding:1rem; border:1px solid #E2E8F0; color:#334155; {$fw}'>{$cellText}</td>";
                         }
                         $html .= "</tr>";
                     }

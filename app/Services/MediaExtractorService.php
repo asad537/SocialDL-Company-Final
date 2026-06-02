@@ -2,58 +2,42 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
+use App\Services\PlatformDetector;
 
-/**
- * MediaExtractorService — Ultra-fast yt-dlp wrapper.
- *
- * STRATEGY:
- *   1. PRIMARY: yt-dlp CLI with --dump-single-json (fastest)
- *   2. FALLBACK: Python downloader.py script (existing)
- *
- * OPTIMIZATIONS:
- *   - --dump-single-json: single stdout JSON blob, no intermediate processing
- *   - --extractor-args "youtube:player_client=android": faster YouTube extraction
- *   - --no-warnings --no-playlist: skip unnecessary work
- *   - --socket-timeout 8: don't hang on slow servers
- *   - --no-check-certificates: skip SSL verification overhead
- *   - proc_open with pipes: no temp files, direct stdout capture
- */
 class MediaExtractorService
 {
-    /** @var string */
-    private $ytdlpPath;
-
-    /** @var string */
-    private $pythonPath;
-
-    /** @var array */
-    private $config;
+    protected $config;
+    protected $ytdlpPath;
 
     public function __construct()
     {
-        $this->config     = config('downloader.extraction', []);
-        $this->ytdlpPath  = config('downloader.ytdlp_path', base_path('venv/bin/yt-dlp'));
-        $this->pythonPath = config('downloader.python_path', base_path('venv/bin/python3'));
+        $this->config = config('downloader');
+        $this->ytdlpPath = $this->config['ytdlp_path'] ?? base_path('venv/bin/yt-dlp');
     }
 
     /**
-     * Extract media info from a URL using yt-dlp.
-     *
-     * @param string $url
-     * @return array  ['title', 'thumbnail', 'duration', 'medias', ...]
-     * @throws \RuntimeException on extraction failure
+     * Extract media info from a URL.
      */
     public function extract($url)
     {
         $startTime = microtime(true);
+        $platform = PlatformDetector::detect($url);
+        $supportedByRapidApi = ['YouTube', 'TikTok', 'Instagram', 'Facebook'];
 
-        // ── PRIMARY: yt-dlp CLI ───────────────────────────────────────
+        $result = null;
+
+        // Try yt-dlp first (with cookies)
         $result = $this->extractViaCli($url);
 
+        // Fallback to RapidAPI if yt-dlp fails and platform is supported
+        if (!$result && in_array($platform['platform'], $supportedByRapidApi)) {
+            $result = $this->extractViaRapidApi($url);
+        }
+
         if (!$result) {
-            throw new \RuntimeException('Extraction failed: no output from yt-dlp');
+            throw new \RuntimeException('Extraction failed: no output from extractor');
         }
 
         $result['extraction_ms'] = (int) ((microtime(true) - $startTime) * 1000);
@@ -61,8 +45,7 @@ class MediaExtractorService
     }
 
     /**
-     * PRIMARY: yt-dlp CLI with --dump-single-json.
-     * ~30-50% faster than Python library approach.
+     * Extract via yt-dlp CLI.
      */
     private function extractViaCli($url)
     {
@@ -71,275 +54,229 @@ class MediaExtractorService
 
         $platform = PlatformDetector::detect($url);
         $isYouTube = ($platform['platform'] === 'YouTube');
-
-        // Build command with maximum speed optimizations
+        
+        // Build command
         $cmd = escapeshellarg($binary)
             . ' --dump-single-json'
             . ' --no-warnings'
             . ' --no-playlist'
             . ' --no-check-certificates'
             . ' --geo-bypass'
-            . ' --socket-timeout ' . ($this->config['socket_timeout'] ?? 8)
-            . ' --retries ' . ($this->config['retries'] ?? 2);
+            . ' --format-sort "vcodec:h264,res,acodec:m4a"'
+            . ' --socket-timeout 30'
+            . ' --retries 2';
+
+        // Cookies support
+        $cookiesPath = storage_path('app/cookies.txt');
+        if (file_exists($cookiesPath)) {
+            $cmd .= ' --cookies ' . escapeshellarg($cookiesPath);
+        }
 
         // Platform-specific optimizations
         if ($isYouTube) {
-            $extArgs = $this->config['extractor_args']['youtube'] ?? 'youtube:player_client=android,web';
+            $extArgs = $this->config['extraction']['extractor_args']['youtube'] ?? 'youtube:player_client=android,web,mweb,ios';
             $cmd .= ' --extractor-args ' . escapeshellarg($extArgs);
-            // Skip DASH/HLS manifests for YouTube (massive speedup)
-            $cmd .= ' --extractor-args "youtube:skip=dash,hls"';
         }
 
         // User agent
-        $ua = $this->config['user_agent'] ?? 'Mozilla/5.0';
+        $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
         $cmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Force H.264 preference for Apple compatibility
-        $cmd .= ' --format-sort "vcodec:h264,res,acodec:m4a"';
+        // Proxy support
+        $proxy = $this->config['ytdlp_proxy'] ?? null;
+        if ($proxy) {
+            $cmd .= ' --proxy ' . escapeshellarg($proxy);
+        }
 
         // URL
-        $cmd .= ' ' . escapeshellarg($url);
-        $cmd .= ' 2>/dev/null';
+        $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
+        
+        Log::debug('MediaExtractor: Executing CLI | URL: ' . $url);
 
-        // Execute with timeout
-        $timeout = $this->config['timeout'] ?? 15;
+        $timeout = 60; 
         $output = $this->execWithTimeout($cmd, $timeout);
 
-        if (!$output) return null;
-
-        return $this->parseYtdlpJson($output, $url);
+        if ($output) {
+            $parsed = $this->parseYtdlpJson($output, $url);
+            if ($parsed) return $parsed;
+            
+            Log::error("MediaExtractor: CLI Output parsing failed. Output: " . substr($output, 0, 500));
+        }
+        
+        return null;
     }
 
+    /**
+     * EXTRACT VIA RAPIDAPI: Social Download All-In-One.
+     */
+    private function extractViaRapidApi($url)
+    {
+        $config = config('downloader.rapidapi');
+        if (empty($config['key'])) return null;
 
+        $client = new Client([
+            'base_uri' => $config['base_url'],
+            'timeout'  => 25.0,
+            'verify'   => false
+        ]);
+
+        try {
+            $response = $client->post($config['path'], [
+                'headers' => [
+                    'X-RapidAPI-Key'  => $config['key'],
+                    'X-RapidAPI-Host' => $config['host'],
+                    'Content-Type'    => 'application/json',
+                ],
+                'json' => ['url' => $url]
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+            if (!$data) return null;
+
+            $apiData = isset($data['data']) && is_array($data['data']) ? $data['data'] : $data;
+            if (empty($apiData['medias']) && empty($apiData['title'])) return null;
+
+            $result = [
+                'title'          => $apiData['title'] ?? 'Video',
+                'thumbnail'      => $apiData['thumbnail'] ?? '',
+                'source'         => $apiData['source'] ?? 'RapidAPI',
+                'duration'       => $this->formatDuration($apiData['duration'] ?? 0),
+                'duration_raw'   => $apiData['duration'] ?? 0,
+                'uploader'       => $apiData['author'] ?? null,
+                'best_audio_url' => '',
+                'medias'         => [],
+                'is_rapidapi'    => true,
+            ];
+
+            foreach ($apiData['medias'] ?? [] as $m) {
+                $type = $m['type'] ?? 'video';
+                $isAudio = ($type === 'audio');
+                $result['medias'][] = [
+                    'url'       => $m['url'],
+                    'quality'   => $m['quality'] ?? ($isAudio ? ($m['bitrate'] ?? '128k') : 'HD'),
+                    'extension' => strtoupper($m['extension'] ?? ($isAudio ? 'MP3' : 'MP4')),
+                    'size'      => $this->formatSize($m['size'] ?? 0),
+                    'raw_size'  => (float) ($m['size'] ?? 0),
+                    'type'      => $type,
+                    'has_audio' => $type === 'video',
+                    'height'    => $m['height'] ?? null,
+                    'width'     => $m['width'] ?? null,
+                ];
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            Log::error('MediaExtractor: RapidAPI Error: ' . $e->getMessage());
+            return null;
+        }
+    }
 
     /**
-     * Parse raw yt-dlp --dump-single-json output into our standard format.
+     * Parse raw yt-dlp --dump-single-json output.
      */
     private function parseYtdlpJson($jsonString, $originalUrl)
     {
         $info = json_decode($jsonString, true);
         if (!$info || json_last_error() !== JSON_ERROR_NONE) return null;
 
-        // Handle playlists — take first entry
-        if (isset($info['entries']) && is_array($info['entries']) && !empty($info['entries'])) {
+        if (!empty($info['_type']) && $info['_type'] === 'playlist' && !empty($info['entries'])) {
             $info = $info['entries'][0];
-            if (!$info) return null;
-        }
-
-        $formats = $info['formats'] ?? [];
-
-        // ── Thumbnail ───────────────────────────────────────────────────
-        $thumbnails = $info['thumbnails'] ?? [];
-        $bestThumb  = $info['thumbnail'] ?? '';
-        if ($thumbnails) {
-            $sorted = array_filter($thumbnails, function ($t) { return !empty($t['url']); });
-            usort($sorted, function ($a, $b) {
-                $aSize = ($a['width'] ?? 0) * ($a['height'] ?? 0);
-                $bSize = ($b['width'] ?? 0) * ($b['height'] ?? 0);
-                return $bSize - $aSize;
-            });
-            if (!empty($sorted)) {
-                $bestThumb = $sorted[0]['url'];
-            }
-        }
-
-        // ── Duration ────────────────────────────────────────────────────
-        $duration    = $info['duration'] ?? null;
-        $durationStr = '';
-        if ($duration) {
-            $d = (int) $duration;
-            $h = intdiv($d, 3600);
-            $m = intdiv($d % 3600, 60);
-            $s = $d % 60;
-            $durationStr = $h > 0
-                ? sprintf('%02d:%02d:%02d', $h, $m, $s)
-                : sprintf('%02d:%02d', $m, $s);
         }
 
         $result = [
-            'title'          => $info['title'] ?? substr($info['description'] ?? 'Video', 0, 60),
-            'thumbnail'      => $bestThumb,
-            'source'         => $info['extractor_key'] ?? 'Unknown',
-            'duration'       => $durationStr,
-            'duration_raw'   => $duration,
-            'uploader'       => $info['uploader'] ?? $info['channel'] ?? null,
-            'view_count'     => $info['view_count'] ?? null,
-            'best_audio_url' => '',
-            'medias'         => [],
+            'id'           => $info['id'] ?? '',
+            'title'        => $info['title'] ?? 'Video',
+            'thumbnail'    => $info['thumbnail'] ?? '',
+            'source'       => $info['extractor_key'] ?? 'Direct',
+            'duration'     => $this->formatDuration($info['duration'] ?? 0),
+            'duration_raw' => $info['duration'] ?? 0,
+            'uploader'     => $info['uploader'] ?? null,
+            'medias'       => [],
         ];
 
-        $processed = [];
+        foreach ($info['formats'] ?? [] as $f) {
+            if (empty($f['url'])) continue;
+            
+            $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
+            $type = $isAudio ? 'audio' : 'video';
 
-        // ── Best audio URL ──────────────────────────────────────────────
-        $audioFormats = array_filter($formats, function ($f) {
-            return ($f['vcodec'] ?? '') === 'none' && !in_array($f['acodec'] ?? '', [null, 'none'], true);
-        });
-        if ($audioFormats) {
-            usort($audioFormats, function ($a, $b) {
-                return ($b['abr'] ?? 0) - ($a['abr'] ?? 0);
-            });
-            $result['best_audio_url'] = reset($audioFormats)['url'] ?? '';
-        }
-
-        // ── Root URL (TikTok, direct platforms) ─────────────────────────
-        $rootUrl = $info['url'] ?? '';
-        if ($rootUrl && strpos($rootUrl, 'http') === 0) {
             $result['medias'][] = [
-                'url'       => $rootUrl,
-                'quality'   => 'Best Quality',
-                'extension' => strtoupper($info['ext'] ?? 'MP4'),
-                'size'      => '',
-                'raw_size'  => 0,
-                'type'      => 'video',
-                'has_audio' => true,
+                'format_id' => $f['format_id'] ?? '',
+                'url'       => $f['url'],
+                'quality'   => $f['format_note'] ?? ($f['height'] ? $f['height'].'p' : 'HD'),
+                'extension' => strtoupper($f['ext'] ?? 'MP4'),
+                'size'      => $this->formatSize($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
+                'raw_size'  => (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
+                'type'      => $type,
+                'has_audio' => (!empty($f['acodec']) && $f['acodec'] !== 'none'),
             ];
-            $processed['best_root'] = true;
         }
-
-        // ── Format list ─────────────────────────────────────────────────
-        foreach ($formats as $f) {
-            $vcodec = $f['vcodec'] ?? null;
-            $acodec = $f['acodec'] ?? null;
-            $fUrl   = $f['url'] ?? '';
-            $ext    = $f['ext'] ?? 'mp4';
-
-            if (!$fUrl || strpos($fUrl, 'http') !== 0) continue;
-
-            $filesize = $f['filesize'] ?? $f['filesize_approx'] ?? null;
-            $sizeStr  = '';
-            $sz       = 0;
-            if ($filesize) {
-                $sz = (float) $filesize;
-                $displaySz = $sz;
-                foreach (['B', 'KB', 'MB', 'GB'] as $unit) {
-                    if ($displaySz < 1024.0) {
-                        $sizeStr = sprintf('%.1f %s', $displaySz, $unit);
-                        break;
-                    }
-                    $displaySz /= 1024.0;
-                }
-            }
-
-            $isVideo = ($vcodec !== null && $vcodec !== 'none');
-            $isAudio = ($acodec !== null && $acodec !== 'none');
-
-            if ($isVideo) {
-                $quality = $f['format_note'] ?? $f['resolution'] ?? $f['format_id'] ?? 'HD';
-
-                // Skip storyboards and manifests
-                if (stripos($quality, 'storyboard') !== false) continue;
-                if (in_array(strtolower($ext), ['m3u8', 'mpd'])) continue;
-
-                $approxSize = $sz > 0 ? round($sz / 1024) : 0; // KB precision
-                $key = "v-{$quality}-" . ($isAudio ? '1' : '0') . "-{$approxSize}";
-
-                if (!isset($processed[$key])) {
-                    $result['medias'][] = [
-                        'url'       => $fUrl,
-                        'quality'   => $quality,
-                        'extension' => strtoupper($ext),
-                        'size'      => $sizeStr,
-                        'raw_size'  => $filesize ? (float) $filesize : 0,
-                        'type'      => 'video',
-                        'has_audio' => $isAudio,
-                        'vcodec'    => $vcodec,
-                        'width'     => $f['width'] ?? null,
-                        'height'    => $f['height'] ?? null,
-                    ];
-                    $processed[$key] = true;
-                }
-            } elseif ($isAudio) {
-                $abr = (int) ($f['abr'] ?? 128);
-                $key = "a-{$abr}";
-                if (!isset($processed[$key])) {
-                    $result['medias'][] = [
-                        'url'       => $fUrl,
-                        'quality'   => "{$abr}kbps",
-                        'extension' => strtoupper($ext),
-                        'size'      => $sizeStr,
-                        'raw_size'  => $filesize ? (float) $filesize : 0,
-                        'type'      => 'audio',
-                        'has_audio' => true,
-                        'acodec'    => $acodec,
-                    ];
-                    $processed[$key] = true;
-                }
-            }
-        }
-
-        // ── Sort: Video+Audio → Video Only → Audio ─────────────────────
-        usort($result['medias'], function ($a, $b) {
-            $aScore = $a['type'] === 'video' ? (($a['has_audio'] ?? false) ? 3 : 2) : 1;
-            $bScore = $b['type'] === 'video' ? (($b['has_audio'] ?? false) ? 3 : 2) : 1;
-            if ($aScore !== $bScore) return $bScore - $aScore;
-            return ($b['raw_size'] ?? 0) - ($a['raw_size'] ?? 0);
-        });
-
-        // ── For non-YouTube: show only best video ──────────────────────
-        if (!PlatformDetector::isYouTube($originalUrl)) {
-            $bestVideo = null;
-            $bestAudio = null;
-            foreach ($result['medias'] as $m) {
-                if (!$bestVideo && $m['type'] === 'video') $bestVideo = $m;
-                if (!$bestAudio && $m['type'] === 'audio') $bestAudio = $m;
-            }
-            $filtered = [];
-            if ($bestVideo) {
-                $bestVideo['quality'] = 'Best Quality';
-                $filtered[] = $bestVideo;
-            }
-            if ($bestAudio) {
-                $filtered[] = $bestAudio;
-            }
-            $result['medias'] = $filtered;
-        }
-
-        if (empty($result['medias'])) return null;
 
         return $result;
     }
 
     /**
-     * Find the yt-dlp binary.
+     * Jugar: Try to refresh cookies automatically.
      */
+    public function refreshCookies()
+    {
+        $binary = $this->findBinary();
+        if (!$binary) return false;
+
+        $cookiesPath = storage_path('app/cookies.txt');
+        $testUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        
+        $cmd = escapeshellarg($binary)
+            . ' --cookies ' . escapeshellarg($cookiesPath)
+            . ' --user-agent ' . escapeshellarg($this->config['extraction']['user_agent'] ?? 'Mozilla/5.0')
+            . ' --extractor-args "youtube:player_client=android"'
+            . ' --no-warnings --quiet --dump-single-json ' . escapeshellarg($testUrl) . ' > /dev/null 2>&1';
+        
+        @exec($cmd);
+        return file_exists($cookiesPath);
+    }
+
+    private function formatDuration($seconds)
+    {
+        if (!$seconds) return '00:00';
+        $d = (int) $seconds;
+        $h = intdiv($d, 3600);
+        $m = intdiv($d % 3600, 60);
+        $s = $d % 60;
+        return $h > 0 ? sprintf('%02d:%02d:%02d', $h, $m, $s) : sprintf('%02d:%02d', $m, $s);
+    }
+
+    private function formatSize($bytes)
+    {
+        if (!$bytes) return '';
+        $displaySz = (float) $bytes;
+        foreach (['B', 'KB', 'MB', 'GB'] as $unit) {
+            if ($displaySz < 1024.0) return sprintf('%.1f %s', $displaySz, $unit);
+            $displaySz /= 1024.0;
+        }
+        return '';
+    }
+
     private function findBinary()
     {
-        // Check configured path
-        if (file_exists($this->ytdlpPath)) {
-            return $this->ytdlpPath;
-        }
-
-        // Check venv
-        $venvBin = base_path('venv/bin/yt-dlp');
-        if (file_exists($venvBin)) return $venvBin;
-
-        // Check system
+        if (file_exists($this->ytdlpPath)) return $this->ytdlpPath;
         $system = trim(shell_exec('which yt-dlp 2>/dev/null') ?: '');
         if ($system && file_exists($system)) return $system;
-
         return null;
     }
 
-    /**
-     * Execute a command with a timeout.
-     * Uses proc_open for non-blocking execution.
-     */
-    private function execWithTimeout($command, $timeoutSeconds)
+    private function execWithTimeout($cmd, $timeoutSeconds)
     {
-        $descriptors = [
-            0 => ['pipe', 'r'],  // stdin
-            1 => ['pipe', 'w'],  // stdout
-            2 => ['pipe', 'w'],  // stderr
+        $descriptorspec = [
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["pipe", "w"]
         ];
 
-        $process = proc_open($command, $descriptors, $pipes);
+        $process = proc_open($cmd, $descriptorspec, $pipes);
         if (!is_resource($process)) return null;
 
-        fclose($pipes[0]); // Close stdin
-
-        // Set non-blocking on stdout
         stream_set_blocking($pipes[1], false);
-
         $output  = '';
         $start   = time();
 
@@ -354,17 +291,14 @@ class MediaExtractorService
 
             if ((time() - $start) > $timeoutSeconds) {
                 proc_terminate($process, 9);
-                Log::warning('MediaExtractor: yt-dlp timed out after ' . $timeoutSeconds . 's');
                 fclose($pipes[1]);
                 fclose($pipes[2]);
                 proc_close($process);
                 return null;
             }
-
-            usleep(10000); // 10ms poll
+            usleep(10000);
         }
 
-        // Read remaining output
         $remaining = stream_get_contents($pipes[1]);
         if ($remaining) $output .= $remaining;
 
