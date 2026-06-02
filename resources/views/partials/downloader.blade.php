@@ -962,8 +962,9 @@
             const videoMedias = (data.medias || []).filter(m => m.type === 'video');
             const audioMedias = (data.medias || []).filter(m => m.type === 'audio');
 
-            // Detect if source platform needs proxy (CDN requires Referer/headers)
-            const needsProxy = !['Vimeo', 'vimeo'].includes(data.source || '');
+            // Platforms where CDN URLs expire fast - must use server-side queue download
+            const queuePlatforms = ['TikTok', 'Snapchat', 'tiktok', 'snapchat'];
+            const needsQueue = queuePlatforms.includes(data.source || '');
 
             function renderRow(m) {
                 let dlUrl;
@@ -979,13 +980,15 @@
                         dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}`;
                         noAudioBadge = `<span style="color: #EF4444; font-size: 0.7rem; font-weight: bold; margin-left: 5px;" title="No audio"><i class="fas fa-volume-mute"></i></span>`;
                     }
+                } else if (needsQueue && m.type === 'video') {
+                    // TikTok / Snapchat: CDN URLs expire — download to server first, then serve
+                    dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}`;
                 } else if (m.has_audio && !needsProxy) {
                     // ⚡ DIRECT CDN DOWNLOAD — Full speed, zero server load
-                    // YouTube/Vimeo CDN URLs work directly in browser
                     dlUrl = `/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&quality=${encodeURIComponent(m.quality)}&source_url=${encodeURIComponent(originalUrl)}`;
                     speedBadge = `<span style="color: #10B981; font-size: 0.65rem; margin-left: 4px;" title="Direct CDN — Maximum speed">⚡</span>`;
                 } else {
-                    // Proxy download — needed for Instagram, TikTok, Facebook (CDN requires Referer)
+                    // Proxy download — Instagram, Facebook etc.
                     dlUrl = `/proxy-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&source_url=${encodeURIComponent(originalUrl)}`;
                 }
 
