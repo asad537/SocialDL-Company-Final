@@ -129,6 +129,7 @@ class VideoController extends Controller
         $download = MediaDownload::create([
             'title'      => $title,
             'url'        => $vUrl,
+            'platform'   => $detected['platform'],
             'format'     => 'mp4',
             'quality'    => '1080p+',
             'status'     => MediaDownload::STATUS_PENDING,
