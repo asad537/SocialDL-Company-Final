@@ -222,6 +222,12 @@ class MediaExtractorService
             $isAudio = (!empty($f['vcodec']) && $f['vcodec'] === 'none');
             $type = $isAudio ? 'audio' : 'video';
 
+            // Skip AV1 video codec formats (av01) - not natively supported by Apple QuickTime/macOS/iOS
+            $vcodec = strtolower($f['vcodec'] ?? '');
+            if ($type === 'video' && (strpos($vcodec, 'av01') !== false || strpos($vcodec, 'av1') !== false)) {
+                continue;
+            }
+
             // Skip WEBM video formats (not compatible with iOS/macOS natively)
             if ($type === 'video' && $ext === 'webm') {
                 continue;
