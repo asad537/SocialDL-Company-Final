@@ -64,7 +64,7 @@ class FFmpegService
 
         // If codec is vp9 or av1, transcode to h264 using fast settings, otherwise copy stream
         $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
-        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22 -threads 2' : '-c:v copy';
+        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset ultrafast -crf 22' : '-c:v copy';
 
         $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
             . ' -y'
@@ -164,7 +164,7 @@ class FFmpegService
         }
 
         $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
-        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22 -threads 2' : '-c copy';
+        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset ultrafast -crf 22' : '-c copy';
 
         $ffmpeg = $this->findFfmpeg();
         $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
