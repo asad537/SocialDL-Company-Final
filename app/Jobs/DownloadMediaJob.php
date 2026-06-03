@@ -58,7 +58,10 @@ class DownloadMediaJob implements ShouldQueue
         $download = MediaDownload::find($this->downloadId);
         if (!$download) return;
 
-        $download->markDownloading();
+        $download->update([
+            'status'   => MediaDownload::STATUS_DOWNLOADING,
+            'progress' => 10,
+        ]);
 
         // Track in processing_jobs
         $job = ProcessingJob::create([

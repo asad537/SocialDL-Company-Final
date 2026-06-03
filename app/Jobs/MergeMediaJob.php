@@ -61,7 +61,10 @@ class MergeMediaJob implements ShouldQueue
         $download = MediaDownload::find($this->downloadId);
         if (!$download) return;
 
-        $download->markMerging();
+        $download->update([
+            'status'   => MediaDownload::STATUS_DOWNLOADING,
+            'progress' => 10,
+        ]);
 
         $job = ProcessingJob::create([
             'job_type'    => ProcessingJob::TYPE_MERGE,
@@ -84,15 +87,22 @@ class MergeMediaJob implements ShouldQueue
                 throw new \RuntimeException('Video download failed: ' . ($vResult['error'] ?? 'unknown'));
             }
 
+            $download->update(['progress' => 70]);
+
             // Step 2: Download audio (if provided)
             if ($this->audioUrl) {
                 $aResult = $downloadService->download($this->audioUrl, basename($audioFile), $this->referer);
                 if (!$aResult['success']) {
                     throw new \RuntimeException('Audio download failed: ' . ($aResult['error'] ?? 'unknown'));
                 }
+                $download->update(['progress' => 90]);
+            } else {
+                $download->update(['progress' => 90]);
             }
 
             // Step 3: Merge with FFmpeg
+            $download->markMerging();
+
             if ($this->audioUrl && file_exists($audioFile)) {
                 $mergeResult = $ffmpegService->merge($videoFile, $audioFile, $outputFile);
             } else {

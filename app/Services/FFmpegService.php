@@ -64,9 +64,9 @@ class FFmpegService
 
         // If codec is vp9 or av1, transcode to h264 using fast settings, otherwise copy stream
         $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
-        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22' : '-c:v copy';
+        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22 -threads 2' : '-c:v copy';
 
-        $cmd = escapeshellarg($ffmpeg)
+        $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
             . ' -y'
             . ' -i ' . escapeshellarg($videoPath)
             . ' -i ' . escapeshellarg($audioPath)
@@ -164,10 +164,10 @@ class FFmpegService
         }
 
         $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
-        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22' : '-c copy';
+        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22 -threads 2' : '-c copy';
 
         $ffmpeg = $this->findFfmpeg();
-        $cmd = escapeshellarg($ffmpeg)
+        $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
             . ' -y -i ' . escapeshellarg($inputPath)
             . ' ' . $vcodecArg . ' -movflags +faststart'
             . ' ' . escapeshellarg($outputPath)
@@ -205,7 +205,7 @@ class FFmpegService
         $hlsListSize = config('downloader.ffmpeg.hls_list_size', 0);
 
         $ffmpeg = $this->findFfmpeg();
-        $cmd = escapeshellarg($ffmpeg)
+        $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
             . ' -y -i ' . escapeshellarg($inputPath)
             . ' -c copy'    // NEVER re-encode
             . ' -f hls'

@@ -857,7 +857,7 @@
                             
                             if (statusData.status === 'downloading') {
                                 const prog = statusData.progress || 0;
-                                modalStatus.textContent = `Downloading video components... (${prog}%)`;
+                                modalStatus.textContent = `Downloading video... (${prog}%)`;
                                 modalProgressBar.style.width = `${Math.min(15 + prog * 0.65, 80)}%`;
                             } else if (statusData.status === 'merging') {
                                 modalStatus.textContent = 'Merging audio & video (High Quality)...';
