@@ -101,7 +101,7 @@ class MediaExtractorService
         // URL
         $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
         
-        Log::debug('MediaExtractor: Executing CLI Command: ' . $cmd);
+        Log::debug('MediaExtractor: Executing CLI | URL: ' . $url);
 
         $timeout = 60; 
         $output = $this->execWithTimeout($cmd, $timeout);
