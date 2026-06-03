@@ -73,18 +73,6 @@ class DownloadService
             }
         }
 
-        $isTikTok = (
-            strpos($url, 'tiktok') !== false ||
-            strpos($url, 'tiktokcdn') !== false ||
-            strpos($url, 'tiktokv.com') !== false ||
-            ($platform !== null && strtolower($platform) === 'tiktok')
-        );
-
-        // TikTok/Snapchat CDN blocks multi-connection range requests (aria2c) — use cURL
-        if ($isTikTok) {
-            return $this->downloadWithCurl($url, $outputPath, $referer, $proxy);
-        }
-
         // Try aria2c first (fastest), fallback to cURL
         if ($this->hasAria2c()) {
             $result = $this->downloadWithAria2c($url, $safeFilename, $referer, $proxy);
