@@ -1025,6 +1025,20 @@
 
         fetchBtn.addEventListener('click', () => fetchVideo(input.value.trim()));
         input.addEventListener('keydown', e => { if (e.key === 'Enter') fetchVideo(input.value.trim()); });
+        input.addEventListener('paste', (e) => {
+            const pastedText = (e.clipboardData || window.clipboardData)?.getData('text');
+            if (pastedText) {
+                let val = pastedText.trim();
+                if (val) {
+                    if (!/^https?:\/\//i.test(val) && (val.includes('.') || val.includes('localhost'))) {
+                        val = 'https://' + val;
+                    }
+                    input.value = val;
+                    fetchVideo(val);
+                    e.preventDefault();
+                }
+            }
+        });
 
         if (tutorialLink && tutorialDropdown) {
             tutorialLink.addEventListener('click', (e) => {
