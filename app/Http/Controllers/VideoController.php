@@ -134,7 +134,6 @@ class VideoController extends Controller
 
         $detected = PlatformDetector::detect($orig ?: $vUrl);
         $referer = $detected['referer'];
-        $fileName = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
 
         $download = MediaDownload::create([
             'title'      => $title,
@@ -145,6 +144,8 @@ class VideoController extends Controller
             'status'     => MediaDownload::STATUS_PENDING,
             'ip_address' => request()->ip(),
         ]);
+
+        $fileName = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '_' . $download->id . '.mp4';
 
         if ($aUrl) {
             MergeMediaJob::dispatch($download->id, $vUrl, $aUrl, $fileName, $referer);
@@ -181,7 +182,10 @@ class VideoController extends Controller
         $download = MediaDownload::find($id);
         if (!$download || $download->status !== MediaDownload::STATUS_COMPLETED) return abort(404);
 
-        return response()->download($download->file_path);
+        $ext = pathinfo($download->file_path, PATHINFO_EXTENSION);
+        $cleanTitle = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $download->title), 0, 80) . '.' . $ext;
+
+        return response()->download($download->file_path, $cleanTitle);
     }
 
     public function proxyThumbnail(Request $request)
