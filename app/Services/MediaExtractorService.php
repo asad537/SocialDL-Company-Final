@@ -276,11 +276,17 @@ class MediaExtractorService
                 $mediaUrl .= (strpos($mediaUrl, '?') !== false ? '&' : '?') . 'proxy_session=' . $sessionId;
             }
 
+            // For 4K+ WebM video-only streams: show MP4 badge since FFmpeg merge outputs MP4
+            $displayExt = strtoupper($f['ext'] ?? 'MP4');
+            if ($type === 'video' && $ext === 'webm' && $height > 1080) {
+                $displayExt = 'MP4'; // FFmpeg merge will remux WebM→MP4 container
+            }
+
             $result['medias'][] = [
                 'format_id' => $f['format_id'] ?? '',
                 'url'       => $mediaUrl,
                 'quality'   => $f['format_note'] ?? ($f['height'] ? $f['height'].'p' : 'HD'),
-                'extension' => strtoupper($f['ext'] ?? 'MP4'),
+                'extension' => $displayExt,
                 'size'      => $this->formatSize($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
                 'raw_size'  => (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
                 'type'      => $type,
