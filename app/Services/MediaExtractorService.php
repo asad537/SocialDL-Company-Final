@@ -27,8 +27,8 @@ class MediaExtractorService
 
         // Platforms where RapidAPI is PRIMARY (yt-dlp needs auth or proxy blocks them)
         $rapidApiPrimary  = ['LinkedIn', 'Snapchat'];
-        // Platforms where RapidAPI is FALLBACK if yt-dlp fails
-        $rapidApiFallback = ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat'];
+        // Platforms where RapidAPI is FALLBACK if yt-dlp fails (YouTube removed to strictly enforce yt-dlp)
+        $rapidApiFallback = ['TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat'];
 
         $result = null;
 
