@@ -390,6 +390,7 @@ class MediaExtractorService
                                || (!$isYouTube && !$hasCombinedVideoFormat && $type === 'video'),
                 'height'    => $height,
                 'bitrate'   => $bitrate,
+                'vcodec'    => strtolower($f['vcodec'] ?? ''), // e.g. 'vp9', 'av01.0.12M.08', 'avc1.640028'
             ];
         }
 

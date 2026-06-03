@@ -98,13 +98,20 @@ class FFmpegService
      * Merge video and audio from remote URLs (streaming merge).
      * Used for real-time proxy downloads.
      *
-     * @param string $videoUrl
-     * @param string $audioUrl|null
-     * @param string $referer
-     * @param string $userAgent
+     * When the video codec is VP9 or AV1 (used by YouTube for 1440p/4K),
+     * we MUST re-encode to H.264 (libx264) because macOS QuickTime and
+     * most Apple devices cannot natively decode VP9/AV1 inside an MP4
+     * container. We use -preset ultrafast -crf 23 to keep CPU load low.
+     *
+     * @param string      $videoUrl
+     * @param string|null $audioUrl
+     * @param string      $referer
+     * @param string      $userAgent
+     * @param string|null $proxy
+     * @param bool        $needsTranscode  Force H.264 re-encode (VP9/AV1 streams)
      * @return string  The ffmpeg command that outputs to pipe:1
      */
-    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null)
+    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $needsTranscode = false)
     {
         $ffmpeg = $this->findFfmpeg();
         $headersStr = '';
@@ -128,6 +135,18 @@ class FFmpegService
         $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
             . ' -i ' . escapeshellarg($videoUrl);
 
+        // Video codec selection:
+        // - VP9 / AV1 streams (1440p/4K from YouTube) → transcode to H.264 for Apple compatibility
+        //   -preset ultrafast : fastest x264 encode, minimal CPU overhead
+        //   -tune zerolatency : reduces buffering in streaming mode
+        //   -threads 0        : use ALL available CPU cores
+        //   -crf 23           : good quality / file-size balance
+        //   -pix_fmt yuv420p  : required for Apple device compatibility
+        // - H.264 streams (≤1080p) → stream copy (zero CPU, instant speed)
+        $vcodecArg = $needsTranscode
+            ? '-c:v libx264 -preset ultrafast -tune zerolatency -threads 0 -crf 23 -pix_fmt yuv420p'
+            : '-c:v copy';
+
         if ($audioUrl) {
             if ($proxy) {
                 $cmd .= ' -http_proxy ' . escapeshellarg($proxy);
@@ -137,10 +156,10 @@ class FFmpegService
             }
             $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
                 . ' -i ' . escapeshellarg($audioUrl)
-                . ' -c:v copy -c:a aac'
+                . ' ' . $vcodecArg . ' -c:a aac'
                 . ' -map 0:v:0 -map 1:a:0';
         } else {
-            $cmd .= ' -c:v copy';
+            $cmd .= ' ' . $vcodecArg;
         }
 
         $cmd .= ' -f mp4 -movflags frag_keyframe+empty_moov'

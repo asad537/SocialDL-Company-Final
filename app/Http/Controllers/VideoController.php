@@ -123,19 +123,20 @@ class VideoController extends Controller
     {
         if (session()->isStarted()) session()->save();
 
-        $vUrl = $request->query('video_url');
-        $aUrl = $request->query('audio_url');
-        $title = $request->query('title', 'video');
-        $orig = $request->query('source_url', $vUrl);
+        $vUrl   = $request->query('video_url');
+        $aUrl   = $request->query('audio_url');
+        $title  = $request->query('title', 'video');
+        $orig   = $request->query('source_url', $vUrl);
+        $vcodec = strtolower($request->query('vcodec', '')); // e.g. 'vp9', 'av01', 'avc1'
 
         if (!$vUrl) return abort(400);
 
         $this->logEvent('download', $orig ?: $vUrl, 'mp4', '1080p+', true, $title);
 
-        $detected = PlatformDetector::detect($orig ?: $vUrl);
-        $referer = $detected['referer'];
+        $detected  = PlatformDetector::detect($orig ?: $vUrl);
+        $referer   = $detected['referer'];
         $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
-        $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
+        $filename  = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
 
         // Resolve Proxy
         $proxy = config('downloader.ytdlp_proxy');
@@ -147,8 +148,20 @@ class VideoController extends Controller
             $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
         }
 
+        // VP9 and AV1 are NOT natively supported by macOS QuickTime / iOS.
+        // When we detect such a codec, we must re-encode to H.264 so the
+        // downloaded file is universally playable on all Apple devices.
+        $needsTranscode = str_contains($vcodec, 'vp9')
+                       || str_contains($vcodec, 'vp09')
+                       || str_contains($vcodec, 'av01')
+                       || str_contains($vcodec, 'av1');
+
         $ffmpegService = new \App\Services\FFmpegService();
-        $cmd = $ffmpegService->buildStreamMergeCommand($vUrl, $aUrl, $referer, $userAgent, $proxy);
+        $cmd = $ffmpegService->buildStreamMergeCommand(
+            $vUrl, $aUrl, $referer, $userAgent, $proxy, $needsTranscode
+        );
+
+        Log::info('mergeDownload: vcodec=' . $vcodec . ' needsTranscode=' . ($needsTranscode ? 'yes' : 'no'));
 
         return new StreamedResponse(function () use ($cmd) {
             $handle = popen($cmd, 'r');
