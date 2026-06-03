@@ -312,6 +312,11 @@ class MediaExtractorService
         foreach ($info['formats'] ?? [] as $f) {
             if (empty($f['url'])) continue;
 
+            // Skip HLS manifest formats (manifest.googlevideo.com)
+            if (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false) {
+                continue;
+            }
+
             // Skip storyboard and mhtml preview formats
             if (isset($f['format_id']) && (strpos($f['format_id'], 'sb') === 0 || strpos($f['format_id'], 'storyboard') !== false)) {
                 continue;
@@ -365,13 +370,19 @@ class MediaExtractorService
 
             $bitrate = (int) ($f['abr'] ?? ($f['tbr'] ?? 0));
 
+            $rawSize = (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0));
+            if ($rawSize <= 0 && !empty($f['tbr']) && !empty($info['duration'])) {
+                // Estimate size in bytes: (tbr in kbps * 1000 * duration in seconds) / 8
+                $rawSize = ($f['tbr'] * 1000 * $info['duration']) / 8;
+            }
+
             $result['medias'][] = [
                 'format_id' => $f['format_id'] ?? '',
                 'url'       => $mediaUrl,
                 'quality'   => $f['format_note'] ?? ($height ? $height.'p' : 'HD'),
                 'extension' => $displayExt,
-                'size'      => $this->formatSize($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
-                'raw_size'  => (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
+                'size'      => $this->formatSize($rawSize),
+                'raw_size'  => $rawSize,
                 'type'      => $type,
                 // For non-YouTube: if no combined format exists and this IS a video,
                 // it's a single progressive stream (TikTok/Snapchat) — treat as has_audio = true
