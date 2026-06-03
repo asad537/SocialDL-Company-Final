@@ -62,9 +62,8 @@ class FFmpegService
             }
         }
 
-        // If codec is vp9 or av1, transcode to h264 using fast settings, otherwise copy stream
-        $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
-        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset ultrafast -crf 22' : '-c:v copy';
+        // Always use stream copy (-c:v copy) to merge instantly and preserve original file size and quality.
+        $vcodecArg = '-c:v copy';
 
         $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
             . ' -y'
@@ -163,8 +162,8 @@ class FFmpegService
             }
         }
 
-        $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
-        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset ultrafast -crf 22' : '-c copy';
+        // Always use stream copy (-c copy) to remux instantly without re-encoding.
+        $vcodecArg = '-c copy';
 
         $ffmpeg = $this->findFfmpeg();
         $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg)
