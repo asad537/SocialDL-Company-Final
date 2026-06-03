@@ -134,28 +134,37 @@ class VideoController extends Controller
 
         $detected = PlatformDetector::detect($orig ?: $vUrl);
         $referer = $detected['referer'];
+        $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
+        $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
 
-        $download = MediaDownload::create([
-            'title'      => $title,
-            'url'        => $vUrl,
-            'platform'   => $detected['platform'],
-            'format'     => 'mp4',
-            'quality'    => '1080p+',
-            'status'     => MediaDownload::STATUS_PENDING,
-            'ip_address' => request()->ip(),
-        ]);
-
-        $fileName = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '_' . $download->id . '.mp4';
-
-        if ($aUrl) {
-            MergeMediaJob::dispatch($download->id, $vUrl, $aUrl, $fileName, $referer);
-        } else {
-            DownloadMediaJob::dispatch($download->id, $vUrl, $fileName, $referer, $detected['platform']);
+        // Resolve Proxy
+        $proxy = config('downloader.ytdlp_proxy');
+        $proxySession = null;
+        if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $vUrl, $matches)) {
+            $proxySession = $matches[1];
+        }
+        if ($proxy && $proxySession) {
+            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
         }
 
-        return response()->json([
-            'download_id' => $download->id,
-            'status'      => 'queued',
+        $ffmpegService = new \App\Services\FFmpegService();
+        $cmd = $ffmpegService->buildStreamMergeCommand($vUrl, $aUrl, $referer, $userAgent, $proxy);
+
+        return new StreamedResponse(function () use ($cmd) {
+            $handle = popen($cmd, 'r');
+            if ($handle) {
+                while (!feof($handle)) {
+                    $buffer = fread($handle, 65536);
+                    echo $buffer;
+                    flush();
+                }
+                pclose($handle);
+            }
+        }, 200, [
+            'Content-Type'        => 'video/mp4',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Cache-Control'       => 'no-cache',
+            'X-Accel-Buffering'   => 'no',
         ]);
     }
 

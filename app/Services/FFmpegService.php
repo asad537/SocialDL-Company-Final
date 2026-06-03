@@ -104,7 +104,7 @@ class FFmpegService
      * @param string $userAgent
      * @return string  The ffmpeg command that outputs to pipe:1
      */
-    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '')
+    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null)
     {
         $ffmpeg = $this->findFfmpeg();
         $headersStr = '';
@@ -115,7 +115,11 @@ class FFmpegService
             $headersStr = implode("\r\n", $parts) . "\r\n";
         }
 
-        $cmd = escapeshellarg($ffmpeg);
+        $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg);
+
+        if ($proxy) {
+            $cmd .= ' -http_proxy ' . escapeshellarg($proxy);
+        }
 
         if ($headersStr) {
             $cmd .= ' -headers ' . escapeshellarg($headersStr);
@@ -125,6 +129,9 @@ class FFmpegService
             . ' -i ' . escapeshellarg($videoUrl);
 
         if ($audioUrl) {
+            if ($proxy) {
+                $cmd .= ' -http_proxy ' . escapeshellarg($proxy);
+            }
             if ($headersStr) {
                 $cmd .= ' -headers ' . escapeshellarg($headersStr);
             }

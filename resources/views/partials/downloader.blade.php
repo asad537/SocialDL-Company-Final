@@ -1005,12 +1005,6 @@
                 `;
 
                 const dlBtn = row.querySelector('.dl-btn');
-                if (dlUrl.includes('/merge-download')) {
-                    dlBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        startMergeDownload(dlUrl, data.title);
-                    });
-                }
 
                 return row;
             }
