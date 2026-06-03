@@ -260,8 +260,10 @@ class MediaExtractorService
                 continue;
             }
 
-            // Skip WEBM video formats (not compatible with iOS/macOS natively)
-            if ($type === 'video' && $ext === 'webm') {
+            // Skip WEBM video formats for ≤1080p (H264 available as better alternative)
+            // BUT allow WebM/VP9 for 4K+ (1440p/2160p) since YouTube has no H264 above 1080p
+            $height = (int) ($f['height'] ?? 0);
+            if ($type === 'video' && $ext === 'webm' && $height <= 1080) {
                 continue;
             }
             // Skip WEBM/Opus audio formats
