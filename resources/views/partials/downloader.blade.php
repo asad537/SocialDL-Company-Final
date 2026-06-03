@@ -1039,6 +1039,20 @@
                 }
             }
         });
+        input.addEventListener('drop', (e) => {
+            const droppedText = e.dataTransfer?.getData('text');
+            if (droppedText) {
+                let val = droppedText.trim();
+                if (val) {
+                    if (!/^https?:\/\//i.test(val) && (val.includes('.') || val.includes('localhost'))) {
+                        val = 'https://' + val;
+                    }
+                    input.value = val;
+                    fetchVideo(val);
+                    e.preventDefault();
+                }
+            }
+        });
 
         if (tutorialLink && tutorialDropdown) {
             tutorialLink.addEventListener('click', (e) => {
