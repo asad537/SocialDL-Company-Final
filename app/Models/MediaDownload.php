@@ -65,21 +65,28 @@ class MediaDownload extends Model
 
     public function markDownloading()
     {
-        $this->update(['status' => self::STATUS_DOWNLOADING]);
+        $this->update([
+            'status'        => self::STATUS_DOWNLOADING,
+            'error_message' => null,
+        ]);
     }
 
     public function markMerging()
     {
-        $this->update(['status' => self::STATUS_MERGING]);
+        $this->update([
+            'status'        => self::STATUS_MERGING,
+            'error_message' => null,
+        ]);
     }
 
     public function markCompleted($filePath, $fileSize = null)
     {
         $this->update([
-            'status'    => self::STATUS_COMPLETED,
-            'file_path' => $filePath,
-            'file_size' => $fileSize,
-            'progress'  => 100,
+            'status'        => self::STATUS_COMPLETED,
+            'file_path'     => $filePath,
+            'file_size'     => $fileSize,
+            'progress'      => 100,
+            'error_message' => null,
         ]);
     }
 
