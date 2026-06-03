@@ -966,6 +966,9 @@
             const queuePlatforms = ['TikTok', 'Snapchat', 'tiktok', 'snapchat'];
             const needsQueue = queuePlatforms.includes(data.source || '');
 
+            // Detect if source platform needs proxy (CDN requires Referer/headers)
+            const needsProxy = !['Vimeo', 'vimeo'].includes(data.source || '');
+
             function renderRow(m) {
                 let dlUrl;
                 let noAudioBadge = '';
