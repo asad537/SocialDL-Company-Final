@@ -331,15 +331,19 @@ class MediaExtractorService
                 continue;
             }
 
-            // Skip AV1 video codec formats (av01) - not natively supported by Apple QuickTime/macOS/iOS
+            // Skip AV1 and VP9 video codecs for resolutions ≤ 1080p (not natively supported by Apple QuickTime/macOS/iOS)
+            // We allow VP9 only for >1080p (2K/4K) where H264 does not exist.
             $vcodec = strtolower($f['vcodec'] ?? '');
             if ($type === 'video' && (strpos($vcodec, 'av01') !== false || strpos($vcodec, 'av1') !== false)) {
+                continue;
+            }
+            $height = (int) ($f['height'] ?? 0);
+            if ($type === 'video' && $height <= 1080 && (strpos($vcodec, 'vp9') !== false || strpos($vcodec, 'vp09') !== false)) {
                 continue;
             }
 
             // Skip WEBM video formats for ≤1080p (H264 available as better alternative)
             // BUT allow WebM/VP9 for 4K+ (1440p/2160p) since YouTube has no H264 above 1080p
-            $height = (int) ($f['height'] ?? 0);
             if ($type === 'video' && $ext === 'webm' && $height <= 1080) {
                 continue;
             }
