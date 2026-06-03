@@ -46,6 +46,82 @@ class MediaExtractorService
             throw new \RuntimeException('Extraction failed: no output from extractor');
         }
 
+        // Post-process: separate, deduplicate, and sort formats
+        if (!empty($result['medias'])) {
+            $videos = [];
+            $audios = [];
+
+            foreach ($result['medias'] as $media) {
+                if (($media['type'] ?? 'video') === 'audio') {
+                    $audios[] = $media;
+                } else {
+                    $videos[] = $media;
+                }
+            }
+
+            // Deduplicate Videos by height (resolution)
+            $dedupedVideos = [];
+            foreach ($videos as $v) {
+                $height = (int) ($v['height'] ?? 0);
+                $key = $height ?: ($v['quality'] ?? 'HD');
+                
+                if (!isset($dedupedVideos[$key])) {
+                    $dedupedVideos[$key] = $v;
+                } else {
+                    $existing = $dedupedVideos[$key];
+                    $preferNew = false;
+                    
+                    // 1. Prefer progressive formats (has_audio = true) so they download instantly without merging
+                    if (!empty($v['has_audio']) && empty($existing['has_audio'])) {
+                        $preferNew = true;
+                    } elseif (empty($v['has_audio']) && !empty($existing['has_audio'])) {
+                        $preferNew = false;
+                    } else {
+                        // 2. Otherwise, prefer larger file size
+                        $preferNew = (($v['raw_size'] ?? 0) > ($existing['raw_size'] ?? 0));
+                    }
+
+                    if ($preferNew) {
+                        $dedupedVideos[$key] = $v;
+                    }
+                }
+            }
+
+            // Deduplicate Audios by quality/bitrate
+            $dedupedAudios = [];
+            foreach ($audios as $a) {
+                $bitrate = (int) ($a['bitrate'] ?? 0);
+                $key = $bitrate ?: ($a['quality'] ?? '128k');
+                
+                if (!isset($dedupedAudios[$key])) {
+                    $dedupedAudios[$key] = $a;
+                } else {
+                    if (($a['raw_size'] ?? 0) > ($dedupedAudios[$key]['raw_size'] ?? 0)) {
+                        $dedupedAudios[$key] = $a;
+                    }
+                }
+            }
+
+            // Sort videos descending by height/resolution
+            $videoList = array_values($dedupedVideos);
+            usort($videoList, function($a, $b) {
+                $hA = (int) ($a['height'] ?? 0);
+                $hB = (int) ($b['height'] ?? 0);
+                return $hB <=> $hA;
+            });
+
+            // Sort audios descending by bitrate
+            $audioList = array_values($dedupedAudios);
+            usort($audioList, function($a, $b) {
+                $bA = (int) ($a['bitrate'] ?? 0);
+                $bB = (int) ($b['bitrate'] ?? 0);
+                return $bB <=> $bA;
+            });
+
+            // Merge them back into result
+            $result['medias'] = array_merge($videoList, $audioList);
+        }
+
         $result['extraction_ms'] = (int) ((microtime(true) - $startTime) * 1000);
         return $result;
     }
@@ -178,8 +254,9 @@ class MediaExtractorService
                     'raw_size'  => (float) ($m['size'] ?? 0),
                     'type'      => $type,
                     'has_audio' => $type === 'video',
-                    'height'    => $m['height'] ?? null,
-                    'width'     => $m['width'] ?? null,
+                    'height'    => (int) ($m['height'] ?? 0),
+                    'width'     => (int) ($m['width'] ?? 0),
+                    'bitrate'   => (int) ($m['bitrate'] ?? 0),
                 ];
             }
 
@@ -282,10 +359,12 @@ class MediaExtractorService
                 $displayExt = 'MP4'; // FFmpeg merge will remux WebM→MP4 container
             }
 
+            $bitrate = (int) ($f['abr'] ?? ($f['tbr'] ?? 0));
+
             $result['medias'][] = [
                 'format_id' => $f['format_id'] ?? '',
                 'url'       => $mediaUrl,
-                'quality'   => $f['format_note'] ?? ($f['height'] ? $f['height'].'p' : 'HD'),
+                'quality'   => $f['format_note'] ?? ($height ? $height.'p' : 'HD'),
                 'extension' => $displayExt,
                 'size'      => $this->formatSize($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
                 'raw_size'  => (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0)),
@@ -294,6 +373,8 @@ class MediaExtractorService
                 // it's a single progressive stream (TikTok/Snapchat) — treat as has_audio = true
                 'has_audio' => (!empty($f['acodec']) && $f['acodec'] !== 'none')
                                || (!$isYouTube && !$hasCombinedVideoFormat && $type === 'video'),
+                'height'    => $height,
+                'bitrate'   => $bitrate,
             ];
         }
 
