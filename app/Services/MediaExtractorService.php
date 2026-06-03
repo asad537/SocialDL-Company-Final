@@ -401,6 +401,11 @@ class MediaExtractorService
         $parsed = parse_url($proxyUrl);
         if (!$parsed || empty($parsed['pass'])) return $proxyUrl;
         
+        // Skip sticky session modification for DataImpulse
+        if (strpos($parsed['host'] ?? '', 'dataimpulse.com') !== false) {
+            return $proxyUrl;
+        }
+        
         if (strpos($parsed['pass'], '_session-') !== false) {
             if (preg_match('/_session-([a-zA-Z0-9]+)/', $parsed['pass'], $matches)) {
                 $sessionId = $matches[1];
