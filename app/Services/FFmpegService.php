@@ -52,11 +52,25 @@ class FFmpegService
         $startTime = microtime(true);
         $ffmpeg = $this->findFfmpeg();
 
+        // Check if the video codec needs transcoding for QuickTime compatibility (VP9/AV1)
+        $info = $this->probe($videoPath);
+        $originalCodec = '';
+        foreach ($info['streams'] ?? [] as $stream) {
+            if ($stream['codec_type'] === 'video') {
+                $originalCodec = strtolower($stream['codec_name'] ?? '');
+                break;
+            }
+        }
+
+        // If codec is vp9 or av1, transcode to h264 using fast settings, otherwise copy stream
+        $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
+        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22' : '-c:v copy';
+
         $cmd = escapeshellarg($ffmpeg)
             . ' -y'
             . ' -i ' . escapeshellarg($videoPath)
             . ' -i ' . escapeshellarg($audioPath)
-            . ' -c:v copy -c:a aac'
+            . ' ' . $vcodecArg . ' -c:a aac'
             . ' -map 0:v:0 -map 1:a:0'
             . ' -movflags +faststart'
             . ' ' . escapeshellarg($outputPath)
@@ -139,10 +153,23 @@ class FFmpegService
             $outputPath = $inputPath . '.remuxed.mp4';
         }
 
+        // Check if video codec needs transcoding for QuickTime compatibility (VP9/AV1)
+        $info = $this->probe($inputPath);
+        $originalCodec = '';
+        foreach ($info['streams'] ?? [] as $stream) {
+            if ($stream['codec_type'] === 'video') {
+                $originalCodec = strtolower($stream['codec_name'] ?? '');
+                break;
+            }
+        }
+
+        $needsTranscode = in_array($originalCodec, ['vp9', 'vp09', 'av1', 'av01']);
+        $vcodecArg = $needsTranscode ? '-c:v libx264 -preset superfast -crf 22' : '-c copy';
+
         $ffmpeg = $this->findFfmpeg();
         $cmd = escapeshellarg($ffmpeg)
             . ' -y -i ' . escapeshellarg($inputPath)
-            . ' -c copy -movflags +faststart'
+            . ' ' . $vcodecArg . ' -movflags +faststart'
             . ' ' . escapeshellarg($outputPath)
             . ' 2>&1';
 
