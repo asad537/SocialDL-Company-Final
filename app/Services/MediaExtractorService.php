@@ -166,13 +166,12 @@ class MediaExtractorService
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
         $cmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Proxy support — only for YouTube (prevents 403 blocks on LinkedIn, Snapchat, TikTok)
-        $proxy = $this->config['ytdlp_proxy'] ?? null;
+        // Proxy support:
+        // YouTube: NO proxy — proxy causes HTTP 429 Too Many Requests errors.
+        //   Server IP + Deno n-param decryption is sufficient for YouTube.
+        // Other platforms: proxy used where needed (handled upstream via rapidApiPrimary).
         $sessionId = null;
-        if ($proxy && $isYouTube) {
-            $proxy = self::getStickyProxy($proxy, $sessionId);
-            $cmd .= ' --proxy ' . escapeshellarg($proxy);
-        }
+        // (YouTube proxy intentionally disabled to prevent 429 errors)
 
         // URL
         $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
