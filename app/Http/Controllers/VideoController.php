@@ -80,6 +80,10 @@ class VideoController extends Controller
         elseif ($ext === 'webm') $contentType = 'video/webm';
 
         return new StreamedResponse(function () use ($url, $referer, $userAgent, $proxy) {
+            // Clear PHP output buffers for instant streaming
+            while (ob_get_level()) { ob_end_clean(); }
+            ob_implicit_flush(true);
+
             $headers = [
                 'Referer: ' . $referer,
                 'User-Agent: ' . $userAgent,
@@ -93,7 +97,7 @@ class VideoController extends Controller
                 CURLOPT_MAXREDIRS      => 10,
                 CURLOPT_RETURNTRANSFER => false,
                 CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_BUFFERSIZE     => 131072,
+                CURLOPT_BUFFERSIZE     => 262144, // 256KB for max throughput
                 CURLOPT_TIMEOUT        => 0,
                 CURLOPT_CONNECTTIMEOUT => 20,
                 CURLOPT_HTTPHEADER     => $headers,
@@ -164,12 +168,18 @@ class VideoController extends Controller
         Log::info('mergeDownload: vcodec=' . $vcodec . ' needsTranscode=' . ($needsTranscode ? 'yes' : 'no'));
 
         return new StreamedResponse(function () use ($cmd) {
+            // Clear any remaining PHP output buffers so data flows immediately
+            while (ob_get_level()) { ob_end_clean(); }
+            ob_implicit_flush(true);
+
             $handle = popen($cmd, 'r');
             if ($handle) {
                 while (!feof($handle)) {
-                    $buffer = fread($handle, 65536);
-                    echo $buffer;
-                    flush();
+                    $buffer = fread($handle, 262144); // 256KB chunks for max throughput
+                    if ($buffer !== false && $buffer !== '') {
+                        echo $buffer;
+                        flush();
+                    }
                 }
                 pclose($handle);
             }
