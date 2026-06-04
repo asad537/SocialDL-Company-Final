@@ -175,16 +175,9 @@ class MediaExtractorService
             $httpProxy = $this->config['ytdlp_proxy'] ?? null;
             if ($httpProxy) {
                 // Use a FRESH random session per extraction (avoids 429 from same IP)
-                $freshSession = substr(md5(uniqid(microtime(), true)), 0, 8);
-                $parsed = parse_url($httpProxy);
-                if (!empty($parsed['pass']) && strpos($parsed['host'] ?? '', 'dataimpulse.com') === false) {
-                    $newPass = $parsed['pass'] . '_session-' . $freshSession . '_lifetime-2m';
-                    $scheme = ($parsed['scheme'] ?? 'http') . '://';
-                    $proxyWithSession = $scheme . ($parsed['user'] ?? '') . ':' . $newPass . '@' . ($parsed['host'] ?? '') . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
-                    $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
-                } else {
-                    $cmd .= ' --proxy ' . escapeshellarg($httpProxy);
-                }
+                $sessionId = substr(md5(uniqid(microtime(), true)), 0, 8);
+                $proxyWithSession = self::getStickyProxy($httpProxy, $sessionId);
+                $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
             }
         }
 
@@ -525,9 +518,30 @@ class MediaExtractorService
         $parsed = parse_url($proxyUrl);
         if (!$parsed || empty($parsed['pass'])) return $proxyUrl;
         
-        // Skip sticky session modification for DataImpulse
+        // Handle DataImpulse sticky sessions (uses login__sessid.ID:password format)
         if (strpos($parsed['host'] ?? '', 'dataimpulse.com') !== false) {
-            return $proxyUrl;
+            if (!$sessionId) {
+                $sessionId = substr(md5(uniqid(microtime(), true)), 0, 8);
+            }
+            
+            $user = $parsed['user'] ?? '';
+            // If the username already contains a session, extract it
+            if (strpos($user, ';sessid.') !== false) {
+                if (preg_match('/;sessid\.([a-zA-Z0-9]+)/', $user, $matches)) {
+                    $sessionId = $matches[1];
+                }
+                return $proxyUrl;
+            }
+            
+            // Append sessid to the username
+            $newUser = $user . ';sessid.' . $sessionId;
+            
+            $scheme = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : 'http://';
+            $pass = $parsed['pass'];
+            $host = $parsed['host'] ?? '';
+            $port = isset($parsed['port']) ? ':' . $parsed['port'] : '';
+            
+            return $scheme . $newUser . ':' . $pass . '@' . $host . $port;
         }
         
         if (strpos($parsed['pass'], '_session-') !== false) {
