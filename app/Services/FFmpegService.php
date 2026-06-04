@@ -137,16 +137,15 @@ class FFmpegService
 
         if ($isVp9Stream) {
             // ── VP9 / AV1 stream (1440p / 2160p) ────────────────────────────────
-            // H.264 with resolution-appropriate bitrate cap.
-            // Bitrate cap = predictable file size + iOS/Mac/Windows compatible MP4.
-            // Speed: ~9.38x realtime (ultrafast preset) — fast enough for streaming.
-            // File sizes: 4K 5-min ≈ 310MB, 1440p 5-min ≈ 200MB
+            // H.264 using VBV-constrained CRF 28.
+            // Prevents video pixelation while keeping files extremely lightweight and fast.
+            // File sizes: 4K 5-min ≈ 300-500MB, 1440p 5-min ≈ 200-350MB.
             if ($height >= 2160) {
-                $bitrateArgs = '-b:v 8000k -maxrate 10000k -bufsize 20000k'; // ~310 MB/5min
+                $bitrateArgs = '-crf 28 -maxrate 10000k -bufsize 20000k';
             } elseif ($height >= 1440) {
-                $bitrateArgs = '-b:v 5000k -maxrate 6000k -bufsize 12000k';  // ~200 MB/5min
+                $bitrateArgs = '-crf 28 -maxrate 7000k -bufsize 14000k';
             } else {
-                $bitrateArgs = '-b:v 3500k -maxrate 4500k -bufsize 9000k';   // ~140 MB/5min
+                $bitrateArgs = '-crf 28 -maxrate 5000k -bufsize 10000k';
             }
             $vcodecArg = "-c:v libx264 -preset ultrafast {$bitrateArgs} -pix_fmt yuv420p";
 
