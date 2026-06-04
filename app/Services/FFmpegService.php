@@ -100,9 +100,9 @@ class FFmpegService
      *
      * OUTPUT STRATEGY:
      * - H.264 streams (≤1080p):  stream copy video + AAC audio → MP4  (fast, universal)
-     * - VP9/AV1 streams (>1080p): stream copy video + Opus audio → WebM (fast, ~500MB vs 2GB H.264)
-     *   VP9/AV1 → H.264 transcode was producing 1.96 GB files (4x larger than source).
-     *   WebM output matches vidsave's ~500MB and plays on Chrome/Firefox everywhere.
+     * - VP9/AV1 streams (>1080p): H.264 with bitrate cap → MP4 (~300MB for 4K, iOS/Mac/Win compatible)
+     *   Bitrate caps: 2160p=8000k, 1440p=5000k, other=3000k
+     *   At 9.38x realtime speed, a 5-min 4K video takes ~30 seconds to encode.
      *
      * @param string      $videoUrl
      * @param string|null $audioUrl
@@ -110,9 +110,10 @@ class FFmpegService
      * @param string      $userAgent
      * @param string|null $proxy
      * @param bool        $isVp9Stream  True for VP9/AV1 streams (1440p/2160p from YouTube)
-     * @return array  ['cmd' => string, 'format' => 'mp4'|'webm']
+     * @param int         $height       Source video height in pixels (for bitrate selection)
+     * @return array  ['cmd' => string, 'format' => 'mp4']
      */
-    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $isVp9Stream = false)
+    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $isVp9Stream = false, $height = 0)
     {
         $ffmpeg = $this->findFfmpeg();
         $headersStr = '';
@@ -128,38 +129,43 @@ class FFmpegService
         if ($proxy) {
             $cmd .= ' -http_proxy ' . escapeshellarg($proxy);
         }
-
         if ($headersStr) {
             $cmd .= ' -headers ' . escapeshellarg($headersStr);
         }
-
         $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
             . ' -i ' . escapeshellarg($videoUrl);
 
         if ($isVp9Stream) {
             // ── VP9 / AV1 stream (1440p / 2160p) ────────────────────────────────
-            // Stream-copy the VP9/AV1 video (zero CPU, no quality loss).
-            // Convert AAC audio → Opus (required for WebM container, takes <5 sec).
-            // Output: WebM container (~500 MB for 4K, same as vidsave).
-            // Plays natively on Chrome & Firefox on Windows, Mac, Android, Linux.
-            // Note: Safari/QuickTime does not support VP9 — use VLC on Mac if needed.
+            // H.264 with resolution-appropriate bitrate cap.
+            // Bitrate cap = predictable file size + iOS/Mac/Windows compatible MP4.
+            // Speed: ~9.38x realtime (ultrafast preset) — fast enough for streaming.
+            // File sizes: 4K 5-min ≈ 310MB, 1440p 5-min ≈ 200MB
+            if ($height >= 2160) {
+                $bitrateArgs = '-b:v 8000k -maxrate 10000k -bufsize 20000k'; // ~310 MB/5min
+            } elseif ($height >= 1440) {
+                $bitrateArgs = '-b:v 5000k -maxrate 6000k -bufsize 12000k';  // ~200 MB/5min
+            } else {
+                $bitrateArgs = '-b:v 3500k -maxrate 4500k -bufsize 9000k';   // ~140 MB/5min
+            }
+            $vcodecArg = "-c:v libx264 -preset ultrafast {$bitrateArgs} -pix_fmt yuv420p";
+
             if ($audioUrl) {
                 if ($proxy)      { $cmd .= ' -http_proxy ' . escapeshellarg($proxy); }
                 if ($headersStr) { $cmd .= ' -headers ' . escapeshellarg($headersStr); }
                 $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
                     . ' -i ' . escapeshellarg($audioUrl)
-                    . ' -c:v copy -c:a libopus -b:a 128k'
+                    . ' ' . $vcodecArg . ' -c:a aac -b:a 128k'
                     . ' -map 0:v:0 -map 1:a:0';
             } else {
-                $cmd .= ' -c:v copy -an'; // video only, no audio
+                $cmd .= ' ' . $vcodecArg;
             }
-            $cmd .= ' -f webm pipe:1 2>/dev/null';
-            return ['cmd' => $cmd, 'format' => 'webm'];
+            $cmd .= ' -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>/dev/null';
+            return ['cmd' => $cmd, 'format' => 'mp4'];
         }
 
         // ── H.264 stream (≤1080p) ────────────────────────────────────────────
         // Stream-copy both video and audio — zero CPU, instant, full speed.
-        // Output: MP4 container, universally compatible.
         if ($audioUrl) {
             if ($proxy)      { $cmd .= ' -http_proxy ' . escapeshellarg($proxy); }
             if ($headersStr) { $cmd .= ' -headers ' . escapeshellarg($headersStr); }

@@ -132,6 +132,7 @@ class VideoController extends Controller
         $title  = $request->query('title', 'video');
         $orig   = $request->query('source_url', $vUrl);
         $vcodec = strtolower($request->query('vcodec', '')); // e.g. 'vp9', 'av01', 'avc1'
+        $height = (int) $request->query('height', 0);        // source video height in pixels
 
         if (!$vUrl) return abort(400);
 
@@ -166,16 +167,16 @@ class VideoController extends Controller
 
         $ffmpegService = new \App\Services\FFmpegService();
         $result = $ffmpegService->buildStreamMergeCommand(
-            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream
+            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream, $height
         );
         $cmd        = $result['cmd'];
-        $outFormat  = $result['format']; // 'mp4' or 'webm'
+        $outFormat  = $result['format']; // always 'mp4' now
 
         $baseFilename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80);
-        $filename     = $baseFilename . '.' . $outFormat;
-        $contentType  = $outFormat === 'webm' ? 'video/webm' : 'video/mp4';
+        $filename     = $baseFilename . '.mp4'; // always MP4
+        $contentType  = 'video/mp4';
 
-        Log::info('mergeDownload: vcodec=' . $vcodec . ' isVp9=' . ($isVp9Stream ? 'yes' : 'no') . ' format=' . $outFormat . ' proxy=' . ($proxy ? 'yes' : 'no'));
+        Log::info('mergeDownload: vcodec=' . $vcodec . ' height=' . $height . ' isVp9=' . ($isVp9Stream ? 'yes' : 'no') . ' proxy=' . ($proxy ? 'yes' : 'no'));
 
         return new StreamedResponse(function () use ($cmd) {
             // Clear any remaining PHP output buffers so data flows immediately
