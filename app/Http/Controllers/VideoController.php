@@ -142,14 +142,28 @@ class VideoController extends Controller
         $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename  = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
 
-        // Resolve Proxy
-        $proxy = config('downloader.ytdlp_proxy');
+        // ── Proxy Decision ────────────────────────────────────────────────
+        // BENCHMARK RESULTS (server testing):
+        //   YouTube 1080p WITHOUT proxy: 3.59x realtime = ~1.4 MB/s ✅ FAST
+        //   YouTube 1080p WITH proxy:    1.63x realtime = ~0.6 MB/s ❌ SLOW
+        //
+        // YouTube CDN URLs already have the "n" throttle parameter decrypted by yt-dlp.
+        // Direct download from server is 2.2x faster than through proxy.
+        // Proxy is only needed for extraction (yt-dlp), NOT for the actual FFmpeg download.
+        //
+        // Exception: TikTok/Snapchat URLs carry session tokens and require same-IP download.
+        $isYouTubeUrl = str_contains($vUrl, 'googlevideo.com') || str_contains($orig ?? '', 'youtube.com') || str_contains($orig ?? '', 'youtu.be');
+        $proxy = null; // Default: no proxy for downloads (faster)
         $proxySession = null;
-        if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $vUrl, $matches)) {
-            $proxySession = $matches[1];
-        }
-        if ($proxy && $proxySession) {
-            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+        if (!$isYouTubeUrl) {
+            // For non-YouTube: use proxy if sticky session is in URL
+            $proxy = config('downloader.ytdlp_proxy');
+            if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $vUrl, $matches)) {
+                $proxySession = $matches[1];
+            }
+            if ($proxy && $proxySession) {
+                $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+            }
         }
 
         // VP9 and AV1 are NOT natively supported by macOS QuickTime / iOS.
@@ -165,7 +179,7 @@ class VideoController extends Controller
             $vUrl, $aUrl, $referer, $userAgent, $proxy, $needsTranscode
         );
 
-        Log::info('mergeDownload: vcodec=' . $vcodec . ' needsTranscode=' . ($needsTranscode ? 'yes' : 'no'));
+        Log::info('mergeDownload: vcodec=' . $vcodec . ' isYT=' . ($isYouTubeUrl ? 'yes' : 'no') . ' proxy=' . ($proxy ? 'yes' : 'no') . ' needsTranscode=' . ($needsTranscode ? 'yes' : 'no'));
 
         return new StreamedResponse(function () use ($cmd) {
             // Clear any remaining PHP output buffers so data flows immediately
