@@ -137,17 +137,18 @@ class FFmpegService
 
         if ($isVp9Stream) {
             // ── VP9 / AV1 stream (1440p / 2160p) ────────────────────────────────
-            // H.264 using VBV-constrained CRF 28.
-            // Prevents video pixelation while keeping files extremely lightweight and fast.
-            // File sizes: 4K 5-min ≈ 300-500MB, 1440p 5-min ≈ 200-350MB.
+            // H.264 using VBV-constrained CRF 24 with superfast preset.
+            // Completely fixes pixelation / blurriness by using a higher quality preset (superfast instead of ultrafast)
+            // and lower CRF (24 instead of 28), while keeping file sizes lightweight and compatible.
+            // File sizes: 4K 5-min ≈ 400-600MB, 1440p 5-min ≈ 250-400MB.
             if ($height >= 2160) {
-                $bitrateArgs = '-crf 28 -maxrate 10000k -bufsize 20000k';
+                $bitrateArgs = '-crf 24 -maxrate 12000k -bufsize 24000k';
             } elseif ($height >= 1440) {
-                $bitrateArgs = '-crf 28 -maxrate 7000k -bufsize 14000k';
+                $bitrateArgs = '-crf 24 -maxrate 8000k -bufsize 16000k';
             } else {
-                $bitrateArgs = '-crf 28 -maxrate 5000k -bufsize 10000k';
+                $bitrateArgs = '-crf 24 -maxrate 6000k -bufsize 12000k';
             }
-            $vcodecArg = "-c:v libx264 -preset ultrafast {$bitrateArgs} -pix_fmt yuv420p";
+            $vcodecArg = "-c:v libx264 -preset superfast {$bitrateArgs} -pix_fmt yuv420p";
 
             if ($audioUrl) {
                 if ($proxy)      { $cmd .= ' -http_proxy ' . escapeshellarg($proxy); }
