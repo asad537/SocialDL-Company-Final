@@ -156,20 +156,26 @@ class VideoController extends Controller
             $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
         }
 
-        // VP9 and AV1 are NOT natively supported by macOS QuickTime / iOS.
-        // When we detect such a codec, we must re-encode to H.264 so the
-        // downloaded file is universally playable on all Apple devices.
-        $needsTranscode = str_contains($vcodec, 'vp9')
-                       || str_contains($vcodec, 'vp09')
-                       || str_contains($vcodec, 'av01')
-                       || str_contains($vcodec, 'av1');
+        // ── VP9/AV1 detection ─────────────────────────────────────────────
+        // VP9/AV1 streams (1440p/2160p YouTube): output as WebM (~500MB, same as vidsave).
+        // H.264 streams (≤1080p): output as MP4 (stream copy, universally compatible).
+        $isVp9Stream = str_contains($vcodec, 'vp9')
+                    || str_contains($vcodec, 'vp09')
+                    || str_contains($vcodec, 'av01')
+                    || str_contains($vcodec, 'av1');
 
         $ffmpegService = new \App\Services\FFmpegService();
-        $cmd = $ffmpegService->buildStreamMergeCommand(
-            $vUrl, $aUrl, $referer, $userAgent, $proxy, $needsTranscode
+        $result = $ffmpegService->buildStreamMergeCommand(
+            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream
         );
+        $cmd        = $result['cmd'];
+        $outFormat  = $result['format']; // 'mp4' or 'webm'
 
-        Log::info('mergeDownload: vcodec=' . $vcodec . ' proxy=' . ($proxy ? 'yes' : 'no') . ' needsTranscode=' . ($needsTranscode ? 'yes' : 'no'));
+        $baseFilename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80);
+        $filename     = $baseFilename . '.' . $outFormat;
+        $contentType  = $outFormat === 'webm' ? 'video/webm' : 'video/mp4';
+
+        Log::info('mergeDownload: vcodec=' . $vcodec . ' isVp9=' . ($isVp9Stream ? 'yes' : 'no') . ' format=' . $outFormat . ' proxy=' . ($proxy ? 'yes' : 'no'));
 
         return new StreamedResponse(function () use ($cmd) {
             // Clear any remaining PHP output buffers so data flows immediately
@@ -188,7 +194,7 @@ class VideoController extends Controller
                 pclose($handle);
             }
         }, 200, [
-            'Content-Type'        => 'video/mp4',
+            'Content-Type'        => $contentType,
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
             'Cache-Control'       => 'no-cache',
             'X-Accel-Buffering'   => 'no',
