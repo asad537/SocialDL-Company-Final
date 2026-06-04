@@ -386,8 +386,21 @@ class MediaExtractorService
 
             $rawSize = (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0));
             if ($rawSize <= 0 && !empty($f['tbr']) && !empty($info['duration'])) {
-                // Estimate size in bytes: (tbr in kbps * 1000 * duration in seconds) / 8
-                $rawSize = ($f['tbr'] * 1000 * $info['duration']) / 8;
+                // For VP9/AV1 streams (1440p/2160p) that will be transcoded to H.264:
+                // VP9/AV1 bitrate is much higher than the equivalent H.264 CRF28 output.
+                // Use a realistic H.264 estimate: ~60% of VP9 bitrate, capped at:
+                //   4K: ~8000 kbps, 1440p: ~5000 kbps (matches vidsave ~500MB for 4K)
+                $isVp9OrAv1 = strpos($vcodec, 'vp9') !== false || strpos($vcodec, 'vp09') !== false
+                           || strpos($vcodec, 'av01') !== false;
+                if ($isVp9OrAv1 && $height > 1080) {
+                    // Estimate H.264 CRF28 output bitrate (much smaller than VP9 source)
+                    $maxKbps = $height >= 2160 ? 8000 : ($height >= 1440 ? 5000 : 3500);
+                    $estimatedKbps = min((float)$f['tbr'] * 0.55, $maxKbps);
+                    $rawSize = ($estimatedKbps * 1000 * $info['duration']) / 8;
+                } else {
+                    // Estimate size in bytes: (tbr in kbps * 1000 * duration in seconds) / 8
+                    $rawSize = ($f['tbr'] * 1000 * $info['duration']) / 8;
+                }
             }
 
             $result['medias'][] = [

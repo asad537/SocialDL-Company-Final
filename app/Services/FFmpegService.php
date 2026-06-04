@@ -137,14 +137,14 @@ class FFmpegService
 
         // Video codec selection:
         // - VP9 / AV1 streams (1440p/4K from YouTube) → transcode to H.264 for Apple compatibility
-        //   -preset ultrafast : fastest x264 encode, minimal CPU overhead
-        //   -tune zerolatency : reduces buffering in streaming mode
+        //   -preset veryfast : good speed/size balance (ultrafast was too large ~845MB for 4K)
+        //   -tune zerolatency : reduces streaming latency
         //   -threads 0        : use ALL available CPU cores
-        //   -crf 23           : good quality / file-size balance
+        //   -crf 28           : smaller files (~40% vs crf23), comparable to vidsave output
         //   -pix_fmt yuv420p  : required for Apple device compatibility
         // - H.264 streams (≤1080p) → stream copy (zero CPU, instant speed)
         $vcodecArg = $needsTranscode
-            ? '-c:v libx264 -preset ultrafast -tune zerolatency -threads 0 -crf 23 -pix_fmt yuv420p'
+            ? '-c:v libx264 -preset veryfast -tune zerolatency -threads 0 -crf 28 -pix_fmt yuv420p'
             : '-c:v copy';
 
         if ($audioUrl) {
