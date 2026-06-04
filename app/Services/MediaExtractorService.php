@@ -166,12 +166,27 @@ class MediaExtractorService
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
         $cmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Proxy support:
-        // YouTube: NO proxy — proxy causes HTTP 429 Too Many Requests errors.
-        //   Server IP + Deno n-param decryption is sufficient for YouTube.
-        // Other platforms: proxy used where needed (handled upstream via rapidApiPrimary).
+        // Proxy support for YouTube extraction:
+        // YouTube blocks data center IPs (our server) for extraction API calls.
+        // We must use a proxy. Strategy: try HTTP proxy with fresh session per
+        // request (avoids 429 rate limits from sticky IP), fallback to SOCKS5.
         $sessionId = null;
-        // (YouTube proxy intentionally disabled to prevent 429 errors)
+        if ($isYouTube) {
+            $httpProxy = $this->config['ytdlp_proxy'] ?? null;
+            if ($httpProxy) {
+                // Use a FRESH random session per extraction (avoids 429 from same IP)
+                $freshSession = substr(md5(uniqid(microtime(), true)), 0, 8);
+                $parsed = parse_url($httpProxy);
+                if (!empty($parsed['pass']) && strpos($parsed['host'] ?? '', 'dataimpulse.com') === false) {
+                    $newPass = $parsed['pass'] . '_session-' . $freshSession . '_lifetime-2m';
+                    $scheme = ($parsed['scheme'] ?? 'http') . '://';
+                    $proxyWithSession = $scheme . ($parsed['user'] ?? '') . ':' . $newPass . '@' . ($parsed['host'] ?? '') . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+                    $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
+                } else {
+                    $cmd .= ' --proxy ' . escapeshellarg($httpProxy);
+                }
+            }
+        }
 
         // URL
         $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
