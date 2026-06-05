@@ -274,16 +274,18 @@ class MediaExtractorService
                 }
 
                 $result['medias'][] = [
-                    'url'       => $m['url'],
-                    'quality'   => $m['quality'] ?? ($isAudio ? ($m['bitrate'] ?? '128k') : 'HD'),
-                    'extension' => strtoupper($m['extension'] ?? ($isAudio ? 'MP3' : 'MP4')),
-                    'size'      => $this->formatSize($m['size'] ?? 0),
-                    'raw_size'  => (float) ($m['size'] ?? 0),
-                    'type'      => $type,
-                    'has_audio' => $type === 'video',
-                    'height'    => (int) ($m['height'] ?? 0),
-                    'width'     => (int) ($m['width'] ?? 0),
-                    'bitrate'   => (int) ($m['bitrate'] ?? 0),
+                    'url'        => $m['url'],
+                    'quality'    => $m['quality'] ?? ($isAudio ? ($m['bitrate'] ?? '128k') : 'HD'),
+                    'extension'  => strtoupper($m['extension'] ?? ($isAudio ? 'MP3' : 'MP4')),
+                    'size'       => $this->formatSize($m['size'] ?? 0),
+                    'raw_size'   => (float) ($m['size'] ?? 0),
+                    'type'       => $type,
+                    'has_audio'  => $type === 'video',
+                    'height'     => (int) ($m['height'] ?? 0),
+                    'width'      => (int) ($m['width'] ?? 0),
+                    'bitrate'    => (int) ($m['bitrate'] ?? 0),
+                    'user_agent' => '',
+                    'referer'    => '',
                 ];
             }
 
@@ -417,20 +419,22 @@ class MediaExtractorService
             }
 
             $result['medias'][] = [
-                'format_id' => $f['format_id'] ?? '',
-                'url'       => $mediaUrl,
-                'quality'   => $f['format_note'] ?? ($height ? $height.'p' : 'HD'),
-                'extension' => $displayExt,
-                'size'      => $this->formatSize($rawSize),
-                'raw_size'  => $rawSize,
-                'type'      => $type,
+                'format_id'  => $f['format_id'] ?? '',
+                'url'        => $mediaUrl,
+                'quality'    => $f['format_note'] ?? ($height ? $height.'p' : 'HD'),
+                'extension'  => $displayExt,
+                'size'       => $this->formatSize($rawSize),
+                'raw_size'   => $rawSize,
+                'type'       => $type,
                 // For non-YouTube: if no combined format exists and this IS a video,
                 // it's a single progressive stream (TikTok/Snapchat) — treat as has_audio = true
-                'has_audio' => (!empty($f['acodec']) && $f['acodec'] !== 'none')
+                'has_audio'  => (!empty($f['acodec']) && $f['acodec'] !== 'none')
                                || (!$isYouTube && !$hasCombinedVideoFormat && $type === 'video'),
-                'height'    => $height,
-                'bitrate'   => $bitrate,
-                'vcodec'    => strtolower($f['vcodec'] ?? ''), // e.g. 'vp9', 'av01.0.12M.08', 'avc1.640028'
+                'height'     => $height,
+                'bitrate'    => $bitrate,
+                'vcodec'     => strtolower($f['vcodec'] ?? ''), // e.g. 'vp9', 'av01.0.12M.08', 'avc1.640028'
+                'user_agent' => $f['http_headers']['User-Agent'] ?? $f['http_headers']['user-agent'] ?? '',
+                'referer'    => $f['http_headers']['Referer'] ?? $f['http_headers']['referer'] ?? '',
             ];
         }
 
