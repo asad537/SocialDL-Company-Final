@@ -396,8 +396,10 @@
 
     <section class="hero">
         <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/faqsmobile.webp" type="image/webp">
             <source media="(max-width: 768px)" srcset="/images/mobile/faqsmobile.jpg">
-            <img class="hero-bg-img" src="/images/faqs.jpg" alt="Frequently Asked Questions">
+            <source srcset="/images/faqs.webp" type="image/webp">
+            <img class="hero-bg-img" src="/images/faqs.jpg" alt="Frequently Asked Questions" fetchpriority="high" loading="eager">
         </picture>
         <div class="hero-container">
             <div class="hero-content">

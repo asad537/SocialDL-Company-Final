@@ -1878,8 +1878,9 @@
 
     <section class="hero">
         <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/Hero-Image.webp" type="image/webp">
             <source media="(max-width: 768px)" srcset="/images/mobile/Hero-Image.jpg">
-            <img class="hero-bg-img" src="/images/hero_section.webp" alt="Video Saver Hero">
+            <img class="hero-bg-img" src="/images/hero_section.webp" alt="Video Saver Hero" fetchpriority="high" loading="eager">
         </picture>
         <div class="hero-container">
             <div class="hero-content">

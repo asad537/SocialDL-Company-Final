@@ -828,8 +828,10 @@
 
     <header class="blog-header">
         <picture>
+            <source media="(max-width: 768px)" srcset="/images/mobile/blogmobile.webp" type="image/webp">
             <source media="(max-width: 768px)" srcset="/images/mobile/blogmobile.jpg">
-            <img class="hero-bg-img" src="/images/blog.jpg" alt="Blog Banner">
+            <source srcset="/images/blog.webp" type="image/webp">
+            <img class="hero-bg-img" src="/images/blog.jpg" alt="Blog Banner" fetchpriority="high" loading="eager">
         </picture>
         <div class="hero-container">
             <div class="hero-content">
