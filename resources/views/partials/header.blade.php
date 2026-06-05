@@ -535,25 +535,24 @@
     .nav-dropdown-wrap {
         position: relative; line-height: 1.45; }
     .nav-dropdown {
+        display: none;
         position: absolute;
         top: 100%;
         left: 50%;
-        transform: translateX(-50%) translateY(15px);
+        transform: translateX(-50%) translateY(5px);
         background: #ffffff;
         min-width: 280px;
         border-radius: 16px;
         box-shadow: 0 15px 35px rgba(0,0,0,0.12);
         padding: 1rem;
         opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         border: 1px solid rgba(0,0,0,0.05);
         z-index: 1000;
+        transition: opacity 0.2s ease;
     }
-    .nav-dropdown-wrap:hover .nav-dropdown {
+    .nav-dropdown.dropdown-open {
+        display: block;
         opacity: 1;
-        visibility: visible;
-        transform: translateX(-50%) translateY(5px);
     }
     .dropdown-grid {
         display: grid;
@@ -614,6 +613,24 @@
 </script>
 
 <script>
+    // Dropdown via JS (prevents FOUC on page load - CSS :hover glitches during Google Translate repaint)
+    document.addEventListener('DOMContentLoaded', function () {
+        const wrap = document.querySelector('.nav-dropdown-wrap');
+        const dropdown = document.querySelector('.nav-dropdown');
+        if (wrap && dropdown) {
+            let timer;
+            wrap.addEventListener('mouseenter', function () {
+                clearTimeout(timer);
+                dropdown.classList.add('dropdown-open');
+            });
+            wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(function () {
+                    dropdown.classList.remove('dropdown-open');
+                }, 150);
+            });
+        }
+    });
+
     function toggleMobileMenu() {
         const nav = document.getElementById('mobile-nav');
         const overlay = document.getElementById('mobile-overlay');
