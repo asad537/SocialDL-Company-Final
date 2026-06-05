@@ -116,8 +116,14 @@ class VideoController extends Controller
             }
 
             curl_setopt_array($ch, $options);
-            curl_exec($ch);
+            $execResult = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
             curl_close($ch);
+
+            if ($execResult === false || $httpCode >= 400) {
+                Log::error("proxyDownload Failed: URL={$url} | HTTP_CODE={$httpCode} | CURL_ERROR={$curlError} | PROXY=" . ($proxy ?: 'NONE'));
+            }
         }, 200, [
             'Content-Type'        => $contentType,
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
