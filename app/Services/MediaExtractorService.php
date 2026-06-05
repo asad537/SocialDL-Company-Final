@@ -435,6 +435,7 @@ class MediaExtractorService
                 'vcodec'     => strtolower($f['vcodec'] ?? ''), // e.g. 'vp9', 'av01.0.12M.08', 'avc1.640028'
                 'user_agent' => $f['http_headers']['User-Agent'] ?? $f['http_headers']['user-agent'] ?? '',
                 'referer'    => $f['http_headers']['Referer'] ?? $f['http_headers']['referer'] ?? '',
+                'cookies'    => self::cleanCookieString($f['cookies'] ?? ''),
             ];
         }
 
@@ -587,5 +588,35 @@ class MediaExtractorService
         $port = isset($parsed['port']) ? ':' . $parsed['port'] : '';
         
         return $scheme . $user . ':' . $newPass . '@' . $host . $port;
+    }
+
+    public static function cleanCookieString($rawCookies)
+    {
+        if (empty($rawCookies)) {
+            return '';
+        }
+        
+        $parts = explode(';', $rawCookies);
+        $cleanParts = [];
+        $ignoredKeys = ['domain', 'path', 'expires', 'max-age', 'samesite', 'secure', 'httponly'];
+        
+        foreach ($parts as $part) {
+            $part = trim($part);
+            if ($part === '') continue;
+            
+            $eqPos = strpos($part, '=');
+            if ($eqPos === false) {
+                continue;
+            }
+            
+            $key = strtolower(substr($part, 0, $eqPos));
+            if (in_array($key, $ignoredKeys)) {
+                continue;
+            }
+            
+            $cleanParts[] = $part;
+        }
+        
+        return implode('; ', $cleanParts);
     }
 }

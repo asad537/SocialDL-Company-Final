@@ -52,6 +52,7 @@ class VideoController extends Controller
         $title = $request->query('title', 'video');
         $ext = $request->query('ext', 'mp4');
         $sourceUrl = $request->query('source_url', $url);
+        $cookies = $request->query('cookies');
 
         if (!$url) return abort(400);
 
@@ -91,7 +92,7 @@ class VideoController extends Controller
         elseif ($ext === 'mp3') $contentType = 'audio/mpeg';
         elseif ($ext === 'webm') $contentType = 'video/webm';
 
-        return new StreamedResponse(function () use ($url, $referer, $userAgent, $proxy) {
+        return new StreamedResponse(function () use ($url, $referer, $userAgent, $proxy, $cookies) {
             // Clear PHP output buffers for instant streaming
             while (ob_get_level()) { ob_end_clean(); }
             ob_implicit_flush(true);
@@ -124,6 +125,10 @@ class VideoController extends Controller
                 $options[CURLOPT_PROXY] = $proxy;
             }
 
+            if ($cookies) {
+                $options[CURLOPT_COOKIE] = $cookies;
+            }
+
             curl_setopt_array($ch, $options);
             $execResult = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -151,6 +156,7 @@ class VideoController extends Controller
         $orig   = $request->query('source_url', $vUrl);
         $vcodec = strtolower($request->query('vcodec', '')); // e.g. 'vp9', 'av01', 'avc1'
         $height = (int) $request->query('height', 0);        // source video height in pixels
+        $cookies = $request->query('cookies');
 
         if (!$vUrl) return abort(400);
 
@@ -194,7 +200,7 @@ class VideoController extends Controller
 
         $ffmpegService = new \App\Services\FFmpegService();
         $result = $ffmpegService->buildStreamMergeCommand(
-            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream, $height
+            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream, $height, $cookies
         );
         $cmd        = $result['cmd'];
         $outFormat  = $result['format']; // always 'mp4' now

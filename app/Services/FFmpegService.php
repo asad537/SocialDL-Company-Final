@@ -113,7 +113,7 @@ class FFmpegService
      * @param int         $height       Source video height in pixels (for bitrate selection)
      * @return array  ['cmd' => string, 'format' => 'mp4']
      */
-    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $isVp9Stream = false, $height = 0)
+    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $isVp9Stream = false, $height = 0, $cookies = null)
     {
         $ffmpeg = $this->findFfmpeg();
         $headersStr = '';
@@ -131,6 +131,9 @@ class FFmpegService
         $cmd = $envPrefix . 'nice -n 19 ' . escapeshellarg($ffmpeg);
         if ($headersStr) {
             $cmd .= ' -headers ' . escapeshellarg($headersStr);
+        }
+        if ($cookies) {
+            $cmd .= ' -cookies ' . escapeshellarg($cookies);
         }
         $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
             . ' -i ' . escapeshellarg($videoUrl);
@@ -152,6 +155,7 @@ class FFmpegService
 
             if ($audioUrl) {
                 if ($headersStr) { $cmd .= ' -headers ' . escapeshellarg($headersStr); }
+                if ($cookies) { $cmd .= ' -cookies ' . escapeshellarg($cookies); }
                 $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
                     . ' -i ' . escapeshellarg($audioUrl)
                     . ' ' . $vcodecArg . ' -c:a aac -b:a 128k'
@@ -167,12 +171,13 @@ class FFmpegService
         // Stream-copy both video and audio — zero CPU, instant, full speed.
         if ($audioUrl) {
             if ($headersStr) { $cmd .= ' -headers ' . escapeshellarg($headersStr); }
+            if ($cookies) { $cmd .= ' -cookies ' . escapeshellarg($cookies); }
             $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
                 . ' -i ' . escapeshellarg($audioUrl)
                 . ' -c:v copy -c:a aac'
                 . ' -map 0:v:0 -map 1:a:0';
         } else {
-            $cmd .= ' -c:v copy';
+            $cmd .= ' -c copy';
         }
         $cmd .= ' -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>' . escapeshellarg(storage_path('logs/ffmpeg.log'));
         return ['cmd' => $cmd, 'format' => 'mp4'];
