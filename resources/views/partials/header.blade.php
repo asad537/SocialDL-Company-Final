@@ -1,3 +1,33 @@
+<noscript>
+    <style>
+        body { opacity: 1 !important; }
+    </style>
+</noscript>
+<style>
+    body {
+        opacity: 0;
+    }
+</style>
+<script>
+    (function() {
+        let shown = false;
+        function showPage() {
+            if (shown) return;
+            shown = true;
+            document.body.style.transition = 'opacity 0.18s ease-in-out';
+            document.body.style.opacity = '1';
+        }
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            showPage();
+        } else {
+            document.addEventListener('DOMContentLoaded', showPage);
+            window.addEventListener('load', showPage);
+            // Fallback after 1 second so page is never stuck blank
+            setTimeout(showPage, 1000);
+        }
+    })();
+</script>
+
 <header class="site-header {{ $headerClass ?? '' }}">
     <div class="header-container">
 
