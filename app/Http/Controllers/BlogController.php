@@ -93,9 +93,17 @@ class BlogController extends Controller
         return view('blog.show', compact('blog', 'related', 'type'));
     }
 
+    public function filter(Request $request)
+    {
+        session(['helpcenter_resource' => $request->resource]);
+        session(['helpcenter_category' => $request->category]);
+        return redirect()->route('blogs.index');
+    }
+
     public function publicIndex(Request $request)
     {
-        $resource = $request->get('resource', 'blog');
+        $resource = session('helpcenter_resource', 'blog');
+        $category = session('helpcenter_category', '');
         
         if ($resource === 'guide') {
             $query = \App\Models\Guide::where('status', 1);
@@ -103,8 +111,8 @@ class BlogController extends Controller
             $query = Blog::where('status', 1);
         }
 
-        if ($request->has('category') && !empty($request->category)) {
-            $query->where('tags', 'LIKE', '%' . $request->category . '%');
+        if (!empty($category)) {
+            $query->where('tags', 'LIKE', '%' . $category . '%');
         }
 
         $blogs = $query->latest()->paginate(10);

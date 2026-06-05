@@ -78,8 +78,7 @@
         .nav-wrap {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-        }
+            gap: 1.5rem; line-height: 1.45; }
 
         .nav-links {
             display: flex;
@@ -299,76 +298,7 @@
         }
 
 
-        /* ── CTA Section ── */
-        .faq-cta-wrap {
-            background: #FFC107;
-            border-radius: 28px;
-            padding: 2.2rem 3.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
 
-        .faq-cta-text h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.01em;
-        }
-
-        .faq-cta-text p {
-            font-size: 1rem;
-            color: #111827;
-            font-weight: 500;
-            margin: 0;
-            opacity: 0.9;
-        }
-
-        .faq-cta-btn {
-            background: #FF6807;
-            color: #fff;
-            text-decoration: none;
-            padding: 1rem 2.2rem;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 1rem;
-            box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            display: inline-block;
-        }
-
-        .faq-cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 94, 20, 0.35);
-        }
-
-        @media (max-width: 768px) {
-            .faq-cta-wrap {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.8rem 1.5rem;
-                border-radius: 20px;
-                gap: 1.2rem;
-            }
-
-            .faq-cta-text h2 {
-                font-size: 1.5rem;
-            }
-
-            .faq-cta-text p {
-                font-size: 0.9rem;
-            }
-
-            .faq-cta-btn {
-                width: 100%;
-                text-align: center;
-                padding: 0.9rem 1.5rem;
-            }
-        }
 
         .category-section {
             margin-bottom: 4rem;
@@ -423,7 +353,7 @@
 
         .faq-answer-inner {
             padding: 0 1.5rem 1.5rem;
-            color: var(--text-muted);
+            color: #000;
             font-size: 0.95rem;
             line-height: 1.7;
         }
@@ -473,10 +403,10 @@
             <div class="hero-content">
                 <div
                     style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: #FFB800; text-transform: uppercase; margin-bottom: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #FFB800;">
-                    <i class="fas fa-question-circle"></i> FAQ'S & HELP
+                    <i class="fas fa-question-circle"></i> Find Answers
                 </div>
                 <h1>Answers to Your<br>Common Questions</h1>
-                <p class="hero-subtext">Find everything you need to know about downloading videos, <br>quality settings,
+                <p class="hero-subtext" style="line-height: 1.45;">Find everything you need to know about downloading videos, <br>quality settings,
                     and
                     platform support.</p>
 
@@ -512,26 +442,17 @@
         @empty
             <div style="text-align:center; padding:5rem 0;">
                 <i class="fas fa-search" style="font-size:3rem; color:#E2E8F0; margin-bottom:1.5rem;"></i>
-                <p style="color:var(--text-muted);">No FAQs found at the moment.</p>
+                <p style="color:#000; line-height: 1.45;">No FAQs found at the moment.</p>
             </div>
         @endforelse
     </main>
 
     <!-- Download CTA Section -->
-    <section style="padding: 1.5rem 0 4rem; background: #fff;">
-        <div class="container" style="max-width: 1100px;">
-            <div class="faq-cta-wrap">
-                <div class="faq-cta-text">
-                    <h2>Ready to Start Downloading?</h2>
-                    <p>Join millions of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
-                </div>
-                <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
-                    class="faq-cta-btn">
-                    Download Video Saver
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- <section style="padding: 1.5rem 0 4rem; background: #fff;">
+        <div class="container" style="max-width: 1100px;"> -->
+            @include('partials.cta')
+        <!-- </div>
+    </section> -->
 
     @include('partials.footer')
 
@@ -572,14 +493,36 @@
         }
 
         function changeLanguage(langCode) {
+            if (langCode === 'en') {
+                localStorage.setItem('selectedLanguage', 'en');
+                localStorage.setItem('selectedLanguageName', 'English');
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.host;
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.split('.').slice(-2).join('.');
+                location.reload();
+                return;
+            }
+
             const select = document.querySelector('.goog-te-combo');
             if (select) {
+                let actualLang = select.value || 'en';
+                if (actualLang === langCode) {
+                    const menu = document.getElementById('lang-menu');
+                    if (menu) menu.style.display = 'none';
+                    return;
+                }
+
                 select.value = langCode;
                 select.dispatchEvent(new Event('change'));
                 const langNames = {
                     'en': 'English', 'ar': 'Arabic', 'ur': 'Urdu',
-                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French'
+                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French', 'pt': 'Portuguese'
                 };
+                
+                // Save to localStorage
+                localStorage.setItem('selectedLanguage', langCode);
+                localStorage.setItem('selectedLanguageName', langNames[langCode]);
+
                 document.getElementById('current-lang').innerText = langNames[langCode];
             }
             const menu = document.getElementById('lang-menu');

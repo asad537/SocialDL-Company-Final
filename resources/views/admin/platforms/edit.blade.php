@@ -37,9 +37,9 @@
         body{font-family:'Inter',sans-serif;background:#0F1117;color:#E2E8F0;display:flex;min-height:100vh;}
         .sidebar{width:220px;background:#161B27;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;flex-shrink:0;position:fixed;height:100vh;z-index:100;}
         .sidebar-logo{padding:1.5rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.06);}
-        .logo-wrap{display:flex;align-items:center;gap:0.6rem;}
+        .logo-wrap{display:flex;align-items:center;gap:0.6rem; line-height: 1.45; }
         .logo-icon{width:38px;height:38px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;box-shadow:0 6px 20px rgba(255,184,0,0.35);}
-        .logo-wrap h2{font-size:0.95rem;font-weight:700;color:#fff;}
+        .logo-wrap h2{font-size:0.95rem;font-weight: 700;color:#fff;}
         .logo-sub{font-size:0.68rem;color:rgba(255,255,255,0.35);}
         .sidebar-nav{padding:1rem 0.6rem;flex:1;overflow-y:auto;}
         .nav-label{font-size:0.6rem;font-weight:600;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 0.7rem;margin-top:0.5rem;}
@@ -50,7 +50,7 @@
         .sidebar-footer{padding:0.8rem 1rem;border-top:1px solid rgba(255,255,255,0.06);}
         .admin-badge{display:flex;align-items:center;gap:0.6rem;}
         .admin-avatar{width:32px;height:32px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:#fff;font-weight:700;}
-        .admin-info p{font-size:0.78rem;font-weight:600;color:#fff;}
+        .admin-info p{font-size:0.78rem;font-weight:600;color:#fff; line-height: 1.45; }
         .admin-info span{font-size:0.68rem;color:rgba(255,255,255,0.25);}
         .logout-btn{margin-left:auto;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:0.3rem 0.6rem;border-radius:6px;font-size:0.7rem;text-decoration:none;transition:all 0.2s;}
         .logout-btn:hover{background:rgba(239,68,68,0.2);}
@@ -69,7 +69,7 @@
         .form-card-header h3{font-size:0.95rem;font-weight:700;color:#fff;}
         
         .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-        .form-group{margin-bottom:1.5rem;}
+        .form-group{margin-bottom:1.5rem; line-height: 1.45; }
         .form-group label{display:block;font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
         .form-group input, .form-group textarea, .form-group select{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.8rem 1rem;font-size:0.88rem;color:#fff;font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;}
         .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#FFB800;background:rgba(255,184,0,0.06);}

@@ -221,6 +221,43 @@ class AdminController extends Controller
         return back()->with('success', 'FAQ added to Home Page!');
     }
 
+    public function faqEdit($id)
+    {
+        if (!session('admin_logged_in')) return redirect()->route('admin.login');
+        $faq = DB::table('faqs')->where('id', $id)->first();
+        if (!$faq) abort(404);
+        return view('admin.faqs_edit', compact('faq'));
+    }
+
+    public function faqUpdate(Request $request, $id)
+    {
+        if (!session('admin_logged_in')) return redirect()->route('admin.login');
+        $request->validate([
+            'question' => 'required|string',
+            'answer'   => 'required|string',
+        ]);
+        
+        $updateData = [
+            'question' => $request->question,
+            'answer'   => $request->answer,
+            'updated_at' => now(),
+        ];
+        
+        // If editing an FAQ that has a category, allow updating it
+        if ($request->has('category')) {
+            $updateData['category'] = $request->category;
+        }
+
+        DB::table('faqs')->where('id', $id)->update($updateData);
+
+        // Redirect back to the appropriate page based on the FAQ's origin
+        $faq = DB::table('faqs')->where('id', $id)->first();
+        if ($faq && $faq->page === 'faq_page') {
+            return redirect()->route('admin.faq_page')->with('success', 'FAQ updated!');
+        }
+        return redirect()->route('admin.faqs')->with('success', 'FAQ updated!');
+    }
+
     public function faqDelete($id)
     {
         if (!session('admin_logged_in')) return redirect()->route('admin.login');

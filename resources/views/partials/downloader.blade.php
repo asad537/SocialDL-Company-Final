@@ -6,8 +6,7 @@
     .search-box-wrap {
         max-width: 800px;
         margin: 0 auto;
-        position: relative;
-    }
+        position: relative; line-height: 1.45; }
 
     .search-container {
         background: white;
@@ -78,7 +77,7 @@
     .tutorial-link i { font-size: 1.2rem; }
 
     .tutorial-link span {
-        color: #6B7280;
+        color: #000;
         font-weight: 400;
         margin-left: 5px;
     }
@@ -86,12 +85,13 @@
     /* ── Tutorial Modal ── */
     .tutorial-dropdown {
         display: none;
-        margin-top: 0.55rem;
+        margin: 0.55rem auto 0;
         width: 100%;
+        max-width: 950px;
         background: transparent;
         border: none;
         box-shadow: none;
-        padding: 0.6rem 12.5rem 0.3rem;
+        padding: 0.6rem 1.5rem 0.3rem;
     }
 
     .tutorial-dropdown.open {
@@ -107,7 +107,9 @@
 
     .tutorial-step {
         text-align: center;
-    }
+        display: flex;
+        flex-direction: column;
+        height: 100%; line-height: 1.45; }
 
     .tutorial-step-num {
         width: 28px;
@@ -129,6 +131,7 @@
         background: #fff;
         padding: 8px 8px 10px;
         min-height: 208px;
+        flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -312,9 +315,9 @@
     }
 
     .tutorial-step-card p {
-        font-size: 0.8rem;
+        font-size: 0.8rem !important;
         line-height: 1.45;
-        color: #4B5563;
+        color: #000;
         margin: 0;
     }
 
@@ -648,14 +651,13 @@
         }
 
         .tutorial-step-card p {
-            font-size: 0.85rem;
-        }
+            font-size: 0.85rem; line-height: 1.45; }
     }
 </style>
 
 <section class="search-section" style="padding: 3rem 0; text-align: center;">
     <div style="max-width: 900px; margin: 0 auto; padding: 0 1.5rem;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.2rem;">Paste Your Link &amp; Download Instantly</h2>
+        <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.2rem;">Paste Your Link &amp; Download Instantly</h2>
 
         <div class="search-box-wrap">
             <div class="search-container" id="searchBox">
@@ -668,17 +670,17 @@
             </div>
         </div>
 
-        <p style="margin-top: 0.8rem; text-align: center; font-size: 0.85rem;">
-            <a href="#" class="tutorial-link">
-                <i class="fab fa-youtube" style="color: #FF0000;"></i>
+        <p style="margin-top: 0.8rem; text-align: center; font-size: 0.85rem; line-height: 1.45;">
+            <a href="" class="tutorial-link">
+                <img src="/images/play-circle.svg" alt="Play" style="width: 20px; height: 20px;">
                 How to download?
-                <span>Watch the tutorial</span>
+                <!-- <span>Watch the Tutorial</span> -->
             </a>
         </p>
 
         <div class="loader-box" id="loader" style="margin-top: 2rem;">
             <div class="spinner"></div>
-            <p style="margin-top: 15px; font-weight: 600; color: #6B7280;">Connecting to platform...</p>
+            <p style="margin-top: 15px; font-weight: 600; color: #000; line-height: 1.45;">Connecting to platform...</p>
         </div>
 
         <div id="dl-error"></div>
@@ -708,7 +710,7 @@
     <div id="progressModal" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1.5rem; transition: all 0.3s ease;">
         <div class="modal-content" style="background:#161B27; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:2rem; width:100%; max-width:480px; text-align:center; color:#fff; box-shadow:0 20px 40px rgba(0,0,0,0.5);">
             <h3 id="modalTitle" style="font-size:1.15rem; font-weight:700; margin-bottom:1rem; color:#fff;">Processing Video</h3>
-            <p id="modalStatus" style="font-size:0.88rem; color:rgba(255,255,255,0.6); margin-bottom:1.5rem;">Preparing download...</p>
+            <p id="modalStatus" style="font-size:0.88rem; color:rgba(255,255,255,0.6); margin-bottom:1.5rem; line-height: 1.45;">Preparing download...</p>
             
             <!-- Progress Bar -->
             <div style="background:rgba(255,255,255,0.05); height:8px; border-radius:4px; overflow:hidden; margin-bottom:1.5rem; position:relative;">
@@ -732,7 +734,7 @@
                         <div class="tutorial-thumb-ui"></div>
                     </div>
                     <h4>Copy the Video Link</h4>
-                    <p>Find the video you want and copy its link from YouTube, TikTok, Instagram, Facebook, or any
+                    <p style="line-height: 1.45;">Find the video you want and copy its link from YouTube, TikTok, Instagram, Facebook, or any
                         supported platform.</p>
                 </div>
             </div>
@@ -743,8 +745,8 @@
                     <div class="tutorial-thumb step-2" aria-hidden="true">
                         <div class="tutorial-thumb-ui"></div>
                     </div>
-                    <h4>Open VideoSaver.com</h4>
-                    <p>Launch your browser and go to VidsSaver.com the fastest online video downloader.</p>
+                    <h4>Open hdvideosaver.com</h4>
+                    <p style="line-height: 1.45;">Launch your browser and go to VidsSaver.com the fastest online video downloader.</p>
                 </div>
             </div>
 
@@ -755,7 +757,7 @@
                         <div class="tutorial-thumb-ui"></div>
                     </div>
                     <h4>Paste Your Link</h4>
-                    <p>Paste the copied video URL into the smart search box on our homepage. Auto-detects platform.</p>
+                    <p style="line-height: 1.45;">Paste the copied video URL into the smart search box on our homepage. Auto-detects platform.</p>
                 </div>
             </div>
 
@@ -779,7 +781,7 @@
                         </div>
                     </div>
                     <h4>Choose Format &amp; Quality</h4>
-                    <p>Select MP4 (video) or MP3 (audio), and pick quality up to 4K Ultra HD based on source
+                    <p style="line-height: 1.45;">Select MP4 (video) or MP3 (audio), and pick quality up to 4K Ultra HD based on source
                         availability.</p>
                 </div>
             </div>
@@ -795,7 +797,7 @@
                         </div>
                     </div>
                     <h4>Download &amp; Save</h4>
-                    <p>Click "Download" file starts automatically. Find it in your device's "Downloads" folder
+                    <p style="line-height: 1.45;">Click "Download" file starts automatically. Find it in your device's "Downloads" folder
                         instantly.</p>
                 </div>
             </div>
@@ -1024,10 +1026,10 @@
             audioList.innerHTML = '';
 
             if (videoMedias.length) videoMedias.forEach(m => videoList.appendChild(renderRow(m)));
-            else videoList.innerHTML = '<p style="color:#6B7280;font-size:0.9rem;padding:10px 0">No video formats available.</p>';
+            else videoList.innerHTML = '<p style="color:#000;font-size:0.9rem;padding:10px 0; line-height: 1.45;">No video formats available.</p>';
 
             if (audioMedias.length) audioMedias.forEach(m => audioList.appendChild(renderRow(m)));
-            else audioList.innerHTML = '<p style="color:#6B7280;font-size:0.9rem;padding:10px 0">No audio formats available.</p>';
+            else audioList.innerHTML = '<p style="color:#000;font-size:0.9rem;padding:10px 0; line-height: 1.45;">No audio formats available.</p>';
 
             resultsBox.style.display = 'flex';
         }

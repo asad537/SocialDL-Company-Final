@@ -32,7 +32,7 @@
         tr:hover td{background:rgba(255,255,255,0.02);}
         
         .blog-info{display:flex;align-items:center;gap:1.2rem;}
-        .blog-img-wrap{width:110px;height:70px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
+        .blog-img-wrap{width:110px;height:70px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);flex-shrink:0; line-height: 1.45; }
         .blog-img{width:100%;height:100%;object-fit:cover;}
         .blog-title{font-weight:700;color:#fff;font-size:0.95rem;line-height:1.4;}
         .blog-meta{font-size:0.78rem;color:rgba(255,255,255,0.3);margin-top:4px;}

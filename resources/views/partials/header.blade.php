@@ -8,7 +8,7 @@
 
         <!-- Logo (CENTER on mobile, LEFT on desktop) -->
         <a href="/" class="logo">
-            <img src="/images/logofinal.png" alt="Video Saver">
+            <img src="/images/hdvideosaver.png" alt="Video Saver">
         </a>
 
         <!-- Desktop Nav -->
@@ -17,15 +17,15 @@
                 <li><a href="/">Home</a></li>
 
 
-                <li><a href="/faqs">FAQs</a></li>
-                <li><a href="/download">Download</a></li>
+                <li><a href="/faqs/">FAQs</a></li>
+                <li><a href="/download/">Download</a></li>
                 
                 @php
                     $navPlatforms = \App\Models\Platform::where('status', 'active')->get();
                 @endphp
                 
                 <li class="nav-dropdown-wrap">
-                    <a href="javascript:void(0)" class="dropdown-trigger">Supported Platforms</a>
+                    <a style="cursor: pointer;" class="dropdown-trigger">Supported Platforms</a>
                     <div class="nav-dropdown">
                         <div class="dropdown-grid">
                             @foreach($navPlatforms as $np)
@@ -48,31 +48,33 @@
                     </div>
                 </li>
                 
-                <li><a href="/blogs">Help Center</a></li>
+                <li><a href="/help-center/">Help Center</a></li>
             </ul>
-            <div class="lang-dropdown" onclick="toggleLangMenu()">
+            <div class="lang-dropdown notranslate" onclick="toggleLangMenu()">
                 <span id="current-lang">English</span> <i class="fas fa-chevron-down"></i>
-                <div id="lang-menu" class="lang-menu">
+                <div id="lang-menu" class="lang-menu notranslate">
                     <div onclick="changeLanguage('en')">English</div>
                     <div onclick="changeLanguage('ar')">Arabic</div>
                     <div onclick="changeLanguage('ur')">Urdu</div>
                     <div onclick="changeLanguage('hi')">Hindi</div>
                     <div onclick="changeLanguage('es')">Spanish</div>
                     <div onclick="changeLanguage('fr')">French</div>
+                    <div onclick="changeLanguage('pt')">Portuguese</div>
                 </div>
             </div>
         </div>
 
         <!-- Mobile Lang (RIGHT) — hidden on desktop -->
-        <div class="lang-dropdown lang-dropdown-mobile" onclick="toggleLangMenuMobile()">
+        <div class="lang-dropdown lang-dropdown-mobile notranslate" onclick="toggleLangMenuMobile()">
             <span id="current-lang-mobile">English</span> <i class="fas fa-chevron-down"></i>
-            <div id="lang-menu-mobile" class="lang-menu">
+            <div id="lang-menu-mobile" class="lang-menu notranslate">
                 <div onclick="changeLanguage('en')">English</div>
                 <div onclick="changeLanguage('ar')">Arabic</div>
                 <div onclick="changeLanguage('ur')">Urdu</div>
                 <div onclick="changeLanguage('hi')">Hindi</div>
                 <div onclick="changeLanguage('es')">Spanish</div>
                 <div onclick="changeLanguage('fr')">French</div>
+                <div onclick="changeLanguage('pt')">Portuguese</div>
             </div>
         </div>
     </div>
@@ -85,8 +87,8 @@
         </div>
         <ul>
             <li><a href="/" onclick="toggleMobileMenu()">Home</a></li>
-            <li><a href="/faqs" onclick="toggleMobileMenu()">FAQs</a></li>
-            <li><a href="/download" onclick="toggleMobileMenu()">Download</a></li>
+            <li><a href="/faqs/" onclick="toggleMobileMenu()">FAQs</a></li>
+            <li><a href="/download/" onclick="toggleMobileMenu()">Download</a></li>
             
             <li style="padding: 1.2rem 1.5rem; border-bottom: 1px solid #F3F4F6;">
                 <div style="font-size: 0.75rem; font-weight: 800; color: #9CA3AF; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.05em;">Platforms</div>
@@ -108,7 +110,7 @@
                 </div>
             </li>
             
-            <li><a href="/blogs" onclick="toggleMobileMenu()">Help Center</a></li>
+            <li><a href="/helpcenter/" onclick="toggleMobileMenu()">Help Center</a></li>
         </ul>
     </div>
 
@@ -121,6 +123,13 @@
 </header>
 
 <style>
+    h2 {
+        font-size: 1.8rem !important;
+    }
+
+    p {
+        font-size: 1.2rem !important; line-height: 1.45; }
+
     /* ══ Ultra-Aggressive Hide Google Translate Bar ══ */
     iframe.skiptranslate,
     .goog-te-banner-frame,
@@ -180,8 +189,7 @@
     .nav-wrap {
         display: flex;
         align-items: center;
-        gap: 3.5rem;
-    }
+        gap: 3.5rem; line-height: 1.45; }
 
     .nav-links {
         display: flex;
@@ -263,8 +271,7 @@
 
         /* Desktop-only elements */
         .nav-wrap {
-            display: none !important;
-        }
+            display: none !important; line-height: 1.45; }
 
         /* Mobile header: 3-column layout — ≡ | LOGO | English */
         .site-header .header-container {
@@ -454,8 +461,7 @@
         .nav-wrap {
             display: flex;
             align-items: center;
-            gap: 2.5rem;
-        }
+            gap: 2.5rem; line-height: 1.45; }
 
         .nav-links {
             display: flex;
@@ -527,8 +533,7 @@
 
     /* ── Desktop Dropdown Styles ── */
     .nav-dropdown-wrap {
-        position: relative;
-    }
+        position: relative; line-height: 1.45; }
     .nav-dropdown {
         position: absolute;
         top: 100%;
@@ -600,7 +605,7 @@
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
-            includedLanguages: 'en,ar,ur,hi,es,fr',
+            includedLanguages: 'en,ar,ur,hi,es,fr,pt',
             autoDisplay: false
         }, 'google_translate_element');
     }
@@ -636,14 +641,33 @@
     }
 
     function changeLanguage(langCode) {
+        if (langCode === 'en') {
+            localStorage.setItem('selectedLanguage', 'en');
+            localStorage.setItem('selectedLanguageName', 'English');
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.host;
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.split('.').slice(-2).join('.');
+            location.reload();
+            return;
+        }
+
         const select = document.querySelector('.goog-te-combo');
         if (select) {
+            let actualLang = select.value || 'en';
+            if (actualLang === langCode) {
+                const menu = document.getElementById('lang-menu');
+                if (menu) menu.style.display = 'none';
+                const menuMobile = document.getElementById('lang-menu-mobile');
+                if (menuMobile) menuMobile.style.display = 'none';
+                return;
+            }
+
             select.value = langCode;
             select.dispatchEvent(new Event('change'));
 
             const langNames = {
                 'en': 'English', 'ar': 'Arabic', 'ur': 'Urdu',
-                'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French'
+                'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French', 'pt': 'Portuguese'
             };
 
             // Save to localStorage
@@ -683,7 +707,7 @@
                 // Update localStorage to match
                 const langNames = {
                     'en': 'English', 'ar': 'Arabic', 'ur': 'Urdu',
-                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French'
+                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French', 'pt': 'Portuguese'
                 };
                 localStorage.setItem('selectedLanguage', savedLang);
                 localStorage.setItem('selectedLanguageName', langNames[savedLang] || 'English');

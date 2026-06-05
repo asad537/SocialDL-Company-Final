@@ -18,9 +18,9 @@
         /* Sidebar Styles */
         .sidebar{width:240px;background:#161B27;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;flex-shrink:0;position:fixed;height:100vh;z-index:100;}
         .sidebar-logo{padding:1.5rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.06);}
-        .logo-wrap{display:flex;align-items:center;gap:0.7rem;}
+        .logo-wrap{display:flex;align-items:center;gap:0.7rem; line-height: 1.45; }
         .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;box-shadow:0 6px 20px rgba(255,184,0,0.3);}
-        .logo-wrap h2{font-size:1rem;font-weight:700;color:#fff;letter-spacing:-0.02em;}
+        .logo-wrap h2{font-size:1rem;font-weight: 700;color:#fff;letter-spacing:-0.02em;}
         .logo-sub{font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:1px;}
         
         .sidebar-nav{padding:1.2rem 0.8rem;flex:1;overflow-y:auto;}
@@ -35,7 +35,7 @@
         .sidebar-footer{padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.1);}
         .admin-badge{display:flex;align-items:center;gap:0.8rem;}
         .admin-avatar{width:36px;height:36px;background:linear-gradient(135deg,#FFB800,#FF8C00);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:#fff;font-weight:800;}
-        .admin-info p{font-size:0.82rem;font-weight:600;color:#fff;}
+        .admin-info p{font-size:0.82rem;font-weight:600;color:#fff; line-height: 1.45; }
         .admin-info span{font-size:0.7rem;color:rgba(255,255,255,0.3);}
         .logout-btn{margin-left:auto;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.15);color:#FCA5A5;border-radius:8px;text-decoration:none;transition:all 0.2s;}
         .logout-btn:hover{background:rgba(239,68,68,0.2);transform:scale(1.05);}
@@ -73,7 +73,7 @@
             <div class="logo-icon"><i class="fas fa-bolt"></i></div>
             <div>
                 <h2>Video Saver</h2>
-                <p class="logo-sub">Admin Dashboard</p>
+                <p class="logo-sub" style="line-height: 1.45;">Admin Dashboard</p>
             </div>
         </div>
     </div>
@@ -94,7 +94,7 @@
         <div class="admin-badge">
             <div class="admin-avatar">A</div>
             <div class="admin-info">
-                <p>Administrator</p>
+                <p style="line-height: 1.45;">Administrator</p>
                 <span>Super Admin</span>
             </div>
             <a href="{{ route('admin.logout') }}" class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>

@@ -61,8 +61,7 @@
             margin: 0 auto 1rem;
             font-size: 1.8rem;
             color: white;
-            box-shadow: 0 10px 30px rgba(255,184,0,0.4);
-        }
+            box-shadow: 0 10px 30px rgba(255,184,0,0.4); line-height: 1.45; }
 
         .login-logo h1 {
             font-size: 1.5rem;
@@ -73,12 +72,10 @@
         .login-logo p {
             font-size: 0.85rem;
             color: rgba(255,255,255,0.5);
-            margin-top: 0.3rem;
-        }
+            margin-top: 0.3rem; line-height: 1.45; }
 
         .form-group {
-            margin-bottom: 1.2rem;
-        }
+            margin-bottom: 1.2rem; line-height: 1.45; }
 
         .form-group label {
             display: block;
@@ -91,8 +88,7 @@
         }
 
         .input-wrap {
-            position: relative;
-        }
+            position: relative; line-height: 1.45; }
 
         .input-wrap i {
             position: absolute;
@@ -179,7 +175,7 @@
         <div class="login-logo">
             <div class="icon-wrap"><i class="fas fa-shield-alt"></i></div>
             <h1>Admin Panel</h1>
-            <p>Video Saver — Secure Access</p>
+            <p style="line-height: 1.45;">Video Saver — Secure Access</p>
         </div>
 
         @if($errors->any())

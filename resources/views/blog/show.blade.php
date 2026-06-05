@@ -67,7 +67,7 @@
 
         .logo img { height: 65px; width: auto; border-radius: 8px; }
 
-        .nav-wrap { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-wrap { display: flex; align-items: center; gap: 1.5rem; line-height: 1.45; }
 
         .nav-links { display: flex; gap: 1.5rem; list-style: none; }
 
@@ -127,7 +127,7 @@
         .mobile-nav { display: none; }
 
         @media (max-width: 768px) {
-            .nav-wrap { display: none; }
+            .nav-wrap { display: none; line-height: 1.45; }
             .hamburger {
                 display: flex;
                 flex-direction: column;
@@ -242,7 +242,7 @@
 
         .pop-info span {
             font-size: 0.68rem;
-            color: var(--text-muted);
+            color: #000;
             font-weight: 500;
         }
 
@@ -275,9 +275,9 @@
 
         .download-widget p {
             font-size: 0.72rem;
-            color: var(--text-muted);
+            color: #000;
             margin-bottom: 0.8rem;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
         .dl-buttons {
@@ -297,8 +297,7 @@
 
         .btn-app {
             background: var(--primary);
-            color: #fff;
-        }
+            color: #fff; line-height: 1.45; }
 
         .btn-app:hover { background: var(--primary-dark); }
 
@@ -329,8 +328,7 @@
             overflow: hidden;
             margin-bottom: 1rem;
             background: #F1F5F9;
-            aspect-ratio: 16/9;
-        }
+            aspect-ratio: 16/9; line-height: 1.45; }
 
         .featured-img-wrap img {
             width: 100%;
@@ -345,7 +343,7 @@
             align-items: center;
             gap: 1.5rem;
             font-size: 0.82rem;
-            color: var(--text-muted);
+            color: #000;
             margin-bottom: 1.5rem;
             font-weight: 500;
         }
@@ -384,7 +382,7 @@
 
         .toc-list li a {
             font-size: 0.82rem;
-            color: var(--text-muted);
+            color: #000;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -411,7 +409,7 @@
 
         .post-content h2 {
             font-size: 1.35rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--text-main);
             margin: 2rem 0 0.8rem;
             letter-spacing: -0.01em;
@@ -424,7 +422,7 @@
             margin: 1.5rem 0 0.6rem;
         }
 
-        .post-content p { margin-bottom: 1.2rem; }
+        .post-content p { margin-bottom: 1.2rem; line-height: 1.45; }
 
         .post-content ul, .post-content ol {
             padding-left: 1.5rem;
@@ -499,7 +497,7 @@
 
         .related-header h2 {
             font-size: 1.4rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--text-main);
         }
 
@@ -556,7 +554,7 @@
 
         .related-card-body span {
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: #000;
             font-weight: 500;
         }
 
@@ -618,7 +616,7 @@
             <div class="sidebar-widget download-widget">
                 <div class="dl-icon"><i class="fas fa-download"></i></div>
                 <h4>Download Your Way</h4>
-                <p>Choose how you want to download and start using the app.</p>
+                <p style="line-height: 1.45;">Choose how you want to download and start using the app.</p>
                 <div class="dl-buttons">
                     <a href="/" class="btn-dl btn-app">Via App</a>
                     <a href="/" class="btn-dl btn-web">Via Web</a>
@@ -673,7 +671,7 @@
             @if($blog->tags)
             <div class="post-tags">
                 @foreach(explode(',', $blog->tags) as $tag)
-                    <a href="/blogs?category={{ trim($tag) }}" class="tag-pill">#{{ trim($tag) }}</a>
+                    <a href="/helpcenter?category={{ trim($tag) }}" class="tag-pill">#{{ trim($tag) }}</a>
                 @endforeach
             </div>
             @endif
@@ -687,7 +685,7 @@
         <div class="related-inner">
             <div class="related-header">
                 <h2>Related Articles</h2>
-                <a href="/blogs?resource={{ $type }}">View all {{ $type === 'guide' ? 'guides' : 'posts' }} →</a>
+                <a href="/helpcenter?resource={{ $type }}">View all {{ $type === 'guide' ? 'guides' : 'posts' }} →</a>
             </div>
             <div class="related-grid">
                 @foreach($related as $post)
@@ -711,7 +709,7 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,ar,ur,hi,es,fr',
+                includedLanguages: 'en,ar,ur,hi,es,fr,pt',
                 autoDisplay: false
             }, 'google_translate_element');
         }
@@ -733,13 +731,37 @@
         function changeLanguage(langCode) {
             const select = document.querySelector('.goog-te-combo');
             if (select) {
-                select.value = langCode;
+                let actualLang = select.value || 'en';
+                if (actualLang === langCode) {
+                    const menu = document.getElementById('lang-menu');
+                    if (menu) menu.style.display = 'none';
+                    const menuMobile = document.getElementById('lang-menu-mobile');
+                    if (menuMobile) menuMobile.style.display = 'none';
+                    return;
+                }
+
+                if (langCode === 'en') {
+                    select.value = '';
+                } else {
+                    select.value = langCode;
+                }
                 select.dispatchEvent(new Event('change'));
                 
                 const langNames = {
                     'en': 'English', 'ar': 'Arabic', 'ur': 'Urdu',
-                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French'
+                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French', 'pt': 'Portuguese'
                 };
+
+                // Save to localStorage
+                localStorage.setItem('selectedLanguage', langCode);
+                localStorage.setItem('selectedLanguageName', langNames[langCode]);
+
+                if (langCode === 'en') {
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.host;
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.split('.').slice(-2).join('.');
+                }
+
                 const currentLangEl = document.getElementById('current-lang');
                 if (currentLangEl) currentLangEl.innerText = langNames[langCode];
                 

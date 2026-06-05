@@ -95,8 +95,7 @@
         .nav-wrap {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-        }
+            gap: 1.5rem; line-height: 1.45; }
 
         .nav-links {
             display: flex;
@@ -212,7 +211,7 @@
 
         .hero-subtext {
             font-size: 1.05rem;
-            color: #4B5563;
+            color: #000;
             line-height: 1.6;
             margin-bottom: 2rem;
             max-width: 500px;
@@ -296,8 +295,7 @@
         .filter-group {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-        }
+            gap: 0.6rem; line-height: 1.45; }
 
         .filter-group label {
             font-size: 0.85rem;
@@ -386,7 +384,7 @@
 
         .card-content h2 {
             font-size: 1.15rem;
-            font-weight: 800;
+            font-weight: 700;
             margin-bottom: 0.6rem;
             color: #000;
             line-height: 1.3;
@@ -502,7 +500,7 @@
 
         .pop-info span {
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: #000;
         }
 
         /* Download Widget */
@@ -525,9 +523,8 @@
 
         .download-widget p {
             font-size: 0.85rem;
-            color: var(--text-muted);
-            margin: 1rem 0 1.5rem;
-        }
+            color: #000;
+            margin: 1rem 0 1.5rem; line-height: 1.45; }
 
         .dl-buttons {
             display: grid;
@@ -546,8 +543,7 @@
 
         .btn-app {
             background: var(--primary);
-            color: var(--text-dark);
-        }
+            color: var(--text-dark); line-height: 1.45; }
 
         .btn-web {
             border: 1px solid var(--border);
@@ -842,7 +838,7 @@
                     <i class="fas fa-file-alt"></i> Blog
                 </div>
                 <h1>Tips, Guides &<br>Latest Updates</h1>
-                <p class="hero-subtext">Stay informed with helpful tips, how-tos, and updates to get the most out of the
+                <p class="hero-subtext" style="line-height: 1.45;">Stay informed with helpful tips, how-tos, and updates to get the most out of the
                     app.</p>
 
                 <div class="hero-badges">
@@ -858,12 +854,13 @@
         <!-- Filter Bar -->
         <div class="filter-box">
             <h3>Filter By</h3>
-            <form action="{{ route('blogs.index') }}" method="GET" class="filter-flex">
+            <form action="{{ route('blogs.filter') }}" method="POST" class="filter-flex">
+                @csrf
                 <div class="filter-group">
                     <label>Resource Hub:</label>
                     <select name="resource" onchange="this.form.submit()">
-                        <option value="blog" {{ $resource === 'blog' ? 'selected' : '' }}>Blogs</option>
-                        <option value="guide" {{ $resource === 'guide' ? 'selected' : '' }}>Guides</option>
+                        <option value="blog" {{ session('helpcenter_resource', 'blog') === 'blog' ? 'selected' : '' }}>Blogs</option>
+                        <option value="guide" {{ session('helpcenter_resource') === 'guide' ? 'selected' : '' }}>Guides</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -871,7 +868,7 @@
                     <select name="category" onchange="this.form.submit()">
                         <option value="">All Categories</option>
                         @foreach($categories as $cat)
-                            <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>{{ $cat }}
+                            <option value="{{ $cat }}" {{ session('helpcenter_category') === $cat ? 'selected' : '' }}>{{ $cat }}
                             </option>
                         @endforeach
                     </select>
@@ -888,7 +885,7 @@
                     </div>
                     <div class="card-content">
                         <h2><a href="{{ route($resource . '.show', $blog->slug) }}">{{ $blog->title }}</a></h2>
-                        <p class="card-excerpt">{{ $blog->description }}</p>
+                        <p class="card-excerpt" style="line-height: 1.45;">{{ $blog->description }}</p>
                         <div class="card-footer">
                             <span>{{ $blog->author_name ?? 'Admin' }}</span>
                             <span>•</span>
@@ -929,7 +926,7 @@
             <div class="widget download-widget">
                 <div class="dl-icon"><i class="fas fa-download"></i></div>
                 <h3 class="widget-title">Download Your Way</h3>
-                <p>Choose how you want to download and start using the app.</p>
+                <p style="line-height: 1.45;">Choose how you want to download and start using the app.</p>
                 <div class="dl-buttons">
                     <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
                         class="btn-dl btn-app">Via App</a>
@@ -946,7 +943,7 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,ar,ur,hi,es,fr',
+                includedLanguages: 'en,ar,ur,hi,es,fr,pt',
                 autoDisplay: false
             }, 'google_translate_element');
         }
@@ -965,14 +962,38 @@
         }
 
         function changeLanguage(langCode) {
+            if (langCode === 'en') {
+                localStorage.setItem('selectedLanguage', 'en');
+                localStorage.setItem('selectedLanguageName', 'English');
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.host;
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.split('.').slice(-2).join('.');
+                location.reload();
+                return;
+            }
+
             const select = document.querySelector('.goog-te-combo');
             if (select) {
+                let actualLang = select.value || 'en';
+                if (actualLang === langCode) {
+                    const menu = document.getElementById('lang-menu');
+                    if (menu) menu.style.display = 'none';
+                    const menuMobile = document.getElementById('lang-menu-mobile');
+                    if (menuMobile) menuMobile.style.display = 'none';
+                    return;
+                }
+
                 select.value = langCode;
                 select.dispatchEvent(new Event('change'));
                 const langNames = {
                     'en': 'English', 'ar': 'Arabic', 'ur': 'Urdu',
-                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French'
+                    'hi': 'Hindi', 'es': 'Spanish', 'fr': 'French', 'pt': 'Portuguese'
                 };
+                
+                // Save to localStorage
+                localStorage.setItem('selectedLanguage', langCode);
+                localStorage.setItem('selectedLanguageName', langNames[langCode]);
+
                 const currentLangEl = document.getElementById('current-lang');
                 if (currentLangEl) currentLangEl.innerText = langNames[langCode];
 

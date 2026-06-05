@@ -20,7 +20,7 @@
         .hicon{width:36px;height:36px;border-radius:10px;background:rgba(255,184,0,0.12);color:#FFB800;display:flex;align-items:center;justify-content:center;font-size:0.95rem;}
         .form-card-header h3{font-size:0.95rem;font-weight:700;color:#fff;}
         .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-        .form-group{margin-bottom:1.5rem;}
+        .form-group{margin-bottom:1.5rem; line-height: 1.45; }
         .form-group label{display:block;font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
         .form-group input, .form-group textarea, .form-group select{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.8rem 1rem;font-size:0.88rem;color:#fff;font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;}
         .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#FFB800;background:rgba(255,184,0,0.06);}

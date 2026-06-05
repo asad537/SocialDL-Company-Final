@@ -17,6 +17,8 @@ Route::post('/admin/homepage', [AdminController::class, 'homepageSave'])->name('
 // FAQ Admin Routes
 Route::get('/admin/faqs', [AdminController::class, 'faqIndex'])->name('admin.faqs');
 Route::post('/admin/faqs', [AdminController::class, 'faqStore'])->name('admin.faqs.store');
+Route::get('/admin/faqs/{id}/edit', [AdminController::class, 'faqEdit'])->name('admin.faqs.edit');
+Route::post('/admin/faqs/{id}/edit', [AdminController::class, 'faqUpdate'])->name('admin.faqs.update');
 Route::delete('/admin/faqs/{id}', [AdminController::class, 'faqDelete'])->name('admin.faqs.delete');
 
 // FAQ Page (Dedicated)
@@ -33,8 +35,9 @@ Route::post('/admin/blogs', [BlogController::class, 'store'])->name('admin.blogs
 Route::get('/admin/blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.blogs.edit');
 Route::post('/admin/blogs/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
 Route::delete('/admin/blogs/{id}', [BlogController::class, 'destroy'])->name('admin.blogs.delete');
-Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
-Route::get('/blogs', [BlogController::class, 'publicIndex'])->name('blogs.index');
+Route::get('/blog/{slug}/', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/help-center/', [BlogController::class, 'publicIndex'])->name('blogs.index');
+Route::post('/help-center/filter', [BlogController::class, 'filter'])->name('blogs.filter');
 
 // Guide Admin Routes
 use App\Http\Controllers\GuideController;
@@ -44,7 +47,7 @@ Route::post('/admin/guides', [GuideController::class, 'store'])->name('admin.gui
 Route::get('/admin/guides/{id}/edit', [GuideController::class, 'edit'])->name('admin.guides.edit');
 Route::post('/admin/guides/{id}', [GuideController::class, 'update'])->name('admin.guides.update');
 Route::delete('/admin/guides/{id}', [GuideController::class, 'destroy'])->name('admin.guides.delete');
-Route::get('/guide/{slug}', [GuideController::class, 'publicShow'])->name('guide.show');
+Route::get('/guide/{slug}/', [GuideController::class, 'publicShow'])->name('guide.show');
 
 // Platform Admin Routes
 use App\Http\Controllers\PlatformController;
@@ -57,7 +60,7 @@ Route::delete('/admin/platforms/{id}', [PlatformController::class, 'destroy'])->
 Route::post('/admin/platforms/{id}/faqs', [PlatformController::class, 'faqStore'])->name('admin.platforms.faqs.store');
 Route::delete('/admin/platforms/faqs/{faq_id}', [PlatformController::class, 'faqDelete'])->name('admin.platforms.faqs.delete');
 
-Route::get('/faqs', [App\Http\Controllers\AdminController::class, 'publicFaqs'])->name('public.faqs');
+Route::get('/faqs/', [App\Http\Controllers\AdminController::class, 'publicFaqs'])->name('public.faqs');
 Route::post('/admin/cms/upload-editor-image', [AdminController::class, 'uploadEditorImage'])->name('admin.cms.upload-editor-image');
 
 
@@ -82,12 +85,12 @@ Route::get('/', function () {
     return view('home', compact('settings', 'faqs', 'blogs'));
 })->name('home');
 
-Route::get('/download', function () {
+Route::get('/download/', function () {
     return view('download');
 })->name('download');
-Route::view('/privacy-policy', 'legal.privacy-policy')->name('legal.privacy');
-Route::view('/terms-of-service', 'legal.terms-of-service')->name('legal.terms');
-Route::view('/disclaimer', 'legal.disclaimer')->name('legal.disclaimer');
+Route::view('/privacy-policy/', 'legal.privacy-policy')->name('legal.privacy');
+Route::view('/terms-of-service/', 'legal.terms-of-service')->name('legal.terms');
+Route::view('/disclaimer/', 'legal.disclaimer')->name('legal.disclaimer');
 
 // ── Extract: yt-dlp extraction (cached <1ms, uncached ~2-3s) ─────────────
 Route::post('/extract', [VideoController::class, 'extract'])
@@ -124,4 +127,4 @@ Route::get('/thumbnail-proxy', [VideoController::class, 'proxyThumbnail'])
     ->middleware('throttle:60,1');
 
 // Catch-all Public Platform Route (Must be last)
-Route::get('/{slug}', [PlatformController::class, 'show'])->name('platforms.show');
+Route::get('/{slug}/', [PlatformController::class, 'show'])->name('platforms.show');

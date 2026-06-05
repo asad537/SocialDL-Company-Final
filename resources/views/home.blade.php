@@ -101,8 +101,7 @@
         .nav-wrap {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-        }
+            gap: 1.5rem; line-height: 1.45; }
 
         .nav-links {
             display: flex;
@@ -251,7 +250,7 @@
 
         .hero h1 {
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 800;
             line-height: 1.2;
             color: var(--text-dark);
             margin-bottom: 2rem;
@@ -304,7 +303,7 @@
 
         .search-section h2 {
             font-size: 2rem;
-            font-weight: 800;
+            font-weight: 700;
             margin-bottom: 2.5rem;
             color: var(--text-dark);
         }
@@ -312,8 +311,7 @@
         .search-box-wrap {
             max-width: 800px;
             margin: 0 auto;
-            position: relative;
-        }
+            position: relative; line-height: 1.45; }
 
         .search-container {
             background: white;
@@ -621,8 +619,7 @@
         }
 
         .feature-image-wrap {
-            flex: 0 0 auto;
-        }
+            flex: 0 0 auto; line-height: 1.45; }
 
         .feature-image {
             width: 100%;
@@ -638,7 +635,7 @@
 
         .feature-content h2 {
             font-size: 1.3rem !important;
-            font-weight: 800 !important;
+            font-weight: 700 !important;
             margin-bottom: 0.8rem !important;
             line-height: 1.2 !important;
             text-align: left !important;
@@ -652,9 +649,9 @@
         }
 
         .feature-content p {
-            color: var(--text-gray);
+            color: #000;
             font-size: 0.85rem;
-            line-height: 1.5;
+            line-height: 1.45;
             margin-bottom: 1rem;
             text-align: justify;
         }
@@ -680,7 +677,7 @@
 
         .features-intro-title {
             font-size: 2.8rem;
-            font-weight: 800;
+            font-weight: 700;
             line-height: 1.2;
             color: #111827;
             text-align: center !important;
@@ -905,7 +902,7 @@
 
             .search-section p {
                 margin-top: 0.7rem !important;
-                line-height: 1.35;
+                line-height: 1.45;
             }
 
             .search-section p a {
@@ -1004,17 +1001,16 @@
 
         .everything-header h2 {
             font-size: 1.8rem !important;
-            font-weight: 800 !important;
+            font-weight: 700 !important;
             color: #111827 !important;
             margin-bottom: 0.8rem !important;
         }
 
         .everything-header p {
             font-size: 0.95rem;
-            color: #6B7280;
+            color: #000;
             max-width: 600px;
-            margin: 0 auto;
-        }
+            margin: 0 auto; line-height: 1.45; }
 
         .everything-container {
             position: relative;
@@ -1055,7 +1051,7 @@
         .callout-box p {
             font-size: 0.8rem;
             color: #111827;
-            line-height: 1.4;
+            line-height: 1.45;
             font-weight: 600;
         }
 
@@ -1096,8 +1092,7 @@
         .callout-right-top {
             right: 20px;
             top: 15%;
-            text-align: left;
-        }
+            text-align: left; line-height: 1.45; }
 
         .callout-right-bottom {
             right: 20px;
@@ -1136,8 +1131,7 @@
             }
 
             .callout-right-top {
-                order: 2;
-            }
+                order: 2; line-height: 1.45; }
 
             .callout-right-bottom {
                 order: 3;
@@ -1165,17 +1159,17 @@
 
         .everything-section-header h2 {
             font-size: 1.3rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--text-dark);
             margin-bottom: 0.4rem;
         }
 
         .everything-section-header p {
             font-size: 0.85rem;
-            color: var(--text-gray);
+            color: #000;
             max-width: 550px;
             margin: 0 auto;
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
         .everything-wrapper {
@@ -1239,8 +1233,7 @@
         }
 
         .callout-top-right .callout-inner p {
-            margin-top: 2px;
-        }
+            margin-top: 2px; line-height: 1.45; }
 
         .callout-middle-left .callout-inner {
             text-align: left;
@@ -1253,8 +1246,7 @@
         }
 
         .callout-middle-left .callout-inner p {
-            margin-top: 2px;
-        }
+            margin-top: 2px; line-height: 1.45; }
 
         .callout-bottom-right .callout-inner {
             text-align: left;
@@ -1271,8 +1263,8 @@
 
         .callout-inner p {
             font-size: 0.78rem;
-            color: #4B5563;
-            line-height: 1.4;
+            color: #000;
+            line-height: 1.45;
             font-weight: 500;
             text-align: justify;
         }
@@ -1303,7 +1295,7 @@
 
         .howitworks-header h2 {
             font-size: 1.3rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--text-dark);
             margin-bottom: 0.4rem;
         }
@@ -1313,7 +1305,7 @@
             color: var(--text-gray);
             max-width: 550px;
             margin: 0 auto;
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
         .howitworks-wrapper {
@@ -1376,8 +1368,8 @@
 
         .hw-callout p {
             font-size: 0.78rem;
-            color: #4B5563;
-            line-height: 1.4;
+            color: #000;
+            line-height: 1.45;
             font-weight: 500;
             text-align: left;
             margin-top: 2px;
@@ -1416,8 +1408,8 @@
                 max-width: 340px;
                 margin: 0 auto;
                 font-size: 0.9rem;
-                line-height: 1.4;
-                color: #4B5563;
+                line-height: 1.45;
+                color: #000;
                 text-align: center !important;
             }
 
@@ -1458,7 +1450,7 @@
             .mobile-overview-note p {
                 color: #1f2937;
                 font-size: 0.55rem;
-                line-height: 1.23;
+                line-height: 1.45;
                 margin: 0;
             }
 
@@ -1467,8 +1459,7 @@
                 grid-row: 1;
                 justify-self: end;
                 text-align: right;
-                padding-right: 0;
-            }
+                padding-right: 0; line-height: 1.45; }
 
             .mobile-overview-note.left-bottom {
                 grid-column: 1;
@@ -1485,8 +1476,7 @@
                 grid-row: 1;
                 justify-self: start;
                 text-align: left;
-                padding-left: 0;
-            }
+                padding-left: 0; line-height: 1.45; }
 
             .mobile-overview-note.right-bottom {
                 grid-column: 3;
@@ -1508,8 +1498,7 @@
 
             .mobile-overview-note.center-bottom h4,
             .mobile-overview-note.center-bottom p {
-                text-align: center !important;
-            }
+                text-align: center !important; line-height: 1.45; }
 
             .mobile-overview-divider {
                 margin: 0.35rem auto 0.5rem;
@@ -1562,8 +1551,7 @@
             overflow: hidden;
             background: #f3f4f6;
             margin-bottom: 1rem;
-            border: 1px solid #eee;
-        }
+            border: 1px solid #eee; line-height: 1.45; }
 
         .featured-img-wrap img {
             width: 100%;
@@ -1575,7 +1563,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.8rem;
-            color: #6B7280;
+            color: #000;
             margin-bottom: 0.6rem;
             font-weight: 500;
         }
@@ -1590,8 +1578,8 @@
 
         .blog-featured p {
             font-size: 0.88rem;
-            color: #6B7280;
-            line-height: 1.5;
+            color: #000;
+            line-height: 1.45;
         }
 
         .blog-sidebar {
@@ -1613,8 +1601,7 @@
             border-radius: 10px;
             overflow: hidden;
             background: #f3f4f6;
-            border: 1px solid #eee;
-        }
+            border: 1px solid #eee; line-height: 1.45; }
 
         .sm-img-wrap img {
             width: 100%;
@@ -1677,7 +1664,7 @@
 
         .why-choose-desc {
             font-size: 0.93rem;
-            color: #6B7280;
+            color: #000;
             max-width: 620px;
             margin: 0 auto;
             line-height: 1.75;
@@ -1692,10 +1679,16 @@
 
         .why-choose-card {
             background: #ffffff;
-            border: 1.5px solid #F0F1F3;
+            border: 1.5px solid #FFB800;
             border-radius: 18px;
             padding: 1.5rem 1.8rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .why-choose-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(255, 184, 0, 0.15);
         }
 
         .why-choose-icon {
@@ -1725,8 +1718,8 @@
 
         .why-choose-card p {
             font-size: 0.875rem;
-            color: #6B7280;
-            line-height: 1.65;
+            color: #000;
+            line-height: 1.45;
             margin: 0;
             text-align: left !important;
         }
@@ -1807,15 +1800,13 @@
                 margin-bottom: 0.9rem;
                 border-radius: 0;
                 border: none;
-                aspect-ratio: 16 / 10.5;
-            }
+                aspect-ratio: 16 / 10.5; line-height: 1.45; }
 
             .blog-featured .blog-meta-info,
             .blog-featured h3,
             .blog-featured p {
                 padding-left: 1rem;
-                padding-right: 1rem;
-            }
+                padding-right: 1rem; line-height: 1.45; }
 
             .blog-featured .blog-meta-info {
                 font-size: 0.72rem;
@@ -1830,7 +1821,7 @@
 
             .blog-featured p {
                 font-size: 0.82rem;
-                line-height: 1.55;
+                line-height: 1.45;
                 margin-bottom: 0;
             }
 
@@ -1866,8 +1857,7 @@
             }
 
             .blog-featured p {
-                font-size: 0.72rem;
-            }
+                font-size: 0.72rem; line-height: 1.45; }
 
             .btn-read-all {
                 min-width: 230px;
@@ -1927,18 +1917,18 @@
     <section style="padding: 3rem 0 3.5rem; background: #fff; border-top: 1px solid #F3F4F6;">
         <div class="hero-container" style="max-width: 1000px; text-align: center;">
 
-            <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
+            <h2 style="font-size: 1.6rem; font-weight: 700; color: #111827; margin-bottom: 0.8rem;">
                 {{ $settings->sites_heading ?? 'Download Videos from More Supported Sites' }}
             </h2>
-            <p style="font-size: 0.92rem; color: #6B7280; max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.7;">
+            <p style="font-size: 1rem; color: #000; max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.45;">
                 {{ $settings->sites_description ?? 'Video Saver lets you download content from your favorite platforms.' }}
             </p>
 
             @if (count($platforms) > 0)
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem;">
                     @foreach ($platforms as $p)
-                        <a href="{{ $p['url'] ?? '#' }}"
-                            style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s;"
+                        <a @if(!empty($p['url']) && $p['url'] !== '#') href="{{ $p['url'] }}" @endif
+                            style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-decoration:none; transition:transform 0.2s; cursor: pointer;"
                             onmouseover="this.style.transform='translateY(-5px)'"
                             onmouseout="this.style.transform='translateY(0)'">
                             <div
@@ -1968,7 +1958,7 @@
     <div class="features-container" style="margin-top: 2.5rem; text-align: center;">
         <h2 class="features-intro-title">More Than a Downloader Video
             Saver Does It All</h2>
-        <p class="features-intro-text">Video Saver combines powerful features with a seamless experience, making
+        <p class="features-intro-text" style="line-height: 1.45;">Video Saver combines powerful features with a seamless experience, making
             downloads faster, smarter, and more flexible no matter what or where you save from.</p>
         <!-- 1. Mobile Features -->
         <div class="feature-item">
@@ -1977,7 +1967,7 @@
             </div>
             <div class="feature-content">
                 <h2>Experience High-Speed Downloads on Any Device</h2>
-                <p>Our downloader is fully optimized for mobile devices. Save your favorite videos in high
+                <p style="line-height: 1.45;">Our downloader is fully optimized for mobile devices. Save your favorite videos in high
                     resolution directly to your phone gallery with just a single tap. Works seamlessly in your
                     browser without any app installation.</p>
                 <ul class="feature-list">
@@ -1996,7 +1986,7 @@
             <div class="feature-content">
                 <h2>Status & Media Saver</h2>
                 <h3>Save WhatsApp statuses, Instagram photos, and more before they disappear.</h3>
-                <p>Never miss out on your favorite social moments again. Video Saver makes it easy to download
+                <p style="line-height: 1.45;">Never miss out on your favorite social moments again. Video Saver makes it easy to download
                     and keep status videos, stories, and images directly on your device. Quickly browse, save,
                     and revisit content anytime you want.</p>
             </div>
@@ -2010,7 +2000,7 @@
             <div class="feature-content">
                 <h2>Smarter, Faster Downloads</h2>
                 <h3>Save high-quality videos and music in just a few taps quick, smooth, and hassle-free.</h3>
-                <p>Choose the quality that fits your needs, from standard to ultra-clear formats. With improved
+                <p style="line-height: 1.45;">Choose the quality that fits your needs, from standard to ultra-clear formats. With improved
                     performance and optimized speed, Video Saver delivers a faster and more reliable downloading
                     experience.</p>
             </div>
@@ -2024,7 +2014,7 @@
             <div class="feature-content">
                 <h2>Video to MP3 Converter</h2>
                 <h3>Turn your favorite videos into MP3 and create your own music collection with ease.</h3>
-                <p>Video Saver doubles as a powerful audio converter for music lovers. Download tracks, extract
+                <p style="line-height: 1.45;">Video Saver doubles as a powerful audio converter for music lovers. Download tracks, extract
                     audio from videos, and save them in high-quality MP3 format. It’s a fast, smooth, and
                     reliable way to build your personal library.</p>
             </div>
@@ -2038,7 +2028,7 @@
             <div class="feature-content">
                 <h2>Endless Wallpaper Collection</h2>
                 <h3>Browse a vast library of stunning wallpapers and download your favorites with ease.</h3>
-                <p>The Video Saver app offers a wide range of categories, including nature, abstract, minimal,
+                <p style="line-height: 1.45;">The Video Saver app offers a wide range of categories, including nature, abstract, minimal,
                     and more. Discover fresh designs daily, get personalized recommendations, and save
                     high-quality wallpapers directly to your device.</p>
             </div>
@@ -2053,7 +2043,7 @@
         <div class="hero-container">
             <div class="everything-section-header">
                 <h2>Everything You Need to Download</h2>
-                <p>From videos to audio and more download your content quickly and easily in one place.</p>
+                <p style="line-height: 1.45;">From videos to audio and more download your content quickly and easily in one place.</p>
             </div>
 
             <div class="everything-wrapper">
@@ -2073,7 +2063,7 @@
                 <div class="callout-top-right">
                     <div class="callout-inner">
                         <h3>Search</h3>
-                        <p>Sub-caption: Discover the latest trends, insights, and useful information now.</p>
+                        <p style="line-height: 1.45;">Sub-caption: Discover the latest trends, insights, and useful information now.</p>
                     </div>
                 </div>
 
@@ -2081,7 +2071,7 @@
                 <div class="callout-middle-left">
                     <div class="callout-inner">
                         <h3>Supported Sites</h3>
-                        <p>Stay connected, share moments, and grow your online presence fast.</p>
+                        <p style="line-height: 1.45;">Stay connected, share moments, and grow your online presence fast.</p>
                     </div>
                 </div>
 
@@ -2089,7 +2079,7 @@
                 <div class="callout-bottom-right">
                     <div class="callout-inner">
                         <h3>Navigation Bar</h3>
-                        <p>User can access Home page, Progress page, My File page.</p>
+                        <p style="line-height: 1.45;">User can access Home page, Progress page, My File page.</p>
                     </div>
                 </div>
 
@@ -2120,20 +2110,20 @@
                 <!-- Left Top: Paste Link -->
                 <div class="hw-paste-link hw-callout">
                     <h3>Paste Link</h3>
-                    <p>Paste your copied link here to fetch the video instantly.</p>
+                    <p style="line-height: 1.45;">Paste your copied link here to fetch the video instantly.</p>
                 </div>
 
                 <!-- Left Bottom: Format & Quality -->
                 <div class="hw-format-quality hw-callout">
                     <h3>Format &amp; Quality</h3>
-                    <p>Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
+                    <p style="line-height: 1.45;">Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
                         source).</p>
                 </div>
 
                 <!-- Right Top: Download Video -->
                 <div class="hw-download-video hw-callout">
                     <h3>Download Video</h3>
-                    <p>Download your favorite videos easily and watch them offline anytime.</p>
+                    <p style="line-height: 1.45;">Download your favorite videos easily and watch them offline anytime.</p>
                 </div>
 
             </div>
@@ -2144,23 +2134,23 @@
         <div class="hero-container">
             <div class="mobile-overview-header">
                 <h2>Everything You Need to Download</h2>
-                <p>From videos to audio and more download your content quickly and easily in one place.</p>
+                <p style="line-height: 1.45;">From videos to audio and more download your content quickly and easily in one place.</p>
             </div>
 
             <div class="mobile-overview-block">
                 <div class="mobile-overview-note left-top">
                     <h4>Search</h4>
-                    <p>Sub-caption: Discover the latest trends, insights, and useful information now.</p>
+                    <p style="line-height: 1.45;">Sub-caption: Discover the latest trends, insights, and useful information now.</p>
                 </div>
                 <img class="mobile-overview-phone" src="/images/mobile/Image%201%20New%20Mobile.png"
                     alt="Everything you need app overview">
                 <div class="mobile-overview-note left-bottom">
                     <h4>Supported Sites</h4>
-                    <p>Stay connected, share moments and grow your online presence fast.</p>
+                    <p style="line-height: 1.45;">Stay connected, share moments and grow your online presence fast.</p>
                 </div>
                 <div class="mobile-overview-note center-bottom">
                     <h4>Navigation Bar</h4>
-                    <p>User can access Home page, Progress page, My File page.</p>
+                    <p style="line-height: 1.45;">User can access Home page, Progress page, My File page.</p>
                 </div>
             </div>
 
@@ -2169,17 +2159,17 @@
             <div class="mobile-overview-block">
                 <div class="mobile-overview-note right-bottom">
                     <h4>Paste Link</h4>
-                    <p>Paste your copied link here to fetch the video instantly.</p>
+                    <p style="line-height: 1.45;">Paste your copied link here to fetch the video instantly.</p>
                 </div>
                 <img class="mobile-overview-phone" src="/images/mobile/Image%202%20Mobile%20New.png"
                     alt="How it works app overview">
                 <div class="mobile-overview-note right-top">
                     <h4>Download Video</h4>
-                    <p>Download your favorite videos easily and watch them offline anytime.</p>
+                    <p style="line-height: 1.45;">Download your favorite videos easily and watch them offline anytime.</p>
                 </div>
                 <div class="mobile-overview-note center-bottom">
                     <h4>Format &amp; Quality</h4>
-                    <p>Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
+                    <p style="line-height: 1.45;">Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
                         source).</p>
                 </div>
             </div>
@@ -2201,10 +2191,10 @@
                         {!! App\Models\Blog::renderEditorJS($settings->hero_description) !!}
                     </div>
                 @else
-                    <h2 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 0.8rem;">
                         By Platform: Download From Any Social Media
                     </h2>
-                    <p style="font-size: 0.95rem; color: #000000ff; line-height: 1.8; margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.95rem; color: #000000ff; line-height: 1.45; margin-bottom: 1.5rem;">
                         If you're looking for a fast, reliable, and completely free video downloader that supports all
                         major
                         platforms — you've found it. Video Saver lets you effortlessly save videos, reels, stories, and
@@ -2212,10 +2202,10 @@
                         from YouTube, Instagram, TikTok, Facebook, Twitter, and many more.
                     </p>
 
-                    <h2 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 0.8rem;">
                         High-Quality Downloads: MP4, MP3 & More
                     </h2>
-                    <p style="font-size: 0.95rem; color: #4B5563; line-height: 1.8; margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.95rem; color: #000; line-height: 1.45; margin-bottom: 1.5rem;">
                         With Video Saver, you can download content in multiple formats and resolutions — from standard
                         480p
                         to
@@ -2224,10 +2214,10 @@
                         gives you full control over your download quality.
                     </p>
 
-                    <h2 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.8rem;">
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 0.8rem;">
                         Video Saver: Download for a Diverse Range of Platforms
                     </h2>
-                    <p style="font-size: 0.95rem; color: #4B5563; line-height: 1.8; margin-bottom: 2rem;">
+                    <p style="font-size: 0.95rem; color: #000; line-height: 1.45; margin-bottom: 2rem;">
                         At Video Saver, we support content from a wide range of platforms. Simply paste the link, choose
                         your
                         format, and your download starts instantly — no sign-up required.
@@ -2264,6 +2254,9 @@
                 wrap.style.maxHeight = '380px';
                 fade.style.display = 'block';
                 btn.textContent = 'Read More';
+                // Scroll back to the top of the content with offset for header
+                const y = wrap.getBoundingClientRect().top + window.scrollY - 100;
+                window.scrollTo({ top: y, behavior: 'smooth' });
             }
         }
     </script>
@@ -2276,7 +2269,7 @@
 
             <div class="why-choose-header">
                 <h2 class="why-choose-title">Why Millions Choose Video Saver</h2>
-                <p class="why-choose-desc">
+                <p class="why-choose-desc" style="line-height: 1.45;">
                     Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few
                     clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile
                     and desktop browsers.
@@ -2291,7 +2284,7 @@
                         <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
                     <h3>Instant Link Analysis</h3>
-                    <p>Paste a
+                    <p style="line-height: 1.45;">Paste a
                         link and get results in seconds — often faster than other downloaders.</p>
                 </div>
 
@@ -2301,7 +2294,7 @@
                         <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
                     <h3>Multilingual Experience</h3>
-                    <p>Use HD
+                    <p style="line-height: 1.45;">Use HD
                         Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
 
@@ -2311,7 +2304,7 @@
                         <img src="/images/icon-download.svg" alt="Quality">
                     </div>
                     <h3>Flexible Quality Choices</h3>
-                    <p>Pick the
+                    <p style="line-height: 1.45;">Pick the
                         quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
 
@@ -2321,7 +2314,7 @@
                         <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
                     <h3>Wide Platform Support</h3>
-                    <p>Supports
+                    <p style="line-height: 1.45;">Supports
                         YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
 
@@ -2331,7 +2324,7 @@
                         <img src="/images/icon-settings.svg" alt="Device">
                     </div>
                     <h3>Works on Any Device</h3>
-                    <p>Download
+                    <p style="line-height: 1.45;">Download
                         seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
 
@@ -2341,7 +2334,7 @@
                         <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
                     <h3>Privacy-First by Design</h3>
-                    <p>Your
+                    <p style="line-height: 1.45;">Your
                         privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>
 
@@ -2351,33 +2344,96 @@
 
     <!-- FAQ Section -->
     @if (isset($faqs) && count($faqs) > 0)
+        <style>
+            .faq-list {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .faq-item {
+                border: 1px solid #E2E8F0;
+                border-radius: 16px;
+                overflow: hidden;
+                background: #fff;
+                transition: all 0.3s ease;
+            }
+
+            .faq-item:hover {
+                border-color: #FFB800;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            }
+
+            .faq-item.active {
+                border-color: #FFB800;
+            }
+
+            .faq-question {
+                padding: 1.2rem 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                font-weight: 700;
+                color: #1E293B;
+                font-size: 1rem;
+                user-select: none;
+            }
+
+            .faq-answer {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                background: #F8FAFC;
+            }
+
+            .faq-answer-inner {
+                padding: 0 1.5rem 1.5rem;
+                color: #000;
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+
+            .faq-item.active .faq-answer {
+                max-height: 500px;
+            }
+
+            .faq-item.active .faq-question {
+                color: #FF8C00;
+            }
+
+            .toggle-icon {
+                font-size: 1.2rem;
+                color: #CBD5E1;
+                transition: transform 0.3s ease;
+            }
+
+            .faq-item.active .toggle-icon {
+                transform: rotate(45deg);
+                color: #FF8C00;
+            }
+        </style>
         <section style="padding: 3.5rem 0; background: #ffffff; border-top: 1px solid #F3F4F6;">
             <div class="hero-container" style="max-width: 850px;">
 
                 <div style="text-align:center; margin-bottom: 2.5rem;">
                     <h2
-                        style="font-size: 1.8rem; font-weight: 800; color: #0F0F0F; margin-bottom: 0; letter-spacing:-0.02em;">
+                        style="font-size: 1.8rem; font-weight: 700; color: #0F0F0F; margin-bottom: 0; letter-spacing:-0.02em;">
                         Frequently Asked Questions
                     </h2>
                 </div>
 
-                <div id="faqAccordion" style="display:flex;flex-direction:column;gap:0.7rem;">
+                <div class="faq-list" id="faqAccordion">
                     @foreach ($faqs as $faq)
-                        <div class="faq-wrap"
-                            style="border:1.5px solid #EBEBEB; border-radius:14px; overflow:hidden; background:#fff;">
-                            <button onclick="toggleFaq(this)"
-                                style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;">
-                                <span
-                                    style="font-size:0.95rem;font-weight:500;color:#111827;">{{ $faq->question }}</span>
-                                <span class="faq-icon"
-                                    style="font-size:1.3rem;color:#111827;font-weight:300;line-height:1;flex-shrink:0;margin-left:1rem;">+</span>
-                            </button>
-                            <div class="faq-body"
-                                style="max-height:0;overflow:hidden;transition:max-height 0.3s ease;">
-                                <p
-                                    style="padding:0 1.4rem 1.1rem;font-size:0.9rem;color:#6B7280;line-height:1.7;text-align:justify;margin:0;">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                {{ $faq->question }}
+                                <i class="fas fa-plus toggle-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
                                     {{ $faq->answer }}
-                                </p>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -2387,25 +2443,20 @@
         </section>
 
         <script>
-            function toggleFaq(btn) {
-                const wrap = btn.parentElement;
-                const body = wrap.querySelector('.faq-body');
-                const icon = btn.querySelector('.faq-icon');
-                const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+            document.querySelectorAll('#faqAccordion .faq-question').forEach(button => {
+                button.addEventListener('click', () => {
+                    const item = button.parentElement;
 
-                // Close all
-                document.querySelectorAll('.faq-wrap').forEach(w => {
-                    w.querySelector('.faq-body').style.maxHeight = '0px';
-                    w.querySelector('.faq-icon').textContent = '+';
-                    w.style.borderColor = '#EBEBEB';
+                    // Close other items
+                    document.querySelectorAll('#faqAccordion .faq-item').forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+
+                    item.classList.toggle('active');
                 });
-
-                if (!isOpen) {
-                    body.style.maxHeight = body.scrollHeight + 'px';
-                    icon.textContent = '×';
-                    wrap.style.borderColor = '#D1D5DB';
-                }
-            }
+            });
         </script>
     @endif
 
@@ -2432,7 +2483,7 @@
                         <a href="{{ $featured->slug }}" style="text-decoration:none;">
                             <h3>{{ $featured->title }}</h3>
                         </a>
-                        <p>{{ Str::limit($featured->description, 180) }}</p>
+                        <p style="line-height: 1.45;">{{ Str::limit($featured->description, 180) }}</p>
                     </div>
 
                     <!-- Sidebar Blogs (Next 3) -->
@@ -2455,7 +2506,7 @@
                             </div>
                         @endforeach
 
-                        <a href="/blogs" class="btn-read-all">Read All</a>
+                        <a href="/helpcenter/" class="btn-read-all">Read All</a>
                     </div>
                 </div>
             </div>
@@ -2466,7 +2517,7 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,ar,ur,hi,es,fr',
+                includedLanguages: 'en,ar,ur,hi,es,fr,pt',
                 autoDisplay: false
             }, 'google_translate_element');
         }
@@ -2548,9 +2599,26 @@
         }
 
         function changeLanguage(langCode) {
+            if (langCode === 'en') {
+                localStorage.setItem('selectedLanguage', 'en');
+                localStorage.setItem('selectedLanguageName', 'English');
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.host;
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.hostname.split('.').slice(-2).join('.');
+                location.reload();
+                return;
+            }
+
             const select = document.querySelector('.goog-te-combo');
 
             if (select) {
+                let actualLang = select.value || 'en';
+                if (actualLang === langCode) {
+                    const menu = document.getElementById('lang-menu');
+                    if (menu) menu.style.display = 'none';
+                    return;
+                }
+
                 select.value = langCode;
                 select.dispatchEvent(new Event('change'));
 
@@ -2560,8 +2628,14 @@
                     'ur': 'Urdu',
                     'hi': 'Hindi',
                     'es': 'Spanish',
-                    'fr': 'French'
+                    'fr': 'French',
+                    'pt': 'Portuguese'
                 };
+                
+                // Save to localStorage
+                localStorage.setItem('selectedLanguage', langCode);
+                localStorage.setItem('selectedLanguageName', langNames[langCode]);
+
                 document.getElementById('current-lang').innerText = langNames[langCode];
             } else {
                 console.log("Retrying translation...");

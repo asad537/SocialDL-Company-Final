@@ -4,7 +4,7 @@
             <div class="logo-icon"><i class="fas fa-download"></i></div>
             <div>
                 <h2>Video Saver</h2>
-                <p class="logo-sub">Admin Dashboard</p>
+                <p class="logo-sub" style="line-height: 1.45;">Admin Dashboard</p>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <div class="admin-badge">
             <div class="admin-avatar">A</div>
             <div class="admin-info">
-                <p>Administrator</p>
+                <p style="line-height: 1.45;">Administrator</p>
                 <span>Super Admin</span>
             </div>
             <a href="{{ route('admin.logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>

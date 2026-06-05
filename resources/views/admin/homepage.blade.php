@@ -23,7 +23,7 @@
         .form-card-header{display:flex;align-items:center;gap:0.7rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.06);}
         .hicon{width:36px;height:36px;border-radius:10px;background:rgba(255,184,0,0.12);color:#FFB800;display:flex;align-items:center;justify-content:center;font-size:0.95rem;}
         .form-card-header h3{font-size:0.95rem;font-weight:700;color:#fff;}
-        .form-card-header p{font-size:0.75rem;color:rgba(255,255,255,0.35);}
+        .form-card-header p{font-size:0.75rem;color:rgba(255,255,255,0.35); line-height: 1.45; }
         .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;}
         .form-row.full{grid-template-columns:1fr;margin-bottom:1.2rem;}
         .form-group label{display:block;font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;}
@@ -61,7 +61,7 @@
         /* Preview Mockup */
         .preview-section{background:#161B27;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem;}
         .preview-label{font-size:0.7rem;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;}
-        .preview-mockup{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:2.5rem 1.5rem;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+        .preview-mockup{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:2.5rem 1.5rem;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.2); line-height: 1.45; }
         .preview-h1{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:1.2rem;line-height:1.3;}
         .preview-btn-el{display:inline-block;background:linear-gradient(135deg,#FFB800,#FF8C00);color:#fff;padding:0.7rem 1.8rem;border-radius:30px;font-size:0.9rem;font-weight:700;text-decoration:none;box-shadow:0 6px 20px rgba(255,184,0,0.3);}
 
@@ -80,7 +80,7 @@
                 <div class="hicon"><i class="fas fa-heading"></i></div>
                 <div>
                     <h3>Hero Section</h3>
-                    <p>Edit homepage headline, button, and description</p>
+                    <p style="line-height: 1.45;">Edit homepage headline, button, and description</p>
                 </div>
             </div>
 
@@ -90,7 +90,7 @@
                     <input type="text" name="hero_heading" id="heroHeading"
                         value="{{ optional($settings)->hero_heading ?? '' }}"
                         placeholder="Enter main heading...">
-                    <p class="hint">Main H1 title shown at the top of homepage.</p>
+                    <p class="hint" style="line-height: 1.45;">Main H1 title shown at the top of homepage.</p>
                 </div>
             </div>
 
@@ -124,7 +124,7 @@
                 <div class="hicon"><i class="fas fa-globe"></i></div>
                 <div>
                     <h3>Supported Sites Section</h3>
-                    <p>Platform icons grid shown below SEO content</p>
+                    <p style="line-height: 1.45;">Platform icons grid shown below SEO content</p>
                 </div>
             </div>
 
@@ -193,8 +193,8 @@
             console.log('Admin Homepage: Initializing Editor.js...');
             try {
                 let initialData = { blocks: [] };
-                // Use {!! !!} to get raw data, then handle it in JS
-                const rawContent = <?php echo json_encode(optional($settings)->hero_description ?? ''); ?>;
+                <?php $rawDesc = optional($settings)->hero_description ?? ''; ?>
+                const rawContent = {!! json_encode($rawDesc) !!};
                 console.log('Raw content received:', rawContent);
                 
                 if (rawContent) {
@@ -284,7 +284,8 @@
             document.getElementById('platformsJson').value = JSON.stringify(data);
         }
 
-        const existingPlatforms = <?php echo json_encode(json_decode(optional($settings)->platforms_data ?? '[]', true) ?: []); ?>;
+        <?php $pData = json_decode(optional($settings)->platforms_data ?? '[]', true) ?: []; ?>
+        const existingPlatforms = {!! json_encode($pData) !!};
         existingPlatforms.forEach(p => addPlatform(p));
 
         document.getElementById('heroHeading').oninput = function() { document.getElementById('previewH1').textContent = this.value; };

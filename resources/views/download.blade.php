@@ -97,7 +97,7 @@
 
         .hero-subtext {
             font-size: 0.95rem;
-            color: #4B5563;
+            color: #000;
             line-height: 1.5;
             margin-bottom: 1.5rem;
             max-width: 500px;
@@ -225,8 +225,8 @@
 
         .step-card p {
             font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.6;
+            color: #000;
+            line-height: 1.45;
         }
 
         /* ── Responsive ── */
@@ -406,8 +406,8 @@
 
         .instruction-list li p {
             font-size: 1rem;
-            color: #4B5563;
-            line-height: 1.6;
+            color: #000;
+            line-height: 1.45;
             max-width: 800px;
         }
 
@@ -452,64 +452,7 @@
             }
         }
 
-        /* ── Bottom CTA ── */
-        .bottom-cta {
-            background: var(--primary);
-            border-radius: 24px;
-            padding: 2.2rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5rem;
-            margin-bottom: 4rem;
-            text-align: left;
-        }
 
-        .cta-content h2 {
-            font-size: 1.7rem;
-            font-weight: 800;
-            color: #000;
-            margin-bottom: 0.5rem;
-        }
-
-        .cta-content p {
-            font-size: 0.95rem;
-            color: #000;
-            opacity: 0.8;
-            font-weight: 500;
-        }
-
-        .btn-cta {
-            background: #FF6807;
-            color: #fff;
-            padding: 1.1rem 2.2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1.05rem;
-            box-shadow: 0 10px 20px rgba(255, 104, 7, 0.2);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .btn-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 104, 7, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .bottom-cta {
-                flex-direction: column;
-                text-align: center;
-                padding: 2rem 1.5rem;
-                gap: 1.5rem;
-                margin-top: 3.5rem;
-            }
-
-            .cta-content h2 {
-                font-size: 1.4rem;
-            }
-        }
     </style>
 </head>
 
@@ -528,7 +471,7 @@
                     <i class="fas fa-file-download"></i> Download Guide
                 </div>
                 <h1>How to Install from <br> Play Store</h1>
-                <p class="hero-subtext">Follow these simple steps to download and install the app from Google Play
+                <p class="hero-subtext" style="line-height: 1.45;">Follow these simple steps to download and install the app from Google Play
                     Store.</p>
 
                 <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
@@ -552,7 +495,7 @@
             <ul class="instruction-list">
                 <li>
                     <strong>Tap on "Install"</strong>
-                    <p>When you find Video Saver on the Play Store, tap the “Install” button. The app will start
+                    <p style="line-height: 1.45;">When you find Video Saver on the Play Store, tap the “Install” button. The app will start
                         downloading and installing automatically on your device.</p>
                 </li>
             </ul>
@@ -572,7 +515,7 @@
             <ul class="instruction-list">
                 <li>
                     <strong>Open & Explore the App</strong>
-                    <p>Once installation is complete, tap “Open” to launch the app. You’ll land on the home screen,
+                    <p style="line-height: 1.45;">Once installation is complete, tap “Open” to launch the app. You’ll land on the home screen,
                         where you can start saving videos and exploring features right away.</p>
                 </li>
             </ul>
@@ -588,14 +531,7 @@
         </div>
 
         {{-- Bottom CTA Banner --}}
-        <div class="bottom-cta">
-            <div class="cta-content">
-                <h2>Ready to Start Downloading?</h2>
-                <p>Join millions of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
-            </div>
-            <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
-                class="btn-cta">Download Video Saver</a>
-        </div>
+        @include('partials.cta')
     </div>
 
     @include('partials.footer')
@@ -605,7 +541,7 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,ar,ur,hi,es,fr',
+                includedLanguages: 'en,ar,ur,hi,es,fr,pt',
                 autoDisplay: false
             }, 'google_translate_element');
         }

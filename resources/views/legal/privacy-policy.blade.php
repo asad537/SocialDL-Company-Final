@@ -24,8 +24,7 @@
         .legal-wrap {
             max-width: 980px;
             margin: 0 auto;
-            padding: 3rem 1.25rem 3.5rem;
-        }
+            padding: 3rem 1.25rem 3.5rem; line-height: 1.45; }
 
         .legal-hero {
             margin-bottom: 1.4rem;
@@ -44,9 +43,9 @@
         }
 
         .legal-hero p {
-            color: #4B5563;
+            color: #000;
             font-size: 0.98rem;
-            line-height: 1.6;
+            line-height: 1.45;
             max-width: 760px;
         }
 
@@ -61,9 +60,8 @@
         }
 
         .legal-head p {
-            color: #6B7280;
-            font-size: 0.95rem;
-        }
+            color: #000;
+            font-size: 0.95rem; line-height: 1.45; }
 
         .legal-card {
             border: 1px solid #ECEFF3;
@@ -74,7 +72,7 @@
 
         .legal-card h2 {
             font-size: 1.08rem;
-            font-weight: 800;
+            font-weight: 700;
             margin: 1rem 0 0.5rem;
             color: #111827;
         }
@@ -86,7 +84,7 @@
         .legal-card p,
         .legal-card li {
             font-size: 0.95rem;
-            color: #4B5563;
+            color: #000;
             line-height: 1.75;
         }
 
@@ -101,8 +99,7 @@
 
         @media (max-width: 768px) {
             .legal-wrap {
-                padding-top: 2.1rem;
-            }
+                padding-top: 2.1rem; line-height: 1.45; }
 
             .legal-hero {
                 margin-top: 5.2rem;
@@ -115,8 +112,7 @@
             }
 
             .legal-hero p {
-                font-size: 0.9rem;
-            }
+                font-size: 0.9rem; line-height: 1.45; }
         }
     </style>
 </head>
@@ -127,16 +123,16 @@
     <main class="legal-wrap">
         <section class="legal-hero">
             <h1>Privacy Policy</h1>
-            <p>We are committed to protecting your privacy and keeping your data secure while you use Video Saver.</p>
+            <p style="line-height: 1.45;">We are committed to protecting your privacy and keeping your data secure while you use Video Saver.</p>
         </section>
 
         <div class="legal-head">
-            <p>Last updated: {{ date('F d, Y') }}</p>
+            <p style="line-height: 1.45;">Last updated: {{ date('F d, Y') }}</p>
         </div>
 
         <div class="legal-card">
             <h2>1. Introduction</h2>
-            <p>At <span class="accent">Video Saver</span>, we value your privacy. This Privacy Policy explains what
+            <p style="line-height: 1.45;">At <span class="accent">Video Saver</span>, we value your privacy. This Privacy Policy explains what
                 information we collect, how we use it, and the choices you have when using our services.</p>
 
             <h2>2. Information We Collect</h2>
@@ -147,27 +143,27 @@
             </ul>
 
             <h2>3. How We Use Information</h2>
-            <p>We use collected data to operate and improve the service, detect abuse, resolve technical issues, and
+            <p style="line-height: 1.45;">We use collected data to operate and improve the service, detect abuse, resolve technical issues, and
                 maintain platform performance.</p>
 
             <h2>4. Cookies and Tracking</h2>
-            <p>We may use cookies and similar technologies for language preferences, analytics, and essential site
+            <p style="line-height: 1.45;">We may use cookies and similar technologies for language preferences, analytics, and essential site
                 functionality.</p>
 
             <h2>5. Data Sharing</h2>
-            <p>We do not sell your personal information. Data may be shared only with trusted service providers where
+            <p style="line-height: 1.45;">We do not sell your personal information. Data may be shared only with trusted service providers where
                 needed to maintain or secure the platform.</p>
 
             <h2>6. Data Security</h2>
-            <p>We implement reasonable technical and organizational safeguards. However, no internet transmission or
+            <p style="line-height: 1.45;">We implement reasonable technical and organizational safeguards. However, no internet transmission or
                 storage system is 100% secure.</p>
 
             <h2>7. Your Rights</h2>
-            <p>Depending on your location, you may have rights to access, update, or request deletion of your personal
+            <p style="line-height: 1.45;">Depending on your location, you may have rights to access, update, or request deletion of your personal
                 data.</p>
 
             <h2>8. Contact</h2>
-            <p>For privacy-related requests, please contact us through the website support channel.</p>
+            <p style="line-height: 1.45;">For privacy-related requests, please contact us through the website support channel.</p>
         </div>
     </main>
 

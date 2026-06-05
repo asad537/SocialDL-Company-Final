@@ -17,7 +17,7 @@
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem;}
         .stat-card{background:#161B27;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.4rem;transition:transform 0.2s,border-color 0.2s;}
         .stat-card:hover{transform:translateY(-3px);border-color:rgba(255,184,0,0.2);}
-        .stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+        .stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem; line-height: 1.45; }
         .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
         .stat-icon.yellow{background:rgba(255,184,0,0.15);color:#FFB800;}
         .stat-icon.green{background:rgba(34,197,94,0.15);color:#4ADE80;}
@@ -34,7 +34,7 @@
         .card-header span{font-size:0.75rem;color:rgba(255,255,255,0.35);}
         
         .bar-chart{display:flex;align-items:flex-end;gap:0.6rem;height:140px;}
-        .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
+        .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.4rem; line-height: 1.45; }
         .bar{width:100%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#FFB800,#FF8C00);min-height:4px;transition:height 0.5s;}
         .bar-label{font-size:0.65rem;color:rgba(255,255,255,0.3);}
         .bar-count{font-size:0.6rem;color:rgba(255,255,255,0.25);margin-bottom:2px;}
@@ -43,7 +43,7 @@
         .platform-item{display:flex;align-items:center;gap:0.8rem;}
         .platform-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
         .platform-name{font-size:0.82rem;color:rgba(255,255,255,0.7);flex:1;}
-        .platform-bar-wrap{width:80px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+        .platform-bar-wrap{width:80px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden; line-height: 1.45; }
         .platform-bar{height:100%;border-radius:3px;transition:width 0.6s ease;}
         .platform-pct{font-size:0.75rem;color:rgba(255,255,255,0.4);min-width:30px;text-align:right;}
 
@@ -71,7 +71,7 @@
         .quick-card{background:#161B27;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;}
         .quick-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
         .quick-card h4{font-size:1.1rem;font-weight:700;color:#fff;}
-        .quick-card p{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:1px;}
+        .quick-card p{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:1px; line-height: 1.45; }
     </style>
 @endpush
 
@@ -193,21 +193,21 @@
             <div class="quick-icon" style="background:rgba(255,184,0,0.12);color:#FFB800;"><i class="fas fa-bolt"></i></div>
             <div>
                 <h4>Success Rate</h4>
-                <p>98.2% Average</p>
+                <p style="line-height: 1.45;">98.2% Average</p>
             </div>
         </div>
         <div class="quick-card">
             <div class="quick-icon" style="background:rgba(34,197,94,0.12);color:#4ADE80;"><i class="fas fa-calendar-week"></i></div>
             <div>
                 <h4>This Week</h4>
-                <p>{{ array_sum(array_column($weeklyData, 'count')) }} Downloads</p>
+                <p style="line-height: 1.45;">{{ array_sum(array_column($weeklyData, 'count')) }} Downloads</p>
             </div>
         </div>
         <div class="quick-card">
             <div class="quick-icon" style="background:rgba(99,102,241,0.12);color:#818CF8;"><i class="fas fa-layer-group"></i></div>
             <div>
                 <h4>Top Platform</h4>
-                <p>{{ $platformData[0]['name'] ?? '—' }}</p>
+                <p style="line-height: 1.45;">{{ $platformData[0]['name'] ?? '—' }}</p>
             </div>
         </div>
     </div>

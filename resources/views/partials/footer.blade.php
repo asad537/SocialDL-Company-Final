@@ -36,8 +36,9 @@
     .footer-desc {
         font-size: 0.88rem;
         color: #111827;
-        line-height: 1.85;
-        max-width: 190px;
+        line-height: 1.7;
+        max-width: 260px;
+        text-align: justify;
     }
 
     .footer-col-title {
@@ -76,9 +77,8 @@
 
     .footer-copyright p {
         font-size: 0.83rem;
-        color: #9CA3AF;
-        margin: 0;
-    }
+        color: #000;
+        margin: 0; line-height: 1.45; }
 
     /* ── Tablet: 2 columns ── */
     @media (max-width: 900px) {
@@ -126,8 +126,7 @@
         }
 
         .footer-copyright p {
-            font-size: 0.78rem;
-        }
+            font-size: 0.78rem; line-height: 1.45; }
     }
 </style>
 
@@ -138,9 +137,9 @@
             <!-- Brand -->
             <div>
                 <a href="/" class="footer-logo-link">
-                    <img src="/images/logofinal.png" alt="Video Saver">
+                    <img src="/images/hdvideosaver.png" alt="Video Saver">
                 </a>
-                <p class="footer-desc">
+                <p class="footer-desc" style="line-height: 1.45;">
                     Download videos, audios and reels from your
                     favourite platforms in high quality for free.
                     No login required. Works on all devices.
@@ -153,10 +152,10 @@
                 <h4 class="footer-col-title">Quick Links</h4>
                 <ul class="footer-links">
                     <li><a href="/">Home</a></li>
-                    <li><a href="#supported">Supported Platforms</a></li>
-                    <li><a href="#">Download</a></li>
-                    <li><a href="/faqs">FAQs</a></li>
-                    <li><a href="#">Help center</a></li>
+                    <!-- <li><a href="#supported">Supported Platforms</a></li> -->
+                    <li><a href="/download/">Download</a></li>
+                    <li><a href="/faqs/">FAQs</a></li>
+                    <li><a href="/helpcenter/">Help center</a></li>
                 </ul>
             </div>
 
@@ -196,7 +195,7 @@
     <!-- Copyright -->
     <div class="footer-copyright">
         <div class="footer-inner">
-            <p>© {{ date('Y') }} Video Saver. All rights reserved.</p>
+            <p style="line-height: 1.45;">© {{ date('Y') }} Video Saver. All rights reserved.</p>
         </div>
     </div>
 </footer>

@@ -290,8 +290,7 @@
             border-radius: 16px;
             overflow: hidden;
             background: #fff;
-            margin-bottom: 0.8rem;
-        }
+            margin-bottom: 0.8rem; line-height: 1.45; }
 
         .faq-btn {
             width: 100%;
@@ -317,8 +316,8 @@
         .faq-body p {
             padding: 0 1.5rem 1.2rem;
             font-size: 0.95rem;
-            color: #6B7280;
-            line-height: 1.7;
+            color: #000;
+            line-height: 1.45;
         }
 
         .why-choose-section {
@@ -333,7 +332,7 @@
 
         .why-choose-heading h2 {
             font-size: 1.8rem;
-            font-weight: 800;
+            font-weight: 700;
             color: #0F0F0F;
             margin-bottom: 0.75rem;
             letter-spacing: -0.02em;
@@ -341,10 +340,10 @@
 
         .why-choose-heading p {
             font-size: 0.93rem;
-            color: #6B7280;
+            color: #000;
             max-width: 620px;
             margin: 0 auto;
-            line-height: 1.75;
+            line-height: 1.45;
         }
 
         .why-choose-grid {
@@ -387,105 +386,13 @@
 
         .why-choose-card p {
             font-size: 0.875rem;
-            color: #6B7280;
-            line-height: 1.65;
+            color: #000;
+            line-height: 1.45;
             margin: 0;
             text-align: left;
         }
 
-        .download-cta-section {
-            padding: 1.5rem 0 4rem;
-            background: #fff;
-        }
 
-        .download-cta-card {
-            background: #FFC107;
-            border-radius: 28px;
-            padding: 2.2rem 3.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .download-cta-content {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .download-cta-content h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.01em;
-        }
-
-        .download-cta-content p {
-            font-size: 1rem;
-            color: #111827;
-            font-weight: 500;
-            margin: 0;
-            opacity: 0.9;
-            line-height: 1.5;
-        }
-
-        .download-cta-btn {
-            background: #FF6807;
-            color: #fff;
-            text-decoration: none;
-            padding: 1rem 2.2rem;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 1rem;
-            box-shadow: 0 8px 20px rgba(255, 94, 20, 0.25);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .download-cta-section {
-                padding: 1.25rem 0 2.4rem;
-            }
-
-            .download-cta-card {
-                border-radius: 30px;
-                padding: 2rem 1.35rem 2.2rem;
-                gap: 1.3rem;
-                justify-content: center;
-            }
-
-            .download-cta-content {
-                min-width: 0;
-                width: 100%;
-            }
-
-            .download-cta-content h2 {
-                font-size: clamp(2rem, 10vw, 2.6rem);
-                line-height: 1.1;
-                margin-bottom: 0.75rem;
-                text-align: left;
-            }
-
-            .download-cta-content p {
-                font-size: clamp(1rem, 4.8vw, 1.3rem);
-                line-height: 1.42;
-                text-align: left;
-            }
-
-            .download-cta-btn {
-                width: 100%;
-                max-width: 360px;
-                min-height: 54px;
-                border-radius: 999px;
-                font-size: clamp(1rem, 4.4vw, 1.25rem);
-                padding: 0.9rem 1.2rem;
-            }
-        }
 
         @media (max-width: 991px) {
             .why-choose-grid {
@@ -509,7 +416,7 @@
 
             .why-choose-heading p {
                 font-size: 0.95rem;
-                line-height: 1.6;
+                line-height: 1.45;
             }
 
             .why-choose-grid {
@@ -541,7 +448,7 @@
                 </div>
                 <h1 class="hero-desktop-title">{{ $platform->h1 ?? 'Download Videos Instantly' }}</h1>
                 <h1 class="hero-mobile-title">Works on Your<br>Favourite Platforms</h1>
-                <p class="hero-subtext">Our app lets you download videos from all your favourite social platforms fast,
+                <p class="hero-subtext" style="line-height: 1.45;">Our app lets you download videos from all your favourite social platforms fast,
                     easy &amp; seamless.</p>
                 <div class="hero-mobile-actions">
                     <div class="hero-mobile-pill"><i class="fas fa-bolt"></i> Fast</div>
@@ -570,7 +477,7 @@
 
             <div class="why-choose-heading">
                 <h2>Why Millions Choose Video Saver</h2>
-                <p>
+                <p style="line-height: 1.45;">
                     Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few
                     clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile
                     and desktop browsers.
@@ -585,7 +492,7 @@
                         <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
                     <h3>Instant Link Analysis</h3>
-                    <p>Paste a
+                    <p style="line-height: 1.45;">Paste a
                         link and get results in seconds — often faster than other downloaders.</p>
                 </div>
 
@@ -595,7 +502,7 @@
                         <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
                     <h3>Multilingual Experience</h3>
-                    <p>Use HD
+                    <p style="line-height: 1.45;">Use HD
                         Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
 
@@ -605,7 +512,7 @@
                         <img src="/images/icon-download.svg" alt="Quality">
                     </div>
                     <h3>Flexible Quality Choices</h3>
-                    <p>Pick the
+                    <p style="line-height: 1.45;">Pick the
                         quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
 
@@ -615,7 +522,7 @@
                         <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
                     <h3>Wide Platform Support</h3>
-                    <p>Supports
+                    <p style="line-height: 1.45;">Supports
                         YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
 
@@ -625,7 +532,7 @@
                         <img src="/images/icon-settings.svg" alt="Device">
                     </div>
                     <h3>Works on Any Device</h3>
-                    <p>Download
+                    <p style="line-height: 1.45;">Download
                         seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
 
@@ -635,7 +542,7 @@
                         <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
                     <h3>Privacy-First by Design</h3>
-                    <p>Your
+                    <p style="line-height: 1.45;">Your
                         privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>
 
@@ -646,7 +553,7 @@
     @if(count($faqs) > 0)
         <section class="faq-section">
             <div class="container" style="max-width: 850px;">
-                <h2 style="text-align:center; font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem;">Frequently Asked
+                <h2 style="text-align:center; font-size: 2rem; font-weight: 700; margin-bottom: 2.5rem;">Frequently Asked
                     Questions</h2>
                 <div class="faq-list">
                     @foreach($faqs as $faq)
@@ -656,7 +563,7 @@
                                 <i class="fas fa-plus"></i>
                             </button>
                             <div class="faq-body">
-                                <p>{{ $faq->answer }}</p>
+                                <p style="line-height: 1.45;">{{ $faq->answer }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -666,22 +573,11 @@
     @endif
 
     <!-- Download CTA Section -->
-    <section class="download-cta-section">
-        <div class="container" style="max-width: 1100px;">
-            <div class="download-cta-card">
-                <div class="download-cta-content">
-                    <h2>Ready to Start Downloading?</h2>
-                    <p>Join millions of users who rely on HD Video Saver for fast, easy, and reliable downloads</p>
-                </div>
-                <a href="https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
-                    class="download-cta-btn"
-                    onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(255, 94, 20, 0.35)';"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 94, 20, 0.25)';">
-                    Download Video Saver
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- <section style="padding: 1.5rem 0 4rem; background: #fff;">
+        <div class="container" style="max-width: 1100px;"> -->
+            @include('partials.cta')
+        <!-- </div>
+    </section> -->
 
     @include('partials.footer')
 
@@ -743,7 +639,7 @@
                     <div style="display:grid; grid-template-columns: 60px 80px 100px 1fr; align-items:center; background:#fff; padding:12px 0; border-bottom:1px solid #F3F4F6;">
                         <span style="background:#00C853; color:#fff; padding:4px 0; border-radius:5px; font-size:0.75rem; font-weight:800; text-align:center; width:50px;">${m.extension.toUpperCase()}</span>
                         <span style="font-weight:700; color:#111827; font-size:0.9rem;">${m.quality}</span>
-                        <span style="color:#6B7280; font-size:0.85rem; font-weight:600;">${m.size || ''}</span>
+                        <span style="color:#000; font-size:0.85rem; font-weight:600;">${m.size || ''}</span>
                         <a href="${dlUrl}" style="background:#fff; color:#000; border:2px solid #FFB800; text-decoration:none; padding:8px 22px; border-radius:10px; font-weight:700; font-size:0.85rem; display:flex; align-items:center; gap:10px; transition:0.2s; width:fit-content; justify-self:end;">
                             <i class="fas fa-download" style="color:#FFB800; font-size:0.95rem;"></i> Download
                         </a>
@@ -772,7 +668,7 @@
                             <h4 style="font-weight:800; font-size:1.3rem; color:#111827;">Video</h4>
                         </div>
                         <div style="display:flex; flex-direction:column; margin-bottom:35px;">
-                            ${videoMedias.length ? videoMedias.map(m => renderRow(m, data.title)).join('') : '<p style="color:#6B7280; font-size:0.9rem;">No video formats available.</p>'}
+                            ${videoMedias.length ? videoMedias.map(m => renderRow(m, data.title)).join('') : '<p style="color:#000; font-size:0.9rem; line-height: 1.45;">No video formats available.</p>'}
                         </div>
 
                         <!-- Music Section -->
@@ -781,7 +677,7 @@
                             <h4 style="font-weight:800; font-size:1.3rem; color:#111827;">Music</h4>
                         </div>
                         <div style="display:flex; flex-direction:column;">
-                            ${audioMedias.length ? audioMedias.map(m => renderRow(m, data.title)).join('') : '<p style="color:#6B7280; font-size:0.9rem;">No audio formats available.</p>'}
+                            ${audioMedias.length ? audioMedias.map(m => renderRow(m, data.title)).join('') : '<p style="color:#000; font-size:0.9rem; line-height: 1.45;">No audio formats available.</p>'}
                         </div>
                     </div>
                 </div>

@@ -525,119 +525,10 @@ if (typeof EditorJSManager === 'undefined') {
         getTools() {
             const manager = this;
 
-            return {
+            const tools = {
                 inlineList: InlineListTool,
                 inlineH2: InlineHeading2Tool,
                 inlineH3: InlineHeading3Tool,
-                header: {
-                    class: Header,
-                    config: {
-                        placeholder: 'Enter a header',
-                        levels: [1, 2, 3, 4, 5, 6],
-                        defaultLevel: 2
-                    },
-                    inlineToolbar: true,
-                    shortcut: 'CMD+SHIFT+H'
-                },
-
-                list: {
-                    class: window.List || window.NestedList,
-                    inlineToolbar: true,
-                    config: {
-                        defaultStyle: 'unordered'
-                    },
-                    shortcut: 'CMD+SHIFT+L'
-                },
-                checklist: {
-                    class: window.Checklist,
-                    inlineToolbar: true
-                },
-                quote: {
-                    class: Quote,
-                    inlineToolbar: true,
-                    config: {
-                        quotePlaceholder: 'Enter a quote',
-                        captionPlaceholder: 'Quote\'s author'
-                    },
-                    shortcut: 'CMD+SHIFT+Q'
-                },
-                delimiter: Delimiter,
-                table: {
-                    class: Table,
-                    inlineToolbar: true,
-                    config: {
-                        rows: 2,
-                        cols: 3
-                    }
-                },
-                image: {
-                    class: ImageTool,
-                    config: {
-                        endpoints: {
-                            byFile: manager.uploadEndpoint
-                        },
-                        additionalRequestHeaders: {
-                            'X-CSRF-TOKEN': manager.csrfToken
-                        },
-                        field: 'image',
-                        types: 'image/*',
-                        captionPlaceholder: 'Image caption',
-                        buttonContent: 'Select an image',
-                        uploader: {
-                            uploadByFile(file) {
-                                return manager.uploadImage(file);
-                            }
-                        }
-                    }
-                },
-                embed: {
-                    class: Embed,
-                    config: {
-                        services: {
-                            youtube: true,
-                            vimeo: true,
-                            twitter: true,
-                            codepen: true
-                        }
-                    }
-                },
-                code: {
-                    class: CodeTool,
-                    shortcut: 'CMD+SHIFT+C'
-                },
-                raw: RawTool,
-                linkTool: {
-                    class: LinkTool,
-                    config: {
-                        endpoint: '/admin/cms/fetch-url-metadata' // Optional: for link previews
-                    }
-                },
-                marker: {
-                    class: Marker,
-                    shortcut: 'CMD+SHIFT+M'
-                },
-                underline: Underline,
-                inlineCode: {
-                    class: InlineCode,
-                    shortcut: 'CMD+SHIFT+K'
-                },
-                warning: {
-                    class: Warning,
-                    inlineToolbar: true,
-                    config: {
-                        titlePlaceholder: 'Title',
-                        messagePlaceholder: 'Message'
-                    }
-                },
-                attaches: {
-                    class: AttachesTool,
-                    config: {
-                        endpoint: manager.uploadEndpoint,
-                        additionalRequestHeaders: {
-                            'X-CSRF-TOKEN': manager.csrfToken
-                        }
-                    }
-                },
                 twoColumn: {
                     class: TwoColumnSection,
                     inlineToolbar: true,
@@ -646,6 +537,85 @@ if (typeof EditorJSManager === 'undefined') {
                     }
                 }
             };
+
+            if (typeof Header !== 'undefined') {
+                tools.header = {
+                    class: Header,
+                    config: { placeholder: 'Enter a header', levels: [1, 2, 3, 4, 5, 6], defaultLevel: 2 },
+                    inlineToolbar: true,
+                    shortcut: 'CMD+SHIFT+H'
+                };
+            }
+            if (typeof window.List !== 'undefined' || typeof window.NestedList !== 'undefined') {
+                tools.list = {
+                    class: window.List || window.NestedList,
+                    inlineToolbar: true,
+                    config: { defaultStyle: 'unordered' },
+                    shortcut: 'CMD+SHIFT+L'
+                };
+            }
+            if (typeof window.Checklist !== 'undefined') {
+                tools.checklist = { class: window.Checklist, inlineToolbar: true };
+            }
+            if (typeof Quote !== 'undefined') {
+                tools.quote = {
+                    class: Quote,
+                    inlineToolbar: true,
+                    config: { quotePlaceholder: 'Enter a quote', captionPlaceholder: 'Quote\'s author' },
+                    shortcut: 'CMD+SHIFT+Q'
+                };
+            }
+            if (typeof Delimiter !== 'undefined') {
+                tools.delimiter = Delimiter;
+            }
+            if (typeof Table !== 'undefined') {
+                tools.table = { class: Table, inlineToolbar: true, config: { rows: 2, cols: 3 } };
+            }
+            if (typeof ImageTool !== 'undefined') {
+                tools.image = {
+                    class: ImageTool,
+                    config: {
+                        endpoints: { byFile: manager.uploadEndpoint },
+                        additionalRequestHeaders: { 'X-CSRF-TOKEN': manager.csrfToken },
+                        field: 'image',
+                        types: 'image/*',
+                        captionPlaceholder: 'Image caption',
+                        buttonContent: 'Select an image',
+                        uploader: {
+                            uploadByFile(file) { return manager.uploadImage(file); }
+                        }
+                    }
+                };
+            }
+            if (typeof Embed !== 'undefined') {
+                tools.embed = { class: Embed, config: { services: { youtube: true, vimeo: true, twitter: true, codepen: true } } };
+            }
+            if (typeof CodeTool !== 'undefined') {
+                tools.code = { class: CodeTool, shortcut: 'CMD+SHIFT+C' };
+            }
+            if (typeof RawTool !== 'undefined') {
+                tools.raw = RawTool;
+            }
+            if (typeof LinkTool !== 'undefined') {
+                tools.linkTool = { class: LinkTool, config: { endpoint: '/admin/cms/fetch-url-metadata' } };
+            }
+            if (typeof Marker !== 'undefined') {
+                tools.marker = { class: Marker, shortcut: 'CMD+SHIFT+M' };
+            }
+            if (typeof Underline !== 'undefined') {
+                tools.underline = Underline;
+            }
+            if (typeof InlineCode !== 'undefined') {
+                tools.inlineCode = { class: InlineCode, shortcut: 'CMD+SHIFT+K' };
+            }
+            if (typeof Warning !== 'undefined') {
+                tools.warning = { class: Warning, inlineToolbar: true, config: { titlePlaceholder: 'Title', messagePlaceholder: 'Message' } };
+            }
+            if (typeof AttachesTool !== 'undefined') {
+                tools.attaches = { class: AttachesTool, config: { endpoint: manager.uploadEndpoint, additionalRequestHeaders: { 'X-CSRF-TOKEN': manager.csrfToken } } };
+            }
+
+            return tools;
         }
 
         /**
