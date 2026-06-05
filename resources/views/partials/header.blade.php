@@ -613,7 +613,6 @@
 </script>
 
 <script>
-    // Dropdown hover — JS controlled (prevents FOUC, inline style takes priority over CSS class)
     document.addEventListener('DOMContentLoaded', function () {
         const wrap = document.querySelector('.nav-dropdown-wrap');
         const dropdown = document.querySelector('.nav-dropdown');
@@ -621,12 +620,12 @@
             let timer;
             wrap.addEventListener('mouseenter', function () {
                 clearTimeout(timer);
-                dropdown.style.removeProperty('display'); // remove inline display:none
+                dropdown.style.display = 'block';
                 dropdown.style.opacity = '1';
             });
             wrap.addEventListener('mouseleave', function () {
                 timer = setTimeout(function () {
-                    dropdown.style.display = 'none'; // re-hide
+                    dropdown.style.display = 'none';
                     dropdown.style.opacity = '0';
                 }, 150);
             });
