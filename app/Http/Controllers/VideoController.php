@@ -68,9 +68,12 @@ class VideoController extends Controller
         $referer = $detected['referer'];
         $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.' . $ext;
-        $proxy = config('downloader.ytdlp_proxy');
-        if ($proxy && $proxySession) {
-            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+        $proxy = null;
+        if ($proxySession) {
+            $baseProxy = config('downloader.ytdlp_proxy');
+            if ($baseProxy) {
+                $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $proxySession);
+            }
         }
 
         // Resolve Content-Type
@@ -145,16 +148,16 @@ class VideoController extends Controller
 
         // ── Proxy Decision ────────────────────────────────────────────────
         // YouTube CDN URLs are signed/served based on the extracting IP.
-        // If yt-dlp extracted via proxy (Brazilian IP), the CDN URL must be
-        // fetched from the same proxy — otherwise YouTube returns 0 bytes.
-        // We ALWAYS use proxy for YouTube downloads to maintain IP consistency.
-        $proxy = config('downloader.ytdlp_proxy'); // Always use for YouTube
+        // If direct extraction (no proxy), download directly.
+        // If proxy extraction (fallback), route through the corresponding sticky proxy.
+        $proxy = null;
         $proxySession = null;
         if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $vUrl, $matches)) {
             $proxySession = $matches[1];
-        }
-        if ($proxy && $proxySession) {
-            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+            $baseProxy = config('downloader.ytdlp_proxy');
+            if ($baseProxy) {
+                $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $proxySession);
+            }
         }
 
         // ── VP9/AV1 detection ─────────────────────────────────────────────

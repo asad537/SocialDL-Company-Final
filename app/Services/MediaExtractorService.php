@@ -137,8 +137,8 @@ class MediaExtractorService
         $platform = PlatformDetector::detect($url);
         $isYouTube = ($platform['platform'] === 'YouTube');
         
-        // Build command
-        $cmd = escapeshellarg($binary)
+        // Build base command
+        $baseCmd = escapeshellarg($binary)
             . ' --dump-single-json'
             . ' --no-warnings'
             . ' --no-playlist'
@@ -151,49 +151,73 @@ class MediaExtractorService
         // Cookies support
         $cookiesPath = storage_path('app/cookies.txt');
         if (file_exists($cookiesPath)) {
-            $cmd .= ' --cookies ' . escapeshellarg($cookiesPath);
+            $baseCmd .= ' --cookies ' . escapeshellarg($cookiesPath);
         }
 
         // Platform-specific optimizations
         if ($isYouTube) {
             $extArgs = $this->config['extraction']['extractor_args']['youtube'] ?? null;
             if ($extArgs) {
-                $cmd .= ' --extractor-args ' . escapeshellarg($extArgs);
+                $baseCmd .= ' --extractor-args ' . escapeshellarg($extArgs);
             }
         }
 
         // User agent
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
-        $cmd .= ' --user-agent ' . escapeshellarg($ua);
+        $baseCmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Proxy support for YouTube extraction:
-        // YouTube blocks data center IPs (our server) for extraction API calls.
-        // We must use a proxy. Strategy: try HTTP proxy with fresh session per
-        // request (avoids 429 rate limits from sticky IP), fallback to SOCKS5.
-        $sessionId = null;
+        // Define execution options (without proxy, then fallback to proxy for YouTube)
+        $attempts = [];
         if ($isYouTube) {
-            $httpProxy = $this->config['ytdlp_proxy'] ?? null;
-            if ($httpProxy) {
-                // Use a FRESH random session per extraction (avoids 429 from same IP)
-                $sessionId = substr(md5(uniqid(microtime(), true)), 0, 8);
-                $proxyWithSession = self::getStickyProxy($httpProxy, $sessionId);
-                $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
-            }
+            // Attempt 1: Direct extraction (without proxy)
+            $attempts[] = [
+                'use_proxy' => false,
+                'session_id' => null
+            ];
+            // Attempt 2: Fallback with proxy
+            $attempts[] = [
+                'use_proxy' => true,
+                'session_id' => substr(md5(uniqid(microtime(), true)), 0, 8)
+            ];
+        } else {
+            // Non-YouTube platforms run direct only
+            $attempts[] = [
+                'use_proxy' => false,
+                'session_id' => null
+            ];
         }
 
-        // URL
-        $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
-        
-        Log::debug('MediaExtractor: Executing CLI | URL: ' . $url);
+        $timeout = 60;
 
-        $timeout = 60; 
-        $output = $this->execWithTimeout($cmd, $timeout);
+        foreach ($attempts as $index => $attempt) {
+            $cmd = $baseCmd;
+            $sessionId = $attempt['session_id'];
 
-        if ($output) {
-            $parsed = $this->parseYtdlpJson($output, $url, $sessionId);
-            if ($parsed) return $parsed;
+            if ($attempt['use_proxy']) {
+                $httpProxy = $this->config['ytdlp_proxy'] ?? null;
+                if ($httpProxy && $sessionId) {
+                    $proxyWithSession = self::getStickyProxy($httpProxy, $sessionId);
+                    $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
+                }
+            }
+
+            // URL
+            $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
             
-            Log::error("MediaExtractor: CLI Output parsing failed. Output: " . substr($output, 0, 500));
+            Log::debug('MediaExtractor: Executing CLI (Attempt ' . ($index + 1) . ', Proxy: ' . ($attempt['use_proxy'] ? 'Yes' : 'No') . ') | URL: ' . $url);
+
+            $output = $this->execWithTimeout($cmd, $timeout);
+
+            if ($output) {
+                $parsed = $this->parseYtdlpJson($output, $url, $sessionId);
+                if ($parsed) {
+                    return $parsed;
+                }
+                
+                Log::warning("MediaExtractor: CLI Attempt " . ($index + 1) . " parsing failed or returned error. Output: " . substr($output, 0, 300));
+            } else {
+                Log::warning("MediaExtractor: CLI Attempt " . ($index + 1) . " execution returned empty output.");
+            }
         }
         
         return null;
