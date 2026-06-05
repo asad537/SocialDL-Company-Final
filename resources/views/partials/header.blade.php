@@ -613,7 +613,7 @@
 </script>
 
 <script>
-    // Dropdown via JS (prevents FOUC on page load - CSS :hover glitches during Google Translate repaint)
+    // Dropdown hover — JS controlled (prevents FOUC, inline style takes priority over CSS class)
     document.addEventListener('DOMContentLoaded', function () {
         const wrap = document.querySelector('.nav-dropdown-wrap');
         const dropdown = document.querySelector('.nav-dropdown');
@@ -621,11 +621,13 @@
             let timer;
             wrap.addEventListener('mouseenter', function () {
                 clearTimeout(timer);
-                dropdown.classList.add('dropdown-open');
+                dropdown.style.removeProperty('display'); // remove inline display:none
+                dropdown.style.opacity = '1';
             });
             wrap.addEventListener('mouseleave', function () {
                 timer = setTimeout(function () {
-                    dropdown.classList.remove('dropdown-open');
+                    dropdown.style.display = 'none'; // re-hide
+                    dropdown.style.opacity = '0';
                 }, 150);
             });
         }
