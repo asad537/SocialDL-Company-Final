@@ -26,7 +26,7 @@
                 
                 <li class="nav-dropdown-wrap">
                     <a style="cursor: pointer;" class="dropdown-trigger">Supported Platforms</a>
-                    <div class="nav-dropdown" style="display:none;">
+                    <div class="nav-dropdown">
                         <div class="dropdown-grid">
                             @foreach($navPlatforms as $np)
                             <a href="{{ route('platforms.show', $np->slug) }}" class="dropdown-item">
@@ -533,26 +533,24 @@
 
     /* ── Desktop Dropdown Styles ── */
     .nav-dropdown-wrap {
-        position: relative; line-height: 1.45; }
+        position: relative;
+    }
     .nav-dropdown {
         display: none;
         position: absolute;
-        top: 100%;
+        top: calc(100% + 8px);
         left: 50%;
-        transform: translateX(-50%) translateY(5px);
+        transform: translateX(-50%);
         background: #ffffff;
         min-width: 280px;
         border-radius: 16px;
         box-shadow: 0 15px 35px rgba(0,0,0,0.12);
         padding: 1rem;
-        opacity: 0;
         border: 1px solid rgba(0,0,0,0.05);
         z-index: 1000;
-        transition: opacity 0.2s ease;
     }
-    .nav-dropdown.dropdown-open {
+    .nav-dropdown-wrap:hover .nav-dropdown {
         display: block;
-        opacity: 1;
     }
     .dropdown-grid {
         display: grid;
@@ -613,24 +611,6 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const wrap = document.querySelector('.nav-dropdown-wrap');
-        const dropdown = document.querySelector('.nav-dropdown');
-        if (wrap && dropdown) {
-            let timer;
-            wrap.addEventListener('mouseenter', function () {
-                clearTimeout(timer);
-                dropdown.style.display = 'block';
-                dropdown.style.opacity = '1';
-            });
-            wrap.addEventListener('mouseleave', function () {
-                timer = setTimeout(function () {
-                    dropdown.style.display = 'none';
-                    dropdown.style.opacity = '0';
-                }, 150);
-            });
-        }
-    });
 
     function toggleMobileMenu() {
         const nav = document.getElementById('mobile-nav');
