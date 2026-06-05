@@ -74,6 +74,15 @@ class VideoController extends Controller
             if ($baseProxy) {
                 $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $proxySession);
             }
+        } else {
+            $baseProxy = config('downloader.ytdlp_proxy');
+            if ($baseProxy) {
+                $platform = PlatformDetector::platformName($sourceUrl);
+                if (in_array($platform, ['TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn'])) {
+                    $randSession = substr(md5(uniqid(microtime(), true)), 0, 8);
+                    $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $randSession);
+                }
+            }
         }
 
         // Resolve Content-Type
@@ -163,6 +172,15 @@ class VideoController extends Controller
             $baseProxy = config('downloader.ytdlp_proxy');
             if ($baseProxy) {
                 $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $proxySession);
+            }
+        } else {
+            $baseProxy = config('downloader.ytdlp_proxy');
+            if ($baseProxy) {
+                $platform = PlatformDetector::platformName($orig ?: $vUrl);
+                if (in_array($platform, ['TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn'])) {
+                    $randSession = substr(md5(uniqid(microtime(), true)), 0, 8);
+                    $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $randSession);
+                }
             }
         }
 
