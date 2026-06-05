@@ -124,11 +124,11 @@ class FFmpegService
             $headersStr = implode("\r\n", $parts) . "\r\n";
         }
 
-        $cmd = 'nice -n 19 ' . escapeshellarg($ffmpeg);
-
+        $envPrefix = '';
         if ($proxy) {
-            $cmd .= ' -http_proxy ' . escapeshellarg($proxy);
+            $envPrefix = 'http_proxy=' . escapeshellarg($proxy) . ' https_proxy=' . escapeshellarg($proxy) . ' ';
         }
+        $cmd = $envPrefix . 'nice -n 19 ' . escapeshellarg($ffmpeg);
         if ($headersStr) {
             $cmd .= ' -headers ' . escapeshellarg($headersStr);
         }
@@ -151,7 +151,6 @@ class FFmpegService
             $vcodecArg = "-c:v libx264 -preset superfast {$bitrateArgs} -pix_fmt yuv420p";
 
             if ($audioUrl) {
-                if ($proxy)      { $cmd .= ' -http_proxy ' . escapeshellarg($proxy); }
                 if ($headersStr) { $cmd .= ' -headers ' . escapeshellarg($headersStr); }
                 $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
                     . ' -i ' . escapeshellarg($audioUrl)
@@ -167,7 +166,6 @@ class FFmpegService
         // ── H.264 stream (≤1080p) ────────────────────────────────────────────
         // Stream-copy both video and audio — zero CPU, instant, full speed.
         if ($audioUrl) {
-            if ($proxy)      { $cmd .= ' -http_proxy ' . escapeshellarg($proxy); }
             if ($headersStr) { $cmd .= ' -headers ' . escapeshellarg($headersStr); }
             $cmd .= ' -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
                 . ' -i ' . escapeshellarg($audioUrl)

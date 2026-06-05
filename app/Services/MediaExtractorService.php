@@ -170,14 +170,13 @@ class MediaExtractorService
         // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
         // Non-YouTube: direct only
         $attempts = [];
-        if ($isYouTube) {
-            // Only attempt: proxy with sticky session (skips bot-check, ~2.5s)
+        $proxyRequired = in_array($platform['platform'], ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn']);
+        if ($proxyRequired) {
             $attempts[] = [
                 'use_proxy' => true,
                 'session_id' => substr(md5(uniqid(microtime(), true)), 0, 8)
             ];
         } else {
-            // Non-YouTube platforms run direct only
             $attempts[] = [
                 'use_proxy' => false,
                 'session_id' => null
