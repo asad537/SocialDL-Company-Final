@@ -50,7 +50,7 @@ return [
 
         // Platform-specific extractor args for speed
         'extractor_args' => [
-            'youtube' => 'youtube:player_client=android,android_vr',
+            'youtube' => 'youtube:player_client=android_vr',
         ],
     ],
 
