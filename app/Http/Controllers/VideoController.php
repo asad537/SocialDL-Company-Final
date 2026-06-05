@@ -157,6 +157,7 @@ class VideoController extends Controller
         $vcodec = strtolower($request->query('vcodec', '')); // e.g. 'vp9', 'av01', 'avc1'
         $height = (int) $request->query('height', 0);        // source video height in pixels
         $cookies = $request->query('cookies');
+        $formatId = $request->query('format_id');
 
         if (!$vUrl) return abort(400);
 
@@ -188,6 +189,55 @@ class VideoController extends Controller
                     $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $randSession);
                 }
             }
+        }
+
+        // TikTok / Snapchat: stream directly using yt-dlp to avoid Akamai 403 blocks
+        $platform = $detected['platform'];
+        if (in_array($platform, ['TikTok', 'Snapchat'])) {
+            $ytdlpPath = config('downloader.ytdlp_path', base_path('venv/bin/yt-dlp'));
+            $cmd = '';
+            if ($proxy) {
+                $cmd .= 'http_proxy=' . escapeshellarg($proxy) . ' https_proxy=' . escapeshellarg($proxy) . ' ';
+            }
+            $cmd .= 'nice -n 19 ' . escapeshellarg($ytdlpPath)
+                . ' --quiet --no-warnings --no-check-certificate';
+
+            if ($proxy) {
+                $cmd .= ' --proxy ' . escapeshellarg($proxy);
+            }
+
+            if ($formatId) {
+                $cmd .= ' -f ' . escapeshellarg($formatId);
+            }
+
+            $cmd .= ' -o - ' . escapeshellarg($orig ?: $vUrl);
+
+            $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
+            $contentType  = 'video/mp4';
+            
+            Log::info('mergeDownload: Streaming TikTok/Snapchat via yt-dlp: ' . $cmd);
+
+            return new StreamedResponse(function () use ($cmd) {
+                while (ob_get_level()) { ob_end_clean(); }
+                ob_implicit_flush(true);
+
+                $handle = popen($cmd, 'r');
+                if ($handle) {
+                    while (!feof($handle)) {
+                        $buffer = fread($handle, 262144);
+                        if ($buffer !== false && $buffer !== '') {
+                            echo $buffer;
+                            flush();
+                        }
+                    }
+                    pclose($handle);
+                }
+            }, 200, [
+                'Content-Type'        => $contentType,
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Cache-Control'       => 'no-cache',
+                'X-Accel-Buffering'   => 'no',
+            ]);
         }
 
         // ── VP9/AV1 detection ─────────────────────────────────────────────

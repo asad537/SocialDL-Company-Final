@@ -990,14 +990,15 @@
                 const uaParam = m.user_agent ? `&user_agent=${encodeURIComponent(m.user_agent)}` : '';
                 const refParam = m.referer ? `&referer=${encodeURIComponent(m.referer)}` : '';
                 const cookieParam = m.cookies ? `&cookies=${encodeURIComponent(m.cookies)}` : '';
+                const formatIdParam = m.format_id ? `&format_id=${encodeURIComponent(m.format_id)}` : '';
 
                 if (m.type === 'video' && m.has_audio === false) {
                     // Video-only: needs FFmpeg merge
                     if (audioMedias.length > 0) {
                         const bestAudioUrl = audioMedias[0].url;
-                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&audio_url=${encodeURIComponent(bestAudioUrl)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}`;
+                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&audio_url=${encodeURIComponent(bestAudioUrl)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
                     } else {
-                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}`;
+                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
                         noAudioBadge = `<span style="color: #EF4444; font-size: 0.7rem; font-weight: bold; margin-left: 5px;" title="No audio"><i class="fas fa-volume-mute"></i></span>`;
                     }
                     // Show Mac-compatible badge for VP9/AV1 streams that will be transcoded
@@ -1006,14 +1007,14 @@
                     }
                 } else if (needsQueue && m.type === 'video') {
                     // TikTok / Snapchat: CDN URLs expire — download to server first, then serve
-                    dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}`;
+                    dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
                 } else if (m.has_audio && !needsProxy) {
                     // ⚡ DIRECT CDN DOWNLOAD — Full speed, zero server load
                     dlUrl = `/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&quality=${encodeURIComponent(m.quality)}&source_url=${encodeURIComponent(originalUrl)}`;
                     speedBadge = `<span style="color: #10B981; font-size: 0.65rem; margin-left: 4px;" title="Direct CDN — Maximum speed">⚡</span>`;
                 } else {
                     // Proxy download — Instagram, Facebook etc.
-                    dlUrl = `/proxy-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&source_url=${encodeURIComponent(originalUrl)}${uaParam}${refParam}${cookieParam}`;
+                    dlUrl = `/proxy-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&source_url=${encodeURIComponent(originalUrl)}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
                 }
 
                 const row = document.createElement('div');
