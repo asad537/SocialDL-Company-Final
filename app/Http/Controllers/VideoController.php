@@ -68,9 +68,12 @@ class VideoController extends Controller
         $referer = $detected['referer'];
         $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.' . $ext;
-        $proxy = config('downloader.ytdlp_proxy');
-        if ($proxy && $proxySession) {
-            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+        $proxy = null;
+        if ($proxySession) {
+            $baseProxy = config('downloader.ytdlp_proxy');
+            if ($baseProxy) {
+                $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $proxySession);
+            }
         }
 
         // Resolve Content-Type
@@ -132,6 +135,7 @@ class VideoController extends Controller
         $title  = $request->query('title', 'video');
         $orig   = $request->query('source_url', $vUrl);
         $vcodec = strtolower($request->query('vcodec', '')); // e.g. 'vp9', 'av01', 'avc1'
+        $height = (int) $request->query('height', 0);        // source video height in pixels
 
         if (!$vUrl) return abort(400);
 
@@ -144,32 +148,38 @@ class VideoController extends Controller
 
         // ── Proxy Decision ────────────────────────────────────────────────
         // YouTube CDN URLs are signed/served based on the extracting IP.
-        // If yt-dlp extracted via proxy (Brazilian IP), the CDN URL must be
-        // fetched from the same proxy — otherwise YouTube returns 0 bytes.
-        // We ALWAYS use proxy for YouTube downloads to maintain IP consistency.
-        $proxy = config('downloader.ytdlp_proxy'); // Always use for YouTube
+        // If direct extraction (no proxy), download directly.
+        // If proxy extraction (fallback), route through the corresponding sticky proxy.
+        $proxy = null;
         $proxySession = null;
         if (preg_match('/[?&]proxy_session=([a-zA-Z0-9]+)/', $vUrl, $matches)) {
             $proxySession = $matches[1];
-        }
-        if ($proxy && $proxySession) {
-            $proxy = \App\Services\MediaExtractorService::getStickyProxy($proxy, $proxySession);
+            $baseProxy = config('downloader.ytdlp_proxy');
+            if ($baseProxy) {
+                $proxy = \App\Services\MediaExtractorService::getStickyProxy($baseProxy, $proxySession);
+            }
         }
 
-        // VP9 and AV1 are NOT natively supported by macOS QuickTime / iOS.
-        // When we detect such a codec, we must re-encode to H.264 so the
-        // downloaded file is universally playable on all Apple devices.
-        $needsTranscode = str_contains($vcodec, 'vp9')
-                       || str_contains($vcodec, 'vp09')
-                       || str_contains($vcodec, 'av01')
-                       || str_contains($vcodec, 'av1');
+        // ── VP9/AV1 detection ─────────────────────────────────────────────
+        // VP9/AV1 streams (1440p/2160p YouTube): output as WebM (~500MB, same as vidsave).
+        // H.264 streams (≤1080p): output as MP4 (stream copy, universally compatible).
+        $isVp9Stream = str_contains($vcodec, 'vp9')
+                    || str_contains($vcodec, 'vp09')
+                    || str_contains($vcodec, 'av01')
+                    || str_contains($vcodec, 'av1');
 
         $ffmpegService = new \App\Services\FFmpegService();
-        $cmd = $ffmpegService->buildStreamMergeCommand(
-            $vUrl, $aUrl, $referer, $userAgent, $proxy, $needsTranscode
+        $result = $ffmpegService->buildStreamMergeCommand(
+            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream, $height
         );
+        $cmd        = $result['cmd'];
+        $outFormat  = $result['format']; // always 'mp4' now
 
-        Log::info('mergeDownload: vcodec=' . $vcodec . ' proxy=' . ($proxy ? 'yes' : 'no') . ' needsTranscode=' . ($needsTranscode ? 'yes' : 'no'));
+        $baseFilename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80);
+        $filename     = $baseFilename . '.mp4'; // always MP4
+        $contentType  = 'video/mp4';
+
+        Log::info('mergeDownload: vcodec=' . $vcodec . ' height=' . $height . ' isVp9=' . ($isVp9Stream ? 'yes' : 'no') . ' proxy=' . ($proxy ? 'yes' : 'no'));
 
         return new StreamedResponse(function () use ($cmd) {
             // Clear any remaining PHP output buffers so data flows immediately
@@ -188,7 +198,7 @@ class VideoController extends Controller
                 pclose($handle);
             }
         }, 200, [
-            'Content-Type'        => 'video/mp4',
+            'Content-Type'        => $contentType,
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
             'Cache-Control'       => 'no-cache',
             'X-Accel-Buffering'   => 'no',

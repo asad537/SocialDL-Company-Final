@@ -137,8 +137,8 @@ class MediaExtractorService
         $platform = PlatformDetector::detect($url);
         $isYouTube = ($platform['platform'] === 'YouTube');
         
-        // Build command
-        $cmd = escapeshellarg($binary)
+        // Build base command
+        $baseCmd = escapeshellarg($binary)
             . ' --dump-single-json'
             . ' --no-warnings'
             . ' --no-playlist'
@@ -151,56 +151,70 @@ class MediaExtractorService
         // Cookies support
         $cookiesPath = storage_path('app/cookies.txt');
         if (file_exists($cookiesPath)) {
-            $cmd .= ' --cookies ' . escapeshellarg($cookiesPath);
+            $baseCmd .= ' --cookies ' . escapeshellarg($cookiesPath);
         }
 
         // Platform-specific optimizations
         if ($isYouTube) {
             $extArgs = $this->config['extraction']['extractor_args']['youtube'] ?? null;
             if ($extArgs) {
-                $cmd .= ' --extractor-args ' . escapeshellarg($extArgs);
+                $baseCmd .= ' --extractor-args ' . escapeshellarg($extArgs);
             }
         }
 
         // User agent
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
-        $cmd .= ' --user-agent ' . escapeshellarg($ua);
+        $baseCmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Proxy support for YouTube extraction:
-        // YouTube blocks data center IPs (our server) for extraction API calls.
-        // We must use a proxy. Strategy: try HTTP proxy with fresh session per
-        // request (avoids 429 rate limits from sticky IP), fallback to SOCKS5.
-        $sessionId = null;
+        // Define execution options
+        // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
+        // Non-YouTube: direct only
+        $attempts = [];
         if ($isYouTube) {
-            $httpProxy = $this->config['ytdlp_proxy'] ?? null;
-            if ($httpProxy) {
-                // Use a FRESH random session per extraction (avoids 429 from same IP)
-                $freshSession = substr(md5(uniqid(microtime(), true)), 0, 8);
-                $parsed = parse_url($httpProxy);
-                if (!empty($parsed['pass']) && strpos($parsed['host'] ?? '', 'dataimpulse.com') === false) {
-                    $newPass = $parsed['pass'] . '_session-' . $freshSession . '_lifetime-2m';
-                    $scheme = ($parsed['scheme'] ?? 'http') . '://';
-                    $proxyWithSession = $scheme . ($parsed['user'] ?? '') . ':' . $newPass . '@' . ($parsed['host'] ?? '') . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
-                    $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
-                } else {
-                    $cmd .= ' --proxy ' . escapeshellarg($httpProxy);
-                }
-            }
+            // Only attempt: proxy with sticky session (skips bot-check, ~2.5s)
+            $attempts[] = [
+                'use_proxy' => true,
+                'session_id' => substr(md5(uniqid(microtime(), true)), 0, 8)
+            ];
+        } else {
+            // Non-YouTube platforms run direct only
+            $attempts[] = [
+                'use_proxy' => false,
+                'session_id' => null
+            ];
         }
 
-        // URL
-        $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
-        
-        Log::debug('MediaExtractor: Executing CLI | URL: ' . $url);
+        $timeout = 60;
 
-        $timeout = 60; 
-        $output = $this->execWithTimeout($cmd, $timeout);
+        foreach ($attempts as $index => $attempt) {
+            $cmd = $baseCmd;
+            $sessionId = $attempt['session_id'];
 
-        if ($output) {
-            $parsed = $this->parseYtdlpJson($output, $url, $sessionId);
-            if ($parsed) return $parsed;
+            if ($attempt['use_proxy']) {
+                $httpProxy = $this->config['ytdlp_proxy'] ?? null;
+                if ($httpProxy && $sessionId) {
+                    $proxyWithSession = self::getStickyProxy($httpProxy, $sessionId);
+                    $cmd .= ' --proxy ' . escapeshellarg($proxyWithSession);
+                }
+            }
+
+            // URL
+            $cmd .= ' ' . escapeshellarg($url) . ' 2>&1';
             
-            Log::error("MediaExtractor: CLI Output parsing failed. Output: " . substr($output, 0, 500));
+            Log::debug('MediaExtractor: Executing CLI (Attempt ' . ($index + 1) . ', Proxy: ' . ($attempt['use_proxy'] ? 'Yes' : 'No') . ') | URL: ' . $url);
+
+            $output = $this->execWithTimeout($cmd, $timeout);
+
+            if ($output) {
+                $parsed = $this->parseYtdlpJson($output, $url, $sessionId);
+                if ($parsed) {
+                    return $parsed;
+                }
+                
+                Log::warning("MediaExtractor: CLI Attempt " . ($index + 1) . " parsing failed or returned error. Output: " . substr($output, 0, 300));
+            } else {
+                Log::warning("MediaExtractor: CLI Attempt " . ($index + 1) . " execution returned empty output.");
+            }
         }
         
         return null;
@@ -386,8 +400,21 @@ class MediaExtractorService
 
             $rawSize = (float) ($f['filesize'] ?? ($f['filesize_approx'] ?? 0));
             if ($rawSize <= 0 && !empty($f['tbr']) && !empty($info['duration'])) {
-                // Estimate size in bytes: (tbr in kbps * 1000 * duration in seconds) / 8
-                $rawSize = ($f['tbr'] * 1000 * $info['duration']) / 8;
+                // For VP9/AV1 streams (1440p/2160p) that will be transcoded to H.264:
+                // VP9/AV1 bitrate is much higher than the equivalent H.264 CRF28 output.
+                // Use a realistic H.264 estimate: ~60% of VP9 bitrate, capped at:
+                //   4K: ~8000 kbps, 1440p: ~5000 kbps (matches vidsave ~500MB for 4K)
+                $isVp9OrAv1 = strpos($vcodec, 'vp9') !== false || strpos($vcodec, 'vp09') !== false
+                           || strpos($vcodec, 'av01') !== false;
+                if ($isVp9OrAv1 && $height > 1080) {
+                    // Estimate H.264 CRF28 output bitrate (much smaller than VP9 source)
+                    $maxKbps = $height >= 2160 ? 8000 : ($height >= 1440 ? 5000 : 3500);
+                    $estimatedKbps = min((float)$f['tbr'] * 0.55, $maxKbps);
+                    $rawSize = ($estimatedKbps * 1000 * $info['duration']) / 8;
+                } else {
+                    // Estimate size in bytes: (tbr in kbps * 1000 * duration in seconds) / 8
+                    $rawSize = ($f['tbr'] * 1000 * $info['duration']) / 8;
+                }
             }
 
             $result['medias'][] = [
@@ -512,9 +539,30 @@ class MediaExtractorService
         $parsed = parse_url($proxyUrl);
         if (!$parsed || empty($parsed['pass'])) return $proxyUrl;
         
-        // Skip sticky session modification for DataImpulse
+        // Handle DataImpulse sticky sessions (uses login__sessid.ID:password format)
         if (strpos($parsed['host'] ?? '', 'dataimpulse.com') !== false) {
-            return $proxyUrl;
+            if (!$sessionId) {
+                $sessionId = substr(md5(uniqid(microtime(), true)), 0, 8);
+            }
+            
+            $user = $parsed['user'] ?? '';
+            // If the username already contains a session, extract it
+            if (strpos($user, ';sessid.') !== false) {
+                if (preg_match('/;sessid\.([a-zA-Z0-9]+)/', $user, $matches)) {
+                    $sessionId = $matches[1];
+                }
+                return $proxyUrl;
+            }
+            
+            // Append sessid to the username
+            $newUser = $user . ';sessid.' . $sessionId;
+            
+            $scheme = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : 'http://';
+            $pass = $parsed['pass'];
+            $host = $parsed['host'] ?? '';
+            $port = isset($parsed['port']) ? ':' . $parsed['port'] : '';
+            
+            return $scheme . $newUser . ':' . $pass . '@' . $host . $port;
         }
         
         if (strpos($parsed['pass'], '_session-') !== false) {

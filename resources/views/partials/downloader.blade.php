@@ -935,31 +935,36 @@
         }
 
         function renderResults(data) {
+            const thumbBox = document.querySelector('.thumb-box');
+            if (thumbBox) {
+                // Reset thumb box
+                thumbBox.innerHTML = `<img id="thumb" src="" alt="thumbnail" style="width:100%;height:100%;object-fit:cover;">`;
+                thumbBox.classList.remove('playing');
+            }
+
             const thumbEl = document.getElementById('thumb');
-            const thumbBox = thumbEl.parentElement;
-
-            // Reset thumb box
-            thumbBox.innerHTML = `<img id="thumb" src="" alt="thumbnail" style="width:100%;height:100%;object-fit:cover;">`;
-            thumbBox.classList.remove('playing');
-
-            document.getElementById('thumb').src = `/thumbnail-proxy?url=${encodeURIComponent(data.thumbnail)}`;
+            if (thumbEl) {
+                thumbEl.src = `/thumbnail-proxy?url=${encodeURIComponent(data.thumbnail)}`;
+            }
             document.getElementById('title').textContent = data.title;
             document.getElementById('duration').textContent = data.duration || '00:00';
 
             // Click to play inline
-            thumbBox.onclick = () => {
-                thumbBox.classList.add('playing');
-                const ytMatch = originalUrl.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
-                if (ytMatch) {
-                    thumbBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else {
-                    // Use first video stream URL for non-YouTube
-                    const firstVid = (data.medias || []).find(m => m.type === 'video');
-                    if (firstVid) {
-                        thumbBox.innerHTML = `<video src="${firstVid.url}" controls autoplay style="width:100%;height:100%;object-fit:contain;background:#000;"></video>`;
+            if (thumbBox) {
+                thumbBox.onclick = () => {
+                    thumbBox.classList.add('playing');
+                    const ytMatch = originalUrl.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
+                    if (ytMatch) {
+                        thumbBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    } else {
+                        // Use first video stream URL for non-YouTube
+                        const firstVid = (data.medias || []).find(m => m.type === 'video');
+                        if (firstVid) {
+                            thumbBox.innerHTML = `<video src="${firstVid.url}" controls autoplay style="width:100%;height:100%;object-fit:contain;background:#000;"></video>`;
+                        }
                     }
-                }
-            };
+                };
+            }
 
             const videoMedias = (data.medias || []).filter(m => m.type === 'video');
             const audioMedias = (data.medias || []).filter(m => m.type === 'audio');
@@ -980,23 +985,24 @@
                 const vc = (m.vcodec || '').toLowerCase();
                 const needsRecode = vc.includes('vp9') || vc.includes('vp09') || vc.includes('av01') || vc.includes('av1');
                 const vcodecParam = m.vcodec ? `&vcodec=${encodeURIComponent(m.vcodec)}` : '';
+                const heightParam = m.height ? `&height=${m.height}` : '';
 
                 if (m.type === 'video' && m.has_audio === false) {
                     // Video-only: needs FFmpeg merge
                     if (audioMedias.length > 0) {
                         const bestAudioUrl = audioMedias[0].url;
-                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&audio_url=${encodeURIComponent(bestAudioUrl)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}`;
+                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&audio_url=${encodeURIComponent(bestAudioUrl)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}`;
                     } else {
-                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}`;
+                        dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}`;
                         noAudioBadge = `<span style="color: #EF4444; font-size: 0.7rem; font-weight: bold; margin-left: 5px;" title="No audio"><i class="fas fa-volume-mute"></i></span>`;
                     }
                     // Show Mac-compatible badge for VP9/AV1 streams that will be transcoded
                     if (needsRecode) {
-                        speedBadge = `<span style="color: #F59E0B; font-size: 0.65rem; margin-left: 4px;" title="Converting to H.264 for Mac/iOS compatibility">🍎 H.264</span>`;
+                        speedBadge = `<span style="color: #F59E0B; font-size: 0.65rem; margin-left: 4px;" title="Converting to H.264 MP4 - iOS/Mac/Windows compatible">🍎 H.264</span>`;
                     }
                 } else if (needsQueue && m.type === 'video') {
                     // TikTok / Snapchat: CDN URLs expire — download to server first, then serve
-                    dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}`;
+                    dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}`;
                 } else if (m.has_audio && !needsProxy) {
                     // ⚡ DIRECT CDN DOWNLOAD — Full speed, zero server load
                     dlUrl = `/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&quality=${encodeURIComponent(m.quality)}&source_url=${encodeURIComponent(originalUrl)}`;
