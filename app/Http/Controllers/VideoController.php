@@ -19,8 +19,35 @@ class VideoController extends Controller
         $url = $request->input('url');
 
         try {
+            // Check cache first
+            $detected = PlatformDetector::detect($url);
+            $platform = $detected['platform'];
+            $mediaId = $detected['id'];
+
+            $cacheService = new \App\Services\CacheService();
+            if ($platform !== 'Other' && $mediaId) {
+                try {
+                    $cachedData = $cacheService->get($platform, $mediaId);
+                    if ($cachedData) {
+                        $cachedData['cached'] = true;
+                        return response()->json($cachedData);
+                    }
+                } catch (\Exception $e) {
+                    Log::warning('Cache lookup failed: ' . $e->getMessage());
+                }
+            }
+
             $service = new \App\Services\MediaExtractorService();
             $data = $service->extract($url);
+
+            // Save to cache
+            if ($platform !== 'Other' && $mediaId && !empty($data)) {
+                try {
+                    $cacheService->put($platform, $mediaId, $url, $data);
+                } catch (\Exception $e) {
+                    Log::warning('Cache save failed: ' . $e->getMessage());
+                }
+            }
             
             return response()->json($data);
         } catch (\Exception $e) {
