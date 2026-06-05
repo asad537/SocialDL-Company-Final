@@ -4,7 +4,8 @@
 <head>
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/downloader.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/png" href="/images/logofinal.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Video Saver — Fast & Secure</title>
