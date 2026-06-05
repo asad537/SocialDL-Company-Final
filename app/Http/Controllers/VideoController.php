@@ -65,8 +65,8 @@ class VideoController extends Controller
         $this->logEvent('download', $sourceUrl, $ext, 'HD', true, $title);
 
         $detected = PlatformDetector::detect($sourceUrl);
-        $referer = $detected['referer'];
-        $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
+        $referer = $request->query('referer') ?: $detected['referer'];
+        $userAgent = $request->query('user_agent') ?: config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.' . $ext;
         $proxy = null;
         if ($proxySession) {
@@ -157,8 +157,8 @@ class VideoController extends Controller
         $this->logEvent('download', $orig ?: $vUrl, 'mp4', '1080p+', true, $title);
 
         $detected  = PlatformDetector::detect($orig ?: $vUrl);
-        $referer   = $detected['referer'];
-        $userAgent = config('downloader.extraction.user_agent', 'Mozilla/5.0');
+        $referer   = $request->query('referer') ?: $detected['referer'];
+        $userAgent = $request->query('user_agent') ?: config('downloader.extraction.user_agent', 'Mozilla/5.0');
         $filename  = substr(preg_replace('/[^A-Za-z0-9\-_]/', '_', $title), 0, 80) . '.mp4';
 
         // ── Proxy Decision ────────────────────────────────────────────────
