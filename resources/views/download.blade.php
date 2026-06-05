@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <!-- Preload hero image for instant LCP -->
+    <link rel="preload" as="image" href="/images/downloader.webp" type="image/webp" fetchpriority="high">
     <link rel="icon" type="image/png" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -463,7 +465,8 @@
     <header class="platform-hero">
         <picture>
             <source media="(max-width: 768px)" srcset="/images/mobile/download-hero.jpg">
-            <img class="hero-bg-img" src="/images/downloader.jpg" alt="Download Guide Banner">
+            <source srcset="/images/downloader.webp" type="image/webp">
+            <img class="hero-bg-img" src="/images/downloader.jpg" alt="Download Guide Banner" fetchpriority="high" loading="eager">
         </picture>
         <div class="hero-container">
             <div class="hero-content">

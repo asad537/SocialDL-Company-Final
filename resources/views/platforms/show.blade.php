@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <!-- Preload hero image for instant LCP -->
+    <link rel="preload" as="image" href="/images/supporteds.webp" type="image/webp" fetchpriority="high">
     <link rel="icon" type="image/png" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -438,7 +440,8 @@
     <section class="hero">
         <picture>
             <source media="(max-width: 768px)" srcset="/images/mobile/support-hero.jpg">
-            <img class="hero-bg-img" src="/images/supporteds.jpg" alt="">
+            <source srcset="/images/supporteds.webp" type="image/webp">
+            <img class="hero-bg-img" src="/images/supporteds.jpg" alt="Supported Platforms" fetchpriority="high" loading="eager">
         </picture>
         <div class="hero-container">
             <div class="hero-content">
