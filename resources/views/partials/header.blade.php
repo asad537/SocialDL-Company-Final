@@ -26,7 +26,7 @@
                 
                 <li class="nav-dropdown-wrap">
                     <a style="cursor: pointer;" class="dropdown-trigger">Supported Platforms</a>
-                    <div class="nav-dropdown">
+                    <div class="nav-dropdown" style="display:none;">
                         <div class="dropdown-grid">
                             @foreach($navPlatforms as $np)
                             <a href="{{ route('platforms.show', $np->slug) }}" class="dropdown-item">
@@ -80,7 +80,7 @@
     </div>
 
     <!-- Mobile Slide-down Nav (Sidebar) -->
-    <div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav" id="mobile-nav" style="display:none;">
         <!-- Logo at top of sidebar -->
         <div style="text-align: center; padding: 2.5rem 0 1.5rem;">
             <img src="/images/logofinal.png" alt="Video Saver" style="height: 60px; width: auto;">
@@ -115,7 +115,7 @@
     </div>
 
     <!-- Mobile Overlay -->
-    <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-overlay" id="mobile-overlay" style="display:none;" onclick="toggleMobileMenu()"></div>
 
     <!-- Hidden Google Translate -->
     <div id="google_translate_element"
@@ -635,6 +635,13 @@
         const nav = document.getElementById('mobile-nav');
         const overlay = document.getElementById('mobile-overlay');
         const btn = document.getElementById('hamburger');
+
+        // Clear inline style (set for FOUC prevention) on first open
+        if (nav.style.display === 'none' && !nav.classList.contains('open')) {
+            nav.style.display = '';
+            overlay.style.display = '';
+        }
+
         nav.classList.toggle('open');
         overlay.classList.toggle('open');
         btn.classList.toggle('open');
