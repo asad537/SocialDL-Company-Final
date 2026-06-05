@@ -204,6 +204,7 @@ class VideoController extends Controller
         $contentType  = 'video/mp4';
 
         Log::info('mergeDownload: vcodec=' . $vcodec . ' height=' . $height . ' isVp9=' . ($isVp9Stream ? 'yes' : 'no') . ' proxy=' . ($proxy ? 'yes' : 'no'));
+        Log::info('mergeDownload Command: ' . $cmd);
 
         return new StreamedResponse(function () use ($cmd) {
             // Clear any remaining PHP output buffers so data flows immediately
