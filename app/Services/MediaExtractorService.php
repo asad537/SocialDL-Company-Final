@@ -166,15 +166,12 @@ class MediaExtractorService
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
         $baseCmd .= ' --user-agent ' . escapeshellarg($ua);
 
-        // Define execution options (without proxy, then fallback to proxy for YouTube)
+        // Define execution options
+        // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
+        // Non-YouTube: direct only
         $attempts = [];
         if ($isYouTube) {
-            // Attempt 1: Direct extraction (without proxy)
-            $attempts[] = [
-                'use_proxy' => false,
-                'session_id' => null
-            ];
-            // Attempt 2: Fallback with proxy
+            // Only attempt: proxy with sticky session (skips bot-check, ~2.5s)
             $attempts[] = [
                 'use_proxy' => true,
                 'session_id' => substr(md5(uniqid(microtime(), true)), 0, 8)
