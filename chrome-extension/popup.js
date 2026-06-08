@@ -64,70 +64,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
     
-    function formatDuration(seconds) {
-        if (!seconds) return '0:00';
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = Math.floor(seconds % 60);
-        if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        return `${m}:${s.toString().padStart(2, '0')}`;
-    }
-
     function renderResults(data, originalUrl) {
         videoThumb.src = data.thumbnail || '';
         videoTitle.textContent = data.title || 'Unknown Video';
-        platformName.textContent = data.extractor || 'Video';
-        videoDuration.textContent = formatDuration(data.duration);
+        platformName.textContent = data.source || 'Video';
+        videoDuration.textContent = data.duration || '00:00';
         
         // Video processing
-        const videos = (data.formats || []).filter(f => f.has_video).sort((a, b) => (b.height || 0) - (a.height || 0));
-        const uniqueVideos = [];
-        const seenRes = new Set();
-        for (let v of videos) {
-            const res = v.height ? `${v.height}P` : 'HD';
-            if (!seenRes.has(res)) {
-                seenRes.add(res);
-                uniqueVideos.push({
-                    resolution: res,
-                    size: formatBytes(v.filesize || v.filesize_approx),
-                    ext: (v.ext || 'MP4').toUpperCase(),
-                    format_id: v.format_id
-                });
-            }
-        }
+        const videos = (data.medias || []).filter(f => f.type === 'video').sort((a, b) => (b.height || 0) - (a.height || 0));
         
-        uniqueVideos.forEach(v => {
+        videos.forEach(v => {
             const dlUrl = `https://hdvideosaver.com/merge-download?url=${encodeURIComponent(originalUrl)}&format_id=${v.format_id}`;
-            const item = createFormatItem(v.ext, v.resolution, v.size, dlUrl);
+            const item = createFormatItem(v.extension || 'MP4', v.quality, v.size, dlUrl);
             videoFormatsContainer.appendChild(item);
         });
         
-        if (uniqueVideos.length === 0) videoFormatsContainer.innerHTML = '<p class="size">No video formats available</p>';
+        if (videos.length === 0) videoFormatsContainer.innerHTML = '<p class="size">No video formats available</p>';
 
         // Audio processing
-        const audios = (data.formats || []).filter(f => !f.has_video && f.has_audio).sort((a, b) => (b.abr || 0) - (a.abr || 0));
-        const uniqueAudios = [];
-        const seenAbr = new Set();
-        for (let a of audios) {
-            const br = a.abr ? `${Math.round(a.abr)}KBPS` : 'Audio';
-            if (!seenAbr.has(br)) {
-                seenAbr.add(br);
-                uniqueAudios.push({
-                    bitrate: br,
-                    size: formatBytes(a.filesize || a.filesize_approx),
-                    ext: 'MP3',
-                    format_id: a.format_id
-                });
-            }
-        }
+        const audios = (data.medias || []).filter(f => f.type === 'audio').sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
 
-        uniqueAudios.forEach(a => {
+        audios.forEach(a => {
             const dlUrl = `https://hdvideosaver.com/merge-download?url=${encodeURIComponent(originalUrl)}&format_id=${a.format_id}`;
-            const item = createFormatItem(a.ext, a.bitrate, a.size, dlUrl);
+            const item = createFormatItem(a.extension || 'MP3', a.quality, a.size, dlUrl);
             audioFormatsContainer.appendChild(item);
         });
 
-        if (uniqueAudios.length === 0) audioFormatsContainer.innerHTML = '<p class="size">No audio formats available</p>';
+        if (audios.length === 0) audioFormatsContainer.innerHTML = '<p class="size">No audio formats available</p>';
 
         resultArea.classList.remove('hidden');
     }
