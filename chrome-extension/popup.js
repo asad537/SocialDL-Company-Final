@@ -74,27 +74,54 @@ document.addEventListener('DOMContentLoaded', () => {
         platformName.textContent = data.source || 'Video';
         videoDuration.textContent = data.duration || '00:00';
         
-        // Video processing
-        const videos = (data.medias || []).filter(f => f.type === 'video').sort((a, b) => (b.height || 0) - (a.height || 0));
-        
-        videos.forEach(v => {
-            const dlUrl = `https://hdvideosaver.com/merge-download?url=${encodeURIComponent(originalUrl)}&format_id=${v.format_id}`;
+        const videoMedias = (data.medias || []).filter(f => f.type === 'video').sort((a, b) => (b.height || 0) - (a.height || 0));
+        const audioMedias = (data.medias || []).filter(f => f.type === 'audio').sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
+
+        const queuePlatforms = ['TikTok', 'Snapchat', 'tiktok', 'snapchat'];
+        const needsQueue = queuePlatforms.includes(data.source || '');
+        const needsProxy = !['Vimeo', 'vimeo'].includes(data.source || '');
+
+        function generateDownloadUrl(m) {
+            let dlUrl = '';
+            const vcodecParam = m.vcodec ? `&vcodec=${encodeURIComponent(m.vcodec)}` : '';
+            const heightParam = m.height ? `&height=${m.height}` : '';
+            const uaParam = m.user_agent ? `&user_agent=${encodeURIComponent(m.user_agent)}` : '';
+            const refParam = m.referer ? `&referer=${encodeURIComponent(m.referer)}` : '';
+            const cookieParam = m.cookies ? `&cookies=${encodeURIComponent(m.cookies)}` : '';
+            const formatIdParam = m.format_id ? `&format_id=${encodeURIComponent(m.format_id)}` : '';
+
+            if (m.type === 'video' && m.has_audio === false) {
+                if (audioMedias.length > 0) {
+                    const bestAudioUrl = audioMedias[0].url;
+                    dlUrl = `https://hdvideosaver.com/merge-download?video_url=${encodeURIComponent(m.url)}&audio_url=${encodeURIComponent(bestAudioUrl)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
+                } else {
+                    dlUrl = `https://hdvideosaver.com/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
+                }
+            } else if (needsQueue && m.type === 'video') {
+                dlUrl = `https://hdvideosaver.com/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
+            } else if (m.has_audio && !needsProxy) {
+                dlUrl = `https://hdvideosaver.com/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&quality=${encodeURIComponent(m.quality)}&source_url=${encodeURIComponent(originalUrl)}`;
+            } else {
+                dlUrl = `https://hdvideosaver.com/proxy-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&source_url=${encodeURIComponent(originalUrl)}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
+            }
+            return dlUrl;
+        }
+
+        videoMedias.forEach(v => {
+            const dlUrl = generateDownloadUrl(v);
             const item = createFormatItem(v.extension || 'MP4', v.quality, v.size, dlUrl);
             videoFormatsContainer.appendChild(item);
         });
         
-        if (videos.length === 0) videoFormatsContainer.innerHTML = '<p class="size">No video formats available</p>';
+        if (videoMedias.length === 0) videoFormatsContainer.innerHTML = '<p class="size">No video formats available</p>';
 
-        // Audio processing
-        const audios = (data.medias || []).filter(f => f.type === 'audio').sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
-
-        audios.forEach(a => {
-            const dlUrl = `https://hdvideosaver.com/merge-download?url=${encodeURIComponent(originalUrl)}&format_id=${a.format_id}`;
+        audioMedias.forEach(a => {
+            const dlUrl = generateDownloadUrl(a);
             const item = createFormatItem(a.extension || 'MP3', a.quality, a.size, dlUrl);
             audioFormatsContainer.appendChild(item);
         });
 
-        if (audios.length === 0) audioFormatsContainer.innerHTML = '<p class="size">No audio formats available</p>';
+        if (audioMedias.length === 0) audioFormatsContainer.innerHTML = '<p class="size">No audio formats available</p>';
 
         resultArea.classList.remove('hidden');
     }
