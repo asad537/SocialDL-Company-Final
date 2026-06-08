@@ -13,15 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoFormatsContainer = document.getElementById('videoFormats');
     const audioFormatsContainer = document.getElementById('audioFormats');
 
-    // Attempt to autofill active tab URL
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0] && tabs[0].url && tabs[0].url.startsWith('http')) {
-            urlInput.value = tabs[0].url;
-        }
-    });
-
-    fetchBtn.addEventListener('click', () => {
-        const url = urlInput.value.trim();
+    function startFetch(url) {
         if (!url) return;
 
         // Reset UI
@@ -48,6 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         );
+    }
+
+    // Attempt to autofill active tab URL and auto-fetch
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0] && tabs[0].url && tabs[0].url.startsWith('http')) {
+            urlInput.value = tabs[0].url;
+            startFetch(tabs[0].url);
+        }
+    });
+
+    fetchBtn.addEventListener('click', () => {
+        startFetch(urlInput.value.trim());
     });
 
     function showError(message) {
