@@ -10,6 +10,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Saver - HD Video & Music Downloader</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- JSON-LD Schemas for Homepage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://hdvideosaver.com/images/logofinal.png"
+      },
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "sameAs": [
+        "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com/",
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://hdvideosaver.com/"
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "operatingSystem": "Windows, macOS, Linux, Android, iOS",
+      "applicationCategory": "MultimediaApplication",
+      "url": "https://hdvideosaver.com/",
+      "downloadUrl": "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How can I download videos from any website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply copy the video URL from your browser, paste it into the Video Saver search box, and click Download. Our tool will instantly fetch the available formats for you to choose from."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I download videos via a URL?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Copy the direct video URL from any supported platform (YouTube, Instagram, TikTok, etc.), paste it into our input field, select your preferred quality, and hit download. It's that simple!"
+          }
+        }
+      ]
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
