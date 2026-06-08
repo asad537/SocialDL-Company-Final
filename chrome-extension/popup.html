@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Saver</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="12" fill="white"/>
+                <path d="M24 14V34M24 34L16 26M24 34L32 26" stroke="#FF9900" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 38H36" stroke="#FF9900" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h1>Video <span class="highlight">Saver</span></h1>
+        <p>Download Videos from Popular Websites</p>
+    </div>
+
+    <div class="container">
+        <div class="input-group">
+            <div class="input-wrapper">
+                <svg class="globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <input type="text" id="urlInput" placeholder="Paste your link here">
+            </div>
+            <button id="fetchBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
+                Fetch
+            </button>
+        </div>
+
+        <!-- Loader -->
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>Extracting video...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMsg" class="hidden"></div>
+
+        <!-- Result Area -->
+        <div id="resultArea" class="hidden">
+            <div class="video-card">
+                <div class="thumbnail-wrapper">
+                    <img id="videoThumb" src="" alt="Thumbnail">
+                    <span class="duration-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span id="videoDuration"></span>
+                    </span>
+                </div>
+                <div class="video-info">
+                    <div class="platform-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="red"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4S5.746,4,4.186,4.418c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768C5.746,20,12,20,12,20s6.254,0,7.814-0.418c0.86-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z"/></svg>
+                        <span id="platformName">YouTube</span>
+                    </div>
+                    <h3 id="videoTitle"></h3>
+                </div>
+            </div>
+
+            <div class="downloads-section">
+                <div class="section-title">
+                    <span class="icon">🎬</span> Video
+                </div>
+                <div id="videoFormats" class="format-list">
+                    <!-- Formats dynamically injected -->
+                </div>
+
+                <div class="section-title mt-4">
+                    <span class="icon">🎵</span> Music
+                </div>
+                <div id="audioFormats" class="format-list">
+                    <!-- Formats dynamically injected -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
