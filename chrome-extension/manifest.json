@@ -5,7 +5,12 @@
   "description": "Download Videos from Popular Websites",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Video Saver"
+    "default_title": "Video Saver",
+    "default_icon": {
+      "16": "extension-logo.png",
+      "48": "extension-logo.png",
+      "128": "extension-logo.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
