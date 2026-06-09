@@ -191,9 +191,10 @@ class VideoController extends Controller
             }
         }
 
-        // TikTok / Snapchat / Direct M3U8: stream directly using yt-dlp to avoid blocks and improve speed
+        // TikTok / Snapchat / Direct MP4: stream directly using yt-dlp to avoid blocks and improve speed
+        // M3U8 / MPD must use FFmpeg to remux into playable MP4 container
         $platform = $detected['platform'];
-        if (!$aUrl) {
+        if (!$aUrl && strpos($vUrl, '.m3u8') === false && strpos($vUrl, '.mpd') === false) {
             $ytdlpPath = config('downloader.ytdlp_path', base_path('venv/bin/yt-dlp'));
             $cmd = '';
             if ($proxy) {
