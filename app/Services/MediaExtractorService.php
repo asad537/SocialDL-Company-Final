@@ -168,9 +168,6 @@ class MediaExtractorService
         // User agent
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
         $baseCmd .= ' --user-agent ' . escapeshellarg($ua);
-        
-        // Disable impersonation to avoid curl_cffi missing firefox targets
-        $baseCmd .= ' --impersonate ""';
 
         // Define execution options
         // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
