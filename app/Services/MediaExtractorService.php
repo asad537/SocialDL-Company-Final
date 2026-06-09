@@ -160,6 +160,8 @@ class MediaExtractorService
             if ($extArgs) {
                 $baseCmd .= ' --extractor-args ' . escapeshellarg($extArgs);
             }
+        } elseif ($platform['platform'] === 'Facebook') {
+            $baseCmd .= ' --extractor-args "facebook:max_video_size=1080"';
         }
 
         // User agent
@@ -170,7 +172,7 @@ class MediaExtractorService
         // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
         // Non-YouTube: direct only
         $attempts = [];
-        $proxyRequired = in_array($platform['platform'], ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn']);
+        $proxyRequired = in_array($platform['platform'], ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn', 'Dailymotion', 'Reddit']);
         if ($proxyRequired) {
             $attempts[] = [
                 'use_proxy' => true,
@@ -341,8 +343,8 @@ class MediaExtractorService
         foreach ($info['formats'] ?? [] as $f) {
             if (empty($f['url'])) continue;
 
-            // Skip HLS manifest formats (manifest.googlevideo.com)
-            if (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false) {
+            // Skip HLS/DASH manifest formats (manifest.googlevideo.com, .mpd, .m3u8)
+            if (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false || strpos($f['url'], '.mpd') !== false || strpos($f['url'], '.m3u8') !== false) {
                 continue;
             }
 
