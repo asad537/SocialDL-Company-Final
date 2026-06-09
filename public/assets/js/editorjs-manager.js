@@ -343,6 +343,14 @@ class InlineListTool {
         return true;
     }
 
+    static get sanitize() {
+        return {
+            ul: true,
+            ol: true,
+            li: true
+        };
+    }
+
     get state() {
         return this._state;
     }
@@ -388,6 +396,13 @@ class InlineListTool {
 
 class InlineHeading2Tool {
     static get isInline() { return true; }
+    
+    static get sanitize() {
+        return {
+            h2: true
+        };
+    }
+    
     get state() { return this._state; }
     set state(state) {
         this._state = state;
@@ -422,6 +437,13 @@ class InlineHeading2Tool {
 
 class InlineHeading3Tool {
     static get isInline() { return true; }
+    
+    static get sanitize() {
+        return {
+            h3: true
+        };
+    }
+    
     get state() { return this._state; }
     set state(state) {
         this._state = state;
