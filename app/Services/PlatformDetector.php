@@ -31,6 +31,7 @@ class PlatformDetector
         'snapchat.com'   => ['Snapchat',    null],
         'vimeo.com'      => ['Vimeo',       '/vimeo\.com\/(\d+)/'],
         'dailymotion.com'=> ['Dailymotion', '/(?:video\/)([a-z0-9]+)/i'],
+        'dai.ly'         => ['Dailymotion', '/dai\.ly\/([a-z0-9]+)/i'],
         'reddit.com'     => ['Reddit',      '/\/comments\/([a-z0-9]+)/i'],
         'twitch.tv'      => ['Twitch',      '/\/videos\/(\d+)/'],
         'soundcloud.com' => ['SoundCloud',  null],
