@@ -18,6 +18,44 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://hdvideosaver.com/images/logofinal.png"
+      },
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "sameAs": [
+        "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com",
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         {
