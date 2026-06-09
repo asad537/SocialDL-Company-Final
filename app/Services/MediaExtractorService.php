@@ -151,7 +151,7 @@ class MediaExtractorService
 
         // Cookies support
         $cookiesPath = storage_path('app/cookies.txt');
-        if (file_exists($cookiesPath) && $platform['platform'] !== 'Dailymotion') {
+        if (file_exists($cookiesPath) && !in_array($platform['platform'], ['Dailymotion', 'Facebook'])) {
             $baseCmd .= ' --cookies ' . escapeshellarg($cookiesPath);
         }
 
