@@ -437,8 +437,26 @@ class MediaExtractorService
                     $estimatedKbps = min((float)$f['tbr'] * 0.55, $maxKbps);
                     $rawSize = ($estimatedKbps * 1000 * $info['duration']) / 8;
                 } else {
-                    // Estimate size in bytes: (tbr in kbps * 1000 * duration in seconds) / 8
                     $rawSize = ($f['tbr'] * 1000 * $info['duration']) / 8;
+                }
+            }
+
+            // Fallback: Fetch exact file size via fast HTTP HEAD request if size is still missing
+            if ($rawSize <= 0 && !empty($mediaUrl) && strpos($mediaUrl, '.m3u8') === false && strpos($mediaUrl, '.mpd') === false) {
+                $ch = curl_init($mediaUrl);
+                curl_setopt($ch, CURLOPT_NOBODY, true);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HEADER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_MAXREDIRS, 2);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/114.0.0.0');
+                curl_exec($ch);
+                $cl = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+                curl_close($ch);
+                if ($cl > 0) {
+                    $rawSize = (float)$cl;
                 }
             }
 
