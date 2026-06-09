@@ -27,7 +27,7 @@ class MediaExtractorService
 
         // Platforms where RapidAPI is PRIMARY (yt-dlp needs auth or proxy blocks them)
         // RapidAPI Primary check
-        $rapidApiPrimary = ['LinkedIn', 'Snapchat', 'Instagram', 'TikTok', 'Likee', 'Twitter', 'Reddit', 'Facebook'];
+        $rapidApiPrimary = ['LinkedIn', 'Snapchat', 'Instagram', 'TikTok', 'Likee', 'Twitter'];
         // Platforms where RapidAPI is FALLBACK if yt-dlp fails (YouTube removed to strictly enforce yt-dlp)
         $rapidApiFallback = ['TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat', 'Reddit', 'Likee', 'Twitter'];
 
@@ -377,9 +377,10 @@ class MediaExtractorService
             $type = $isAudio ? 'audio' : 'video';
             $hasAudio = (!empty($f['acodec']) && $f['acodec'] !== 'none');
 
+            $isDashAllowed = $isYouTube || strpos($source, 'facebook') !== false || strpos($source, 'reddit') !== false;
             // For non-YouTube platforms, skip video-only (DASH) formats ONLY IF combined formats exist.
             // (Prevents Instagram DASH fragments, but keeps Snapchat/TikTok/LinkedIn single streams)
-            if (!$isYouTube && $hasCombinedVideoFormat && $type === 'video' && !$hasAudio) {
+            if (!$isDashAllowed && $hasCombinedVideoFormat && $type === 'video' && !$hasAudio) {
                 continue;
             }
 
