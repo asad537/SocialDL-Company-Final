@@ -304,6 +304,13 @@ class MediaExtractorService
      */
     private function parseYtdlpJson($jsonString, $url, $sessionId = null)
     {
+        // Extract valid JSON from output if yt-dlp prints errors/warnings due to 2>&1
+        $startPos = strpos($jsonString, '{');
+        $endPos = strrpos($jsonString, '}');
+        if ($startPos !== false && $endPos !== false && $endPos > $startPos) {
+            $jsonString = substr($jsonString, $startPos, $endPos - $startPos + 1);
+        }
+
         $info = json_decode($jsonString, true);
         if (!$info || json_last_error() !== JSON_ERROR_NONE) return null;
 
