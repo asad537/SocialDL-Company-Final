@@ -1006,8 +1006,8 @@
                     if (needsRecode) {
                         speedBadge = `<span style="color: #F59E0B; font-size: 0.65rem; margin-left: 4px;" title="Converting to H.264 MP4 - iOS/Mac/Windows compatible">🍎 H.264</span>`;
                     }
-                } else if (needsQueue && m.type === 'video') {
-                    // TikTok / Snapchat: CDN URLs expire — download to server first, then serve
+                } else if ((needsQueue && m.type === 'video') || m.extension.toUpperCase() === 'M3U8' || m.extension.toUpperCase() === 'MPD') {
+                    // M3U8 playlists and CDN URLs expire — download to server first, then serve
                     dlUrl = `/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
                 } else if (m.has_audio && !needsProxy) {
                     // ⚡ DIRECT CDN DOWNLOAD — Full speed, zero server load
