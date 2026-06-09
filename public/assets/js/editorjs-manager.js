@@ -424,14 +424,24 @@ class InlineHeading2Tool {
     }
     surround(range) {
         if (!range) return;
-        const isHeading = document.queryCommandValue('formatBlock') === 'h2';
-        document.execCommand('formatBlock', false, isHeading ? 'div' : 'H2');
+        let currentBlock = document.queryCommandValue('formatBlock');
+        if (currentBlock) currentBlock = currentBlock.toLowerCase();
+        
+        const isHeading = currentBlock === 'h2';
+        
+        // Clear any existing block formats (h1-h6) to prevent nesting
+        document.execCommand('formatBlock', false, 'div');
+        
+        if (!isHeading) {
+            document.execCommand('formatBlock', false, 'H2');
+        }
     }
     checkState(selection) {
         const text = selection.anchorNode;
         if (!text) return;
         const anchorElement = text instanceof Element ? text : text.parentElement;
-        this.state = !!anchorElement.closest('h2');
+        const nearestHeading = anchorElement.closest('h1, h2, h3, h4, h5, h6');
+        this.state = nearestHeading ? nearestHeading.tagName.toLowerCase() === 'h2' : false;
     }
 }
 
@@ -465,14 +475,24 @@ class InlineHeading3Tool {
     }
     surround(range) {
         if (!range) return;
-        const isHeading = document.queryCommandValue('formatBlock') === 'h3';
-        document.execCommand('formatBlock', false, isHeading ? 'div' : 'H3');
+        let currentBlock = document.queryCommandValue('formatBlock');
+        if (currentBlock) currentBlock = currentBlock.toLowerCase();
+        
+        const isHeading = currentBlock === 'h3';
+        
+        // Clear any existing block formats (h1-h6) to prevent nesting
+        document.execCommand('formatBlock', false, 'div');
+        
+        if (!isHeading) {
+            document.execCommand('formatBlock', false, 'H3');
+        }
     }
     checkState(selection) {
         const text = selection.anchorNode;
         if (!text) return;
         const anchorElement = text instanceof Element ? text : text.parentElement;
-        this.state = !!anchorElement.closest('h3');
+        const nearestHeading = anchorElement.closest('h1, h2, h3, h4, h5, h6');
+        this.state = nearestHeading ? nearestHeading.tagName.toLowerCase() === 'h3' : false;
     }
 }
 
