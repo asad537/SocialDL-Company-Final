@@ -343,9 +343,16 @@ class MediaExtractorService
         foreach ($info['formats'] ?? [] as $f) {
             if (empty($f['url'])) continue;
 
-            // Skip HLS/DASH manifest formats (manifest.googlevideo.com, .mpd, .m3u8)
-            if (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false || strpos($f['url'], '.mpd') !== false || strpos($f['url'], '.m3u8') !== false) {
-                continue;
+            if ($source === 'pinterest' && strpos($f['url'], '.m3u8') !== false) {
+                // Rewrite Pinterest m3u8 to playable mp4
+                $f['url'] = preg_replace('/hls\/(.*?)_\w+\.m3u8$/', 'expMp4/$1_720w.mp4', $f['url']);
+                $f['ext'] = 'mp4';
+                $f['vcodec'] = 'h264'; // ensure it passes filters
+            } else {
+                // Skip HLS/DASH manifest formats (manifest.googlevideo.com, .mpd, .m3u8)
+                if (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false || strpos($f['url'], '.mpd') !== false || strpos($f['url'], '.m3u8') !== false) {
+                    continue;
+                }
             }
 
             // Skip storyboard and mhtml preview formats
