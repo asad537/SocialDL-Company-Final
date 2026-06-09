@@ -348,8 +348,23 @@
         }
 
         iframe.skiptranslate,
-        .goog-te-banner-frame {
+        .goog-te-banner-frame,
+        .goog-te-banner,
+        .goog-te-balloon-frame,
+        #goog-gt-tt,
+        .goog-tooltip,
+        .goog-tooltip:hover,
+        .goog-te-spinner-pos,
+        .goog-te-spinner,
+        .goog-te-spinner-pos+div,
+        .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+        .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+        .goog-te-gadget-icon,
+        div[id^="goog-gt-"] {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
 
         /* ── FAQ Specific Styles ── */

@@ -123,10 +123,15 @@
         .goog-tooltip:hover,
         .goog-te-spinner-pos,
         .goog-te-spinner,
-        .goog-te-spinner-pos+div {
+        .goog-te-spinner-pos+div,
+        .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+        .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+        .goog-te-gadget-icon,
+        div[id^="goog-gt-"] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
+            pointer-events: none !important;
         }
 
         body {
