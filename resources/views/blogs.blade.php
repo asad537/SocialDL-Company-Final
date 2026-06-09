@@ -13,6 +13,48 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- JSON-LD Schemas for Help Center Page -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://hdvideosaver.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Help Center",
+          "item": "https://hdvideosaver.com/help-center/"
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "@id": "https://hdvideosaver.com/help-center/",
+      "name": "HD Video Saver Help Center",
+      "url": "https://hdvideosaver.com/help-center/",
+      "description": "Browse all video download guides and tutorials",
+      "publisher": {
+        "@type": "Organization",
+        "name": "HD Video Saver",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://hdvideosaver.com/logo.png",
+          "width": 250,
+          "height": 60
+        }
+      }
+    }
+    </script>
 
     <style>
         :root {

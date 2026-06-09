@@ -126,5 +126,18 @@ Route::get('/stream/{mediaId}/{segment}', [VideoController::class, 'streamSegmen
 Route::get('/thumbnail-proxy', [VideoController::class, 'proxyThumbnail'])
     ->middleware('throttle:60,1');
 
+// ── Sitemap Route ────────────────────────────────────────────────────────────
+Route::get('/sitemap.xml', function () {
+    $platforms = \App\Models\Platform::all();
+    $blogs = \App\Models\Blog::where('status', 1)->get();
+    $guides = \App\Models\Guide::all();
+
+    return response()->view('sitemap', [
+        'platforms' => $platforms,
+        'blogs' => $blogs,
+        'guides' => $guides
+    ])->header('Content-Type', 'text/xml');
+});
+
 // Catch-all Public Platform Route (Must be last)
 Route::get('/{slug}/', [PlatformController::class, 'show'])->name('platforms.show');

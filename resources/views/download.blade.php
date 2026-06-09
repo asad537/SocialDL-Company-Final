@@ -13,6 +13,91 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- JSON-LD Schemas for Download Page -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com/",
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://hdvideosaver.com/images/logofinal.png"
+      },
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "sameAs": [
+        "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://hdvideosaver.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Download",
+          "item": "https://hdvideosaver.com/download/"
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "operatingSystem": "Windows, macOS, Linux, Android, iOS",
+      "applicationCategory": "MultimediaApplication",
+      "url": "https://hdvideosaver.com/",
+      "downloadUrl": "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
 
     <style>
         :root {

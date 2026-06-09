@@ -14,6 +14,116 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- JSON-LD Schemas for Platform Page -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://hdvideosaver.com/images/logofinal.png"
+      },
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "sameAs": [
+        "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "url": "https://hdvideosaver.com/",
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Video Saver",
+      "alternateName": [
+        "HD Video Saver",
+        "HDVideoSaver",
+        "HVS Downloader"
+      ],
+      "description": "Video Saver is a free online video downloader that lets users download videos, reels, shorts, and audio clips in MP4 or MP3 format from supported platforms.",
+      "operatingSystem": "Windows, macOS, Linux, Android, iOS",
+      "applicationCategory": "MultimediaApplication",
+      "url": "https://hdvideosaver.com/",
+      "downloadUrl": "https://play.google.com/store/apps/details?id=com.jmdsol.videodownloader.videosaver",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://hdvideosaver.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "{{ $platform->name }}",
+          "item": "{{ url('/' . $platform->slug) }}"
+        }
+      ]
+    }
+    </script>
+    @if(count($faqs) > 0)
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "name": "Frequently Asked Questions - {{ $platform->name }}",
+      "url": "{{ url('/' . $platform->slug) }}",
+      "publisher": {
+        "@id": "https://hdvideosaver.com/#organization"
+      },
+      "mainEntity": [
+        @foreach($faqs as $index => $faq)
+        {
+          "@type": "Question",
+          "name": "{{ strip_tags($faq->question) }}",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "{{ strip_tags($faq->answer) }}"
+          }
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+      ]
+    }
+    </script>
+    @endif
 
     <style>
         :root {
