@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     dlUrl = `https://hdvideosaver.com/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
                 }
-            } else if (needsQueue && m.type === 'video') {
+            } else if ((needsQueue && m.type === 'video') || (m.extension && (m.extension.toUpperCase() === 'M3U8' || m.extension.toUpperCase() === 'MPD'))) {
                 dlUrl = `https://hdvideosaver.com/merge-download?video_url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&source_url=${encodeURIComponent(originalUrl)}${vcodecParam}${heightParam}${uaParam}${refParam}${cookieParam}${formatIdParam}`;
             } else if (m.has_audio && !needsProxy) {
                 dlUrl = `https://hdvideosaver.com/direct-download?url=${encodeURIComponent(m.url)}&title=${encodeURIComponent(data.title)}&ext=${m.extension}&quality=${encodeURIComponent(m.quality)}&source_url=${encodeURIComponent(originalUrl)}`;
