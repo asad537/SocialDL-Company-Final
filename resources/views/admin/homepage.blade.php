@@ -184,7 +184,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
-    <script src="{{ asset('assets/js/editorjs-manager.js') }}"></script>
+    <script src="{{ asset('assets/js/editorjs-manager.js') }}?v={{ time() }}"></script>
 
     <script>
         let heroEditor;
