@@ -162,6 +162,20 @@
             top: 0 !important;
         }
 
+        /* Editor JS Typography Styles */
+        .editor-content h1 { font-size: 2.2rem; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 800; line-height: 1.2; color: #111827; }
+        .editor-content h2 { font-size: 1.8rem; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 700; line-height: 1.3; color: #111827; }
+        .editor-content h3 { font-size: 1.4rem; margin-top: 1.2em; margin-bottom: 0.5em; font-weight: 700; line-height: 1.4; color: #111827; }
+        .editor-content h4 { font-size: 1.15rem; margin-top: 1.2em; margin-bottom: 0.5em; font-weight: 700; color: #111827; }
+        .editor-content p { margin-bottom: 1.2em; line-height: 1.8; color: #000; font-size: 0.95rem; }
+        .editor-content ul, .editor-content ol { margin-bottom: 1.2em; padding-left: 2em; color: #000; font-size: 0.95rem; }
+        .editor-content li { margin-bottom: 0.5em; }
+        .editor-content a { color: #3B82F6; text-decoration: underline; }
+        .editor-content blockquote { border-left: 4px solid #FFB800; padding-left: 1em; margin: 1.5em 0; font-style: italic; color: #4B5563; }
+        .editor-content img { max-width: 100%; border-radius: 8px; margin: 1.5em auto; display: block; }
+        .editor-content strong, .editor-content b { font-weight: 700; }
+        .editor-content i, .editor-content em { font-style: italic; }
+
         /* Prevent horizontal scroll */
         html {
             overflow-x: hidden;
@@ -2302,7 +2316,7 @@
                 style="position:relative; overflow:hidden; max-height:380px; transition: max-height 0.5s ease; text-align:justify;">
 
                 @if (!empty($settings->hero_description))
-                    <div style="font-size: 0.95rem; color: #000000ff; line-height: 1.8;">
+                    <div class="editor-content">
                         {!! App\Models\Blog::renderEditorJS($settings->hero_description) !!}
                     </div>
                 @else
