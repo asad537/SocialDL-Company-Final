@@ -26,9 +26,10 @@ class MediaExtractorService
         $platform = PlatformDetector::detect($url);
 
         // Platforms where RapidAPI is PRIMARY (yt-dlp needs auth or proxy blocks them)
-        $rapidApiPrimary  = ['LinkedIn', 'Snapchat'];
+        // RapidAPI Primary check
+        $rapidApiPrimary = ['LinkedIn', 'Snapchat', 'Instagram', 'TikTok', 'Likee', 'Twitter', 'Dailymotion', 'Reddit', 'Facebook'];
         // Platforms where RapidAPI is FALLBACK if yt-dlp fails (YouTube removed to strictly enforce yt-dlp)
-        $rapidApiFallback = ['TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat'];
+        $rapidApiFallback = ['TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat', 'Dailymotion', 'Reddit', 'Likee', 'Twitter'];
 
         $result = null;
 
