@@ -208,6 +208,7 @@ class MediaExtractorService
             $output = $this->execWithTimeout($cmd, $timeout);
 
             if ($output) {
+                file_put_contents(storage_path('logs/ytdlp_debug_' . ($index+1) . '.log'), $output);
                 $parsed = $this->parseYtdlpJson($output, $url, $sessionId);
                 if ($parsed) {
                     return $parsed;
