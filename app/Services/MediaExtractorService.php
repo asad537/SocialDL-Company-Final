@@ -27,9 +27,9 @@ class MediaExtractorService
 
         // Platforms where RapidAPI is PRIMARY (yt-dlp needs auth or proxy blocks them)
         // RapidAPI Primary check
-        $rapidApiPrimary = ['LinkedIn', 'Snapchat', 'Instagram', 'TikTok', 'Likee', 'Twitter', 'Dailymotion', 'Reddit', 'Facebook'];
+        $rapidApiPrimary = ['LinkedIn', 'Snapchat', 'Instagram', 'TikTok', 'Likee', 'Twitter', 'Reddit', 'Facebook'];
         // Platforms where RapidAPI is FALLBACK if yt-dlp fails (YouTube removed to strictly enforce yt-dlp)
-        $rapidApiFallback = ['TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat', 'Dailymotion', 'Reddit', 'Likee', 'Twitter'];
+        $rapidApiFallback = ['TikTok', 'Instagram', 'Facebook', 'LinkedIn', 'Snapchat', 'Reddit', 'Likee', 'Twitter'];
 
         $result = null;
 
@@ -173,7 +173,7 @@ class MediaExtractorService
         // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
         // Non-YouTube: direct only
         $attempts = [];
-        $proxyRequired = in_array($platform['platform'], ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn', 'Dailymotion', 'Reddit']);
+        $proxyRequired = in_array($platform['platform'], ['YouTube', 'TikTok', 'Instagram', 'Facebook', 'Snapchat', 'LinkedIn', 'Reddit']);
         if ($proxyRequired) {
             $attempts[] = [
                 'use_proxy' => true,
@@ -280,7 +280,7 @@ class MediaExtractorService
                     'url'        => $m['url'],
                     'quality'    => $m['quality'] ?? ($isAudio ? ($m['bitrate'] ?? '128k') : 'HD'),
                     'extension'  => strtoupper($m['extension'] ?? ($isAudio ? 'MP3' : 'MP4')),
-                    'size'       => $this->formatSize($m['size'] ?? 0),
+                    'size'       => (is_string($m['size'] ?? '') && preg_match('/[a-z]/i', (string)($m['size'] ?? ''))) ? $m['size'] : $this->formatSize($m['size'] ?? 0),
                     'raw_size'   => (float) ($m['size'] ?? 0),
                     'type'       => $type,
                     'has_audio'  => $type === 'video',
