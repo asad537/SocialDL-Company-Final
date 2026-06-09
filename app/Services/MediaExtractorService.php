@@ -522,7 +522,8 @@ class MediaExtractorService
             'PATH' => getenv('PATH') ?: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             'HOME' => getenv('HOME') ?: '/var/www',
             'LANG' => 'en_US.UTF-8',
-            'LC_ALL' => 'en_US.UTF-8'
+            'LC_ALL' => 'en_US.UTF-8',
+            'PYTHONIOENCODING' => 'utf-8'
         ];
 
         $process = proc_open($cmd, $descriptorspec, $pipes, null, $env);
