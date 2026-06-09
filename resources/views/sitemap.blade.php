@@ -7,37 +7,37 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>{{ url('/download/') }}</loc>
+        <loc>{{ url('/download') . '/' }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>{{ url('/faqs/') }}</loc>
+        <loc>{{ url('/faqs') . '/' }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>{{ url('/help-center/') }}</loc>
+        <loc>{{ url('/help-center') . '/' }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>{{ url('/privacy-policy/') }}</loc>
+        <loc>{{ url('/privacy-policy') . '/' }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>{{ url('/terms-of-service/') }}</loc>
+        <loc>{{ url('/terms-of-service') . '/' }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>{{ url('/disclaimer/') }}</loc>
+        <loc>{{ url('/disclaimer') . '/' }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
@@ -45,7 +45,7 @@
 
     @foreach($platforms as $platform)
         <url>
-            <loc>{{ url('/' . $platform->slug . '/') }}</loc>
+            <loc>{{ url('/' . $platform->slug) . '/' }}</loc>
             <lastmod>{{ $platform->updated_at ? $platform->updated_at->tz('UTC')->toAtomString() : now()->tz('UTC')->toAtomString() }}</lastmod>
             <changefreq>weekly</changefreq>
             <priority>0.9</priority>
@@ -54,7 +54,7 @@
 
     @foreach($blogs as $blog)
         <url>
-            <loc>{{ url('/blog/' . $blog->slug . '/') }}</loc>
+            <loc>{{ url('/blog/' . $blog->slug) . '/' }}</loc>
             <lastmod>{{ $blog->updated_at ? $blog->updated_at->tz('UTC')->toAtomString() : now()->tz('UTC')->toAtomString() }}</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
@@ -63,7 +63,7 @@
 
     @foreach($guides as $guide)
         <url>
-            <loc>{{ url('/guide/' . $guide->slug . '/') }}</loc>
+            <loc>{{ url('/guide/' . $guide->slug) . '/' }}</loc>
             <lastmod>{{ $guide->updated_at ? $guide->updated_at->tz('UTC')->toAtomString() : now()->tz('UTC')->toAtomString() }}</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
