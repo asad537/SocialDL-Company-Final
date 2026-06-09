@@ -4,7 +4,7 @@
 <head>
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/hero_section.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
     <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -636,7 +636,8 @@
             min-width: 300px;
         }
 
-        .feature-content h2 {
+        .feature-content h2,
+        .feature-content h3.feature-title {
             font-size: 1.3rem !important;
             font-weight: 700 !important;
             margin-bottom: 0.8rem !important;
@@ -644,7 +645,9 @@
             text-align: left !important;
         }
 
-        .feature-content h3 {
+        .feature-content h3,
+        .feature-content span.feature-subcaption {
+            display: block;
             font-size: 0.95rem;
             font-weight: 700;
             color: #212121;
@@ -1231,7 +1234,7 @@
             margin-right: 0;
         }
 
-        .callout-top-right .callout-inner h3 {
+        .callout-top-right .callout-inner span.callout-title {
             margin-bottom: 0;
         }
 
@@ -1244,7 +1247,7 @@
             margin-right: -38px;
         }
 
-        .callout-middle-left .callout-inner h3 {
+        .callout-middle-left .callout-inner span.callout-title {
             margin-bottom: 0;
         }
 
@@ -1257,7 +1260,8 @@
             margin-right: 0;
         }
 
-        .callout-inner h3 {
+        .callout-inner span.callout-title {
+            display: block;
             font-size: 0.95rem;
             font-weight: 800;
             color: #FFB800;
@@ -1362,7 +1366,8 @@
             text-align: left;
         }
 
-        .hw-callout h3 {
+        .hw-callout span.hw-callout-title {
+            display: block;
             font-size: 0.95rem;
             font-weight: 800;
             color: #FFB800;
@@ -1442,7 +1447,8 @@
                 max-width: 132px;
             }
 
-            .mobile-overview-note h4 {
+            .mobile-overview-note span.mobile-overview-note-title {
+                display: block;
                 color: #ffb800;
                 font-size: 0.84rem !important;
                 font-weight: 800;
@@ -1499,7 +1505,7 @@
                 text-align: center !important;
             }
 
-            .mobile-overview-note.center-bottom h4,
+            .mobile-overview-note.center-bottom span.mobile-overview-note-title,
             .mobile-overview-note.center-bottom p {
                 text-align: center !important; line-height: 1.45; }
 
@@ -1711,7 +1717,8 @@
             object-fit: contain;
         }
 
-        .why-choose-card h3 {
+        .why-choose-card span.why-choose-card-title {
+            display: block;
             font-size: 1rem;
             font-weight: 800;
             color: #0F172A;
@@ -1887,7 +1894,7 @@
         </picture>
         <div class="hero-container">
             <div class="hero-content">
-                <h1>{!! $settings->hero_heading ?? 'HD Video & Music Downloader for<br>Seamless Downloads' !!}</h1>
+                <h1>{{ strip_tags(str_replace(['<br>', '<br/>', '<br />'], ' ', $settings->hero_heading ?? 'HD Video & Music Downloader for Seamless Downloads')) }}</h1>
                 <a href="{{ $settings->hero_button_url ?? '#' }}" class="hero-btn">
                     {{ $settings->hero_button_text ?? 'Download Video Saver' }}
                 </a>
@@ -1970,7 +1977,7 @@
                 <img src="/images/mobile1.png" alt="Mobile App" class="feature-image">
             </div>
             <div class="feature-content">
-                <h2>Experience High-Speed Downloads on Any Device</h2>
+                <h3 class="feature-title">Experience High-Speed Downloads on Any Device</h3>
                 <p style="line-height: 1.45;">Our downloader is fully optimized for mobile devices. Save your favorite videos in high
                     resolution directly to your phone gallery with just a single tap. Works seamlessly in your
                     browser without any app installation.</p>
@@ -1988,8 +1995,8 @@
                 <img src="/images/mobile4.png" alt="Status Saver" class="feature-image">
             </div>
             <div class="feature-content">
-                <h2>Status & Media Saver</h2>
-                <h3>Save WhatsApp statuses, Instagram photos, and more before they disappear.</h3>
+                <h3 class="feature-title">Status & Media Saver</h3>
+                <span class="feature-subcaption">Save WhatsApp statuses, Instagram photos, and more before they disappear.</span>
                 <p style="line-height: 1.45;">Never miss out on your favorite social moments again. Video Saver makes it easy to download
                     and keep status videos, stories, and images directly on your device. Quickly browse, save,
                     and revisit content anytime you want.</p>
@@ -2002,8 +2009,8 @@
                 <img src="/images/mobile5.png" alt="Fast Downloads" class="feature-image">
             </div>
             <div class="feature-content">
-                <h2>Smarter, Faster Downloads</h2>
-                <h3>Save high-quality videos and music in just a few taps quick, smooth, and hassle-free.</h3>
+                <h3 class="feature-title">Smarter, Faster Downloads</h3>
+                <span class="feature-subcaption">Save high-quality videos and music in just a few taps quick, smooth, and hassle-free.</span>
                 <p style="line-height: 1.45;">Choose the quality that fits your needs, from standard to ultra-clear formats. With improved
                     performance and optimized speed, Video Saver delivers a faster and more reliable downloading
                     experience.</p>
@@ -2016,8 +2023,8 @@
                 <img src="/images/mobile2.png" alt="Video to MP3" class="feature-image">
             </div>
             <div class="feature-content">
-                <h2>Video to MP3 Converter</h2>
-                <h3>Turn your favorite videos into MP3 and create your own music collection with ease.</h3>
+                <h3 class="feature-title">Video to MP3 Converter</h3>
+                <span class="feature-subcaption">Turn your favorite videos into MP3 and create your own music collection with ease.</span>
                 <p style="line-height: 1.45;">Video Saver doubles as a powerful audio converter for music lovers. Download tracks, extract
                     audio from videos, and save them in high-quality MP3 format. It’s a fast, smooth, and
                     reliable way to build your personal library.</p>
@@ -2030,8 +2037,8 @@
                 <img src="/images/mobile3.png" alt="Wallpapers" class="feature-image">
             </div>
             <div class="feature-content">
-                <h2>Endless Wallpaper Collection</h2>
-                <h3>Browse a vast library of stunning wallpapers and download your favorites with ease.</h3>
+                <h3 class="feature-title">Endless Wallpaper Collection</h3>
+                <span class="feature-subcaption">Browse a vast library of stunning wallpapers and download your favorites with ease.</span>
                 <p style="line-height: 1.45;">The Video Saver app offers a wide range of categories, including nature, abstract, minimal,
                     and more. Discover fresh designs daily, get personalized recommendations, and save
                     high-quality wallpapers directly to your device.</p>
@@ -2066,7 +2073,7 @@
                 <!-- Top Right: Search -->
                 <div class="callout-top-right">
                     <div class="callout-inner">
-                        <h3>Search</h3>
+                        <span class="callout-title">Search</span>
                         <p style="line-height: 1.45;">Sub-caption: Discover the latest trends, insights, and useful information now.</p>
                     </div>
                 </div>
@@ -2074,7 +2081,7 @@
                 <!-- Middle Left: Supported Sites -->
                 <div class="callout-middle-left">
                     <div class="callout-inner">
-                        <h3>Supported Sites</h3>
+                        <span class="callout-title">Supported Sites</span>
                         <p style="line-height: 1.45;">Stay connected, share moments, and grow your online presence fast.</p>
                     </div>
                 </div>
@@ -2082,7 +2089,7 @@
                 <!-- Bottom Right: Navigation Bar -->
                 <div class="callout-bottom-right">
                     <div class="callout-inner">
-                        <h3>Navigation Bar</h3>
+                        <span class="callout-title">Navigation Bar</span>
                         <p style="line-height: 1.45;">User can access Home page, Progress page, My File page.</p>
                     </div>
                 </div>
@@ -2113,20 +2120,20 @@
 
                 <!-- Left Top: Paste Link -->
                 <div class="hw-paste-link hw-callout">
-                    <h3>Paste Link</h3>
+                    <span class="hw-callout-title">Paste Link</span>
                     <p style="line-height: 1.45;">Paste your copied link here to fetch the video instantly.</p>
                 </div>
 
                 <!-- Left Bottom: Format & Quality -->
                 <div class="hw-format-quality hw-callout">
-                    <h3>Format &amp; Quality</h3>
+                    <span class="hw-callout-title">Format &amp; Quality</span>
                     <p style="line-height: 1.45;">Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
                         source).</p>
                 </div>
 
                 <!-- Right Top: Download Video -->
                 <div class="hw-download-video hw-callout">
-                    <h3>Download Video</h3>
+                    <span class="hw-callout-title">Download Video</span>
                     <p style="line-height: 1.45;">Download your favorite videos easily and watch them offline anytime.</p>
                 </div>
 
@@ -2143,17 +2150,17 @@
 
             <div class="mobile-overview-block">
                 <div class="mobile-overview-note left-top">
-                    <h4>Search</h4>
+                    <span class="mobile-overview-note-title">Search</span>
                     <p style="line-height: 1.45;">Sub-caption: Discover the latest trends, insights, and useful information now.</p>
                 </div>
                 <img class="mobile-overview-phone" src="/images/mobile/Image%201%20New%20Mobile.png"
                     alt="Everything you need app overview">
                 <div class="mobile-overview-note left-bottom">
-                    <h4>Supported Sites</h4>
+                    <span class="mobile-overview-note-title">Supported Sites</span>
                     <p style="line-height: 1.45;">Stay connected, share moments and grow your online presence fast.</p>
                 </div>
                 <div class="mobile-overview-note center-bottom">
-                    <h4>Navigation Bar</h4>
+                    <span class="mobile-overview-note-title">Navigation Bar</span>
                     <p style="line-height: 1.45;">User can access Home page, Progress page, My File page.</p>
                 </div>
             </div>
@@ -2162,17 +2169,17 @@
 
             <div class="mobile-overview-block">
                 <div class="mobile-overview-note right-bottom">
-                    <h4>Paste Link</h4>
+                    <span class="mobile-overview-note-title">Paste Link</span>
                     <p style="line-height: 1.45;">Paste your copied link here to fetch the video instantly.</p>
                 </div>
                 <img class="mobile-overview-phone" src="/images/mobile/Image%202%20Mobile%20New.png"
                     alt="How it works app overview">
                 <div class="mobile-overview-note right-top">
-                    <h4>Download Video</h4>
+                    <span class="mobile-overview-note-title">Download Video</span>
                     <p style="line-height: 1.45;">Download your favorite videos easily and watch them offline anytime.</p>
                 </div>
                 <div class="mobile-overview-note center-bottom">
-                    <h4>Format &amp; Quality</h4>
+                    <span class="mobile-overview-note-title">Format &amp; Quality</span>
                     <p style="line-height: 1.45;">Click "Download", then choose your format (MP4/MP3) and quality (up to 4K, depending on the
                         source).</p>
                 </div>
@@ -2287,7 +2294,7 @@
                     <div class="why-choose-icon">
                         <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
-                    <h3>Instant Link Analysis</h3>
+                    <span class="why-choose-card-title">Instant Link Analysis</span>
                     <p style="line-height: 1.45;">Paste a
                         link and get results in seconds — often faster than other downloaders.</p>
                 </div>
@@ -2297,7 +2304,7 @@
                     <div class="why-choose-icon">
                         <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
-                    <h3>Multilingual Experience</h3>
+                    <span class="why-choose-card-title">Multilingual Experience</span>
                     <p style="line-height: 1.45;">Use HD
                         Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
@@ -2307,7 +2314,7 @@
                     <div class="why-choose-icon">
                         <img src="/images/icon-download.svg" alt="Quality">
                     </div>
-                    <h3>Flexible Quality Choices</h3>
+                    <span class="why-choose-card-title">Flexible Quality Choices</span>
                     <p style="line-height: 1.45;">Pick the
                         quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
@@ -2317,7 +2324,7 @@
                     <div class="why-choose-icon">
                         <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
-                    <h3>Wide Platform Support</h3>
+                    <span class="why-choose-card-title">Wide Platform Support</span>
                     <p style="line-height: 1.45;">Supports
                         YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
@@ -2327,7 +2334,7 @@
                     <div class="why-choose-icon">
                         <img src="/images/icon-settings.svg" alt="Device">
                     </div>
-                    <h3>Works on Any Device</h3>
+                    <span class="why-choose-card-title">Works on Any Device</span>
                     <p style="line-height: 1.45;">Download
                         seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
@@ -2337,7 +2344,7 @@
                     <div class="why-choose-icon">
                         <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
-                    <h3>Privacy-First by Design</h3>
+                    <span class="why-choose-card-title">Privacy-First by Design</span>
                     <p style="line-height: 1.45;">Your
                         privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>
@@ -2398,6 +2405,10 @@
                 line-height: 1.7;
             }
 
+            .faq-answer-inner p {
+                margin: 0;
+            }
+
             .faq-item.active .faq-answer {
                 max-height: 500px;
             }
@@ -2431,12 +2442,12 @@
                     @foreach ($faqs as $faq)
                         <div class="faq-item">
                             <div class="faq-question">
-                                {{ $faq->question }}
+                                <span>{{ $faq->question }}</span>
                                 <i class="fas fa-plus toggle-icon"></i>
                             </div>
                             <div class="faq-answer">
                                 <div class="faq-answer-inner">
-                                    {{ $faq->answer }}
+                                    <p>{{ $faq->answer }}</p>
                                 </div>
                             </div>
                         </div>
@@ -2474,7 +2485,7 @@
                     <!-- Featured Blog (First one) -->
                     @php $featured = $blogs->first(); @endphp
                     <div class="blog-featured">
-                        <a href="{{ $featured->slug }}" style="text-decoration:none;">
+                        <a href="/blog/{{ $featured->slug }}/" style="text-decoration:none;">
                             <div class="featured-img-wrap">
                                 <img src="{{ $featured->featured_image ?: 'https://via.placeholder.com/800x450' }}"
                                     alt="{{ $featured->image_alt }}">
@@ -2484,7 +2495,7 @@
                             <span>{{ $featured->author_name ?: 'Admin' }}</span>
                             <span>{{ $featured->created_at->format('M d, Y') }}</span>
                         </div>
-                        <a href="{{ $featured->slug }}" style="text-decoration:none;">
+                        <a href="/blog/{{ $featured->slug }}/" style="text-decoration:none;">
                             <h3>{{ $featured->title }}</h3>
                         </a>
                         <p style="line-height: 1.45;">{{ Str::limit($featured->description, 180) }}</p>
@@ -2494,7 +2505,7 @@
                     <div class="blog-sidebar">
                         @foreach ($blogs->skip(1) as $blog)
                             <div class="blog-item-sm">
-                                <a href="{{ $blog->slug }}" class="sm-img-wrap">
+                                <a href="/blog/{{ $blog->slug }}/" class="sm-img-wrap">
                                     <img src="{{ $blog->featured_image ?: 'https://via.placeholder.com/200x200' }}"
                                         alt="{{ $blog->image_alt }}">
                                 </a>
@@ -2503,14 +2514,14 @@
                                         <span>{{ $blog->author_name ?: 'Admin' }}</span>
                                         <span>{{ $blog->created_at->format('M d, Y') }}</span>
                                     </div>
-                                    <a href="{{ $blog->slug }}" style="text-decoration:none;">
+                                    <a href="/blog/{{ $blog->slug }}/" style="text-decoration:none;">
                                         <h4>{{ $blog->title }}</h4>
                                     </a>
                                 </div>
                             </div>
                         @endforeach
 
-                        <a href="/helpcenter/" class="btn-read-all">Read All</a>
+                        <a href="/help-center/" class="btn-read-all">Read All</a>
                     </div>
                 </div>
             </div>

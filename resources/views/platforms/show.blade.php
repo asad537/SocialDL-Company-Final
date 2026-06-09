@@ -4,7 +4,7 @@
 <head>
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/supporteds.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
     <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,7 +93,7 @@
 
         .hero h1 {
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 800;
             line-height: 1.2;
             color: #111827;
             margin-bottom: 2rem;
@@ -380,7 +380,8 @@
             object-fit: contain;
         }
 
-        .why-choose-card h3 {
+        .why-choose-card span.why-choose-card-title {
+            display: block;
             font-size: 1rem;
             font-weight: 800;
             color: #0F172A;
@@ -451,7 +452,7 @@
                     <i class="fas fa-rocket"></i> SUPPORTED PLATFORMS
                 </div>
                 <h1 class="hero-desktop-title">{{ $platform->h1 ?? 'Download Videos Instantly' }}</h1>
-                <h1 class="hero-mobile-title">Works on Your<br>Favourite Platforms</h1>
+                <h1 class="hero-mobile-title">Works on Your Favourite Platforms</h1>
                 <p class="hero-subtext" style="line-height: 1.45;">Our app lets you download videos from all your favourite social platforms fast,
                     easy &amp; seamless.</p>
                 <div class="hero-mobile-actions">
@@ -495,7 +496,7 @@
                     <div class="why-choose-card-icon">
                         <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
-                    <h3>Instant Link Analysis</h3>
+                    <span class="why-choose-card-title">Instant Link Analysis</span>
                     <p style="line-height: 1.45;">Paste a
                         link and get results in seconds — often faster than other downloaders.</p>
                 </div>
@@ -505,7 +506,7 @@
                     <div class="why-choose-card-icon">
                         <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
-                    <h3>Multilingual Experience</h3>
+                    <span class="why-choose-card-title">Multilingual Experience</span>
                     <p style="line-height: 1.45;">Use HD
                         Video Downloader in multiple languages, including English, Spanish, Hindi, and more.</p>
                 </div>
@@ -515,7 +516,7 @@
                     <div class="why-choose-card-icon">
                         <img src="/images/icon-download.svg" alt="Quality">
                     </div>
-                    <h3>Flexible Quality Choices</h3>
+                    <span class="why-choose-card-title">Flexible Quality Choices</span>
                     <p style="line-height: 1.45;">Pick the
                         quality you want from 144p up to 1080p+ (4K) when available.</p>
                 </div>
@@ -525,7 +526,7 @@
                     <div class="why-choose-card-icon">
                         <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
-                    <h3>Wide Platform Support</h3>
+                    <span class="why-choose-card-title">Wide Platform Support</span>
                     <p style="line-height: 1.45;">Supports
                         YouTube, TikTok, Instagram, Facebook, and more.</p>
                 </div>
@@ -535,7 +536,7 @@
                     <div class="why-choose-card-icon">
                         <img src="/images/icon-settings.svg" alt="Device">
                     </div>
-                    <h3>Works on Any Device</h3>
+                    <span class="why-choose-card-title">Works on Any Device</span>
                     <p style="line-height: 1.45;">Download
                         seamlessly on mobile, tablet, or desktop — no extra apps needed.</p>
                 </div>
@@ -545,7 +546,7 @@
                     <div class="why-choose-card-icon">
                         <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
-                    <h3>Privacy-First by Design</h3>
+                    <span class="why-choose-card-title">Privacy-First by Design</span>
                     <p style="line-height: 1.45;">Your
                         privacy matters. Processing happens locally, with no data storage and reduced security risk.</p>
                 </div>

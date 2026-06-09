@@ -4,7 +4,7 @@
 <head>
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/downloader.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
     <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,7 +91,7 @@
 
         .platform-hero h1 {
             font-size: 2.4rem;
-            font-weight: 600;
+            font-weight: 800;
             line-height: 1.2;
             color: #111827;
             margin-bottom: 1rem;
@@ -474,7 +474,7 @@
                 <div class="hero-badge-main">
                     <i class="fas fa-file-download"></i> Download Guide
                 </div>
-                <h1>How to Install from <br> Play Store</h1>
+                <h1>How to Install from Play Store</h1>
                 <p class="hero-subtext" style="line-height: 1.45;">Follow these simple steps to download and install the app from Google Play
                     Store.</p>
 
@@ -533,10 +533,10 @@
                 <img src="/images/screen4.png" alt="Video Saver App Screenshot 4">
             </div>
         </div>
-
-        {{-- Bottom CTA Banner --}}
-        @include('partials.cta')
     </div>
+
+    {{-- Bottom CTA Banner --}}
+    @include('partials.cta')
 
     @include('partials.footer')
 

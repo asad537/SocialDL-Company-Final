@@ -4,7 +4,7 @@
 <head>
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/faqs.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
     <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -201,7 +201,7 @@
 
         .hero h1 {
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 800;
             line-height: 1.2;
             color: #111827;
             margin-bottom: 2rem;
@@ -361,6 +361,10 @@
             line-height: 1.7;
         }
 
+        .faq-answer-inner p {
+            margin: 0;
+        }
+
         .faq-item.active .faq-answer {
             max-height: 500px;
         }
@@ -410,10 +414,8 @@
                     style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: #FFB800; text-transform: uppercase; margin-bottom: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #FFB800;">
                     <i class="fas fa-question-circle"></i> Find Answers
                 </div>
-                <h1>Answers to Your<br>Common Questions</h1>
-                <p class="hero-subtext" style="line-height: 1.45;">Find everything you need to know about downloading videos, <br>quality settings,
-                    and
-                    platform support.</p>
+                <h1>Answers to Your Common Questions</h1>
+                <p class="hero-subtext" style="line-height: 1.45;">Find everything you need to know about downloading videos, quality settings, and platform support.</p>
 
                 <div class="hero-badges">
                     <div class="hero-badge"><i class="fas fa-bolt"></i> Fast</div>
@@ -432,12 +434,12 @@
                     @foreach($items as $faq)
                         <div class="faq-item">
                             <div class="faq-question">
-                                {{ $faq->question }}
+                                <span>{{ $faq->question }}</span>
                                 <i class="fas fa-plus toggle-icon"></i>
                             </div>
                             <div class="faq-answer">
                                 <div class="faq-answer-inner">
-                                    {{ $faq->answer }}
+                                    <p>{{ $faq->answer }}</p>
                                 </div>
                             </div>
                         </div>

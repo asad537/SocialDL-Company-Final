@@ -306,7 +306,8 @@
         opacity: 0.8;
     }
 
-    .tutorial-step-card h4 {
+    .tutorial-step-card span.tutorial-step-title {
+        display: block;
         font-size: 0.9rem;
         font-weight: 700;
         color: #111827;
@@ -646,7 +647,7 @@
             height: 64px;
         }
 
-        .tutorial-step-card h4 {
+        .tutorial-step-card span.tutorial-step-title {
             font-size: 1rem;
         }
 
@@ -733,7 +734,7 @@
                     <div class="tutorial-thumb step-1" aria-hidden="true">
                         <div class="tutorial-thumb-ui"></div>
                     </div>
-                    <h4>Copy the Video Link</h4>
+                    <span class="tutorial-step-title">Copy the Video Link</span>
                     <p style="line-height: 1.45;">Find the video you want and copy its link from YouTube, TikTok, Instagram, Facebook, or any
                         supported platform.</p>
                 </div>
@@ -745,7 +746,7 @@
                     <div class="tutorial-thumb step-2" aria-hidden="true">
                         <div class="tutorial-thumb-ui"></div>
                     </div>
-                    <h4>Open hdvideosaver.com</h4>
+                    <span class="tutorial-step-title">Open hdvideosaver.com</span>
                     <p style="line-height: 1.45;">Launch your browser and go to VidsSaver.com the fastest online video downloader.</p>
                 </div>
             </div>
@@ -756,7 +757,7 @@
                     <div class="tutorial-thumb step-3" aria-hidden="true">
                         <div class="tutorial-thumb-ui"></div>
                     </div>
-                    <h4>Paste Your Link</h4>
+                    <span class="tutorial-step-title">Paste Your Link</span>
                     <p style="line-height: 1.45;">Paste the copied video URL into the smart search box on our homepage. Auto-detects platform.</p>
                 </div>
             </div>
@@ -780,7 +781,7 @@
                             </div>
                         </div>
                     </div>
-                    <h4>Choose Format &amp; Quality</h4>
+                    <span class="tutorial-step-title">Choose Format &amp; Quality</span>
                     <p style="line-height: 1.45;">Select MP4 (video) or MP3 (audio), and pick quality up to 4K Ultra HD based on source
                         availability.</p>
                 </div>
@@ -796,7 +797,7 @@
                             <span class="tutorial-folder">📁</span>
                         </div>
                     </div>
-                    <h4>Download &amp; Save</h4>
+                    <span class="tutorial-step-title">Download &amp; Save</span>
                     <p style="line-height: 1.45;">Click "Download" file starts automatically. Find it in your device's "Downloads" folder
                         instantly.</p>
                 </div>

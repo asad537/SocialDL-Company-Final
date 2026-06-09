@@ -155,7 +155,7 @@
                     <!-- <li><a href="#supported">Supported Platforms</a></li> -->
                     <li><a href="/download/">Download</a></li>
                     <li><a href="/faqs/">FAQs</a></li>
-                    <li><a href="/helpcenter/">Help center</a></li>
+                    <li><a href="/help-center/">Help center</a></li>
                 </ul>
             </div>
 
@@ -171,7 +171,7 @@
 
                     @forelse($footerPlatforms as $platform)
                         <li>
-                            <a href="{{ route('platforms.show', $platform->slug) }}">{{ $platform->name }}</a>
+                            <a href="{{ route('platforms.show', $platform->slug) }}/">{{ $platform->name }}</a>
                         </li>
                     @empty
                         <li><a href="javascript:void(0)">No platforms available</a></li>
@@ -183,9 +183,9 @@
             <div>
                 <h4 class="footer-col-title">Legal</h4>
                 <ul class="footer-links">
-                    <li><a href="{{ route('legal.privacy') }}">Privacy Policy</a></li>
-                    <li><a href="{{ route('legal.terms') }}">Term of Service</a></li>
-                    <li><a href="{{ route('legal.disclaimer') }}">Disclaimer</a></li>
+                    <li><a href="{{ route('legal.privacy') }}/">Privacy Policy</a></li>
+                    <li><a href="{{ route('legal.terms') }}/">Term of Service</a></li>
+                    <li><a href="{{ route('legal.disclaimer') }}/">Disclaimer</a></li>
                 </ul>
             </div>
 

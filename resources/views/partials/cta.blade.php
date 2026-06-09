@@ -3,13 +3,16 @@
     .bottom-cta {
         background: var(--primary);
         border-radius: 24px;
-        padding: 2.2rem 3rem;
+        padding: 0 3rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 4rem auto; /* Let the container handle outer spacing, just center it and add some vertical margin */
         text-align: left;
         max-width: 900px;
+        width: 100%;
+        min-height: 170px;
+        box-sizing: border-box;
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
@@ -72,6 +75,8 @@
             padding: 2rem 1.5rem;
             gap: 1.5rem;
             margin-top: 3.5rem;
+            height: auto;
+            min-height: auto;
         }
 
         .cta-content h2 {

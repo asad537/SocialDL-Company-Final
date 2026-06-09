@@ -4,7 +4,7 @@
 <head>
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/blog.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
     <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -842,7 +842,7 @@
                     style="display: inline-flex; align-items: center; gap: 8px; background: #fff; padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: #FFB800; text-transform: uppercase; margin-bottom: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1.5px solid #F3F4F6;">
                     <i class="fas fa-file-alt"></i> Blog
                 </div>
-                <h1>Tips, Guides &<br>Latest Updates</h1>
+                <h1>Tips, Guides & Latest Updates</h1>
                 <p class="hero-subtext" style="line-height: 1.45;">Stay informed with helpful tips, how-tos, and updates to get the most out of the
                     app.</p>
 
@@ -889,7 +889,7 @@
                         <img src="{{ $blog->featured_image ?? '/images/placeholder-blog.jpg' }}" alt="{{ $blog->title }}">
                     </div>
                     <div class="card-content">
-                        <h2><a href="{{ route($resource . '.show', $blog->slug) }}">{{ $blog->title }}</a></h2>
+                        <h2><a href="{{ route($resource . '.show', $blog->slug) }}/">{{ $blog->title }}</a></h2>
                         <p class="card-excerpt" style="line-height: 1.45;">{{ $blog->description }}</p>
                         <div class="card-footer">
                             <span>{{ $blog->author_name ?? 'Admin' }}</span>
@@ -915,7 +915,7 @@
                 <h3 class="widget-title">Popular {{ $resource === 'guide' ? 'Guides' : 'Articles' }}</h3>
                 <div class="popular-list">
                     @foreach($popular as $pop)
-                        <a href="{{ route($resource . '.show', $pop->slug) }}" class="popular-item">
+                        <a href="{{ route($resource . '.show', $pop->slug) }}/" class="popular-item">
                             <div class="pop-img">
                                 <img src="{{ $pop->featured_image ?? '/images/placeholder-blog.jpg' }}" alt="">
                             </div>

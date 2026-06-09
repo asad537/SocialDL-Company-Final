@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
     <link rel="apple-touch-icon" href="/images/logofinal.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -596,7 +596,7 @@
                 <div class="sidebar-widget-title">Popular Guides</div>
                 <div class="popular-list">
                     @foreach($related as $item)
-                    <a href="{{ route($type . '.show', $item->slug) }}" class="popular-item">
+                    <a href="{{ route($type . '.show', $item->slug) }}/" class="popular-item">
                         <div class="pop-avatar">
                             @if($item->featured_image)
                                 <img src="{{ $item->featured_image }}" alt="">
@@ -672,7 +672,7 @@
             @if($blog->tags)
             <div class="post-tags">
                 @foreach(explode(',', $blog->tags) as $tag)
-                    <a href="/helpcenter?category={{ trim($tag) }}" class="tag-pill">#{{ trim($tag) }}</a>
+                    <a href="/help-center/?category={{ trim($tag) }}" class="tag-pill">#{{ trim($tag) }}</a>
                 @endforeach
             </div>
             @endif
@@ -686,11 +686,11 @@
         <div class="related-inner">
             <div class="related-header">
                 <h2>Related Articles</h2>
-                <a href="/helpcenter?resource={{ $type }}">View all {{ $type === 'guide' ? 'guides' : 'posts' }} →</a>
+                <a href="/help-center/?resource={{ $type }}">View all {{ $type === 'guide' ? 'guides' : 'posts' }} →</a>
             </div>
             <div class="related-grid">
                 @foreach($related as $post)
-                <a href="{{ route($type . '.show', $post->slug) }}" class="related-card">
+                <a href="{{ route($type . '.show', $post->slug) }}/" class="related-card">
                     <img src="{{ $post->featured_image ?: '/images/placeholder-blog.jpg' }}" alt="" class="related-card-img">
                     <div class="related-card-body">
                         <h4>{{ $post->title }}</h4>
