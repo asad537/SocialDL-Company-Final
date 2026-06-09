@@ -165,9 +165,9 @@ class MediaExtractorService
             $baseCmd .= ' --extractor-args "facebook:max_video_size=1080"';
         }
 
-        // User agent
+        // User agent and Impersonation (Bypasses bot protections like FB checkpoint instantly)
         $ua = $this->config['extraction']['user_agent'] ?? 'Mozilla/5.0';
-        $baseCmd .= ' --user-agent ' . escapeshellarg($ua);
+        $baseCmd .= ' --user-agent ' . escapeshellarg($ua) . ' --impersonate "chrome"';
 
         // Define execution options
         // YouTube: go proxy-first (Hetzner datacenter IP is always bot-checked by YouTube directly)
