@@ -518,7 +518,14 @@ class MediaExtractorService
             2 => ["pipe", "w"]
         ];
 
-        $process = proc_open($cmd, $descriptorspec, $pipes);
+        $env = [
+            'PATH' => getenv('PATH') ?: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            'HOME' => getenv('HOME') ?: '/var/www',
+            'LANG' => 'en_US.UTF-8',
+            'LC_ALL' => 'en_US.UTF-8'
+        ];
+
+        $process = proc_open($cmd, $descriptorspec, $pipes, null, $env);
         if (!is_resource($process)) return null;
 
         stream_set_blocking($pipes[1], false);
