@@ -95,9 +95,9 @@ class BlogController extends Controller
 
     public function filter(Request $request)
     {
-        session(['helpcenter_resource' => $request->resource]);
-        session(['helpcenter_category' => $request->category]);
-        return redirect()->route('blogs.index');
+        session(['helpcenter_resource' => $request->request->get('resource') ?: $request->resource]);
+        session(['helpcenter_category' => $request->request->get('category') ?: $request->category]);
+        return redirect('/help-center/');
     }
 
     public function publicIndex(Request $request)
