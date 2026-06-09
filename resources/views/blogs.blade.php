@@ -24,7 +24,7 @@
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://hdvideosaver.com/"
+          "item": "https://hdvideosaver.com"
         },
         {
           "@type": "ListItem",
