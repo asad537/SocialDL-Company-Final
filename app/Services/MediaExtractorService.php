@@ -531,7 +531,11 @@ class MediaExtractorService
             }
 
             $status = proc_get_status($process);
-            if (!$status['running']) break;
+            if (!$status['running']) {
+                stream_set_blocking($pipes[1], true);
+                $output .= stream_get_contents($pipes[1]);
+                break;
+            }
 
             if ((time() - $start) > $timeoutSeconds) {
                 proc_terminate($process, 9);
