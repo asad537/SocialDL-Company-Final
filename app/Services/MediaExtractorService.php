@@ -359,7 +359,7 @@ class MediaExtractorService
                 $f['vcodec'] = 'h264'; // ensure it passes filters
             } else {
                 // Skip HLS/DASH manifest formats (manifest.googlevideo.com, .mpd, .m3u8)
-                if (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false || strpos($f['url'], '.mpd') !== false || strpos($f['url'], '.m3u8') !== false) {
+                if ($source !== 'dailymotion' && (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false || strpos($f['url'], '.mpd') !== false || strpos($f['url'], '.m3u8') !== false)) {
                     continue;
                 }
             }
