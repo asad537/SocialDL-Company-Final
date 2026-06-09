@@ -179,6 +179,11 @@ class MediaExtractorService
                 'use_proxy' => true,
                 'session_id' => substr(md5(uniqid(microtime(), true)), 0, 8)
             ];
+            // If proxy fails, try without proxy as fallback
+            $attempts[] = [
+                'use_proxy' => false,
+                'session_id' => null
+            ];
         } else {
             $attempts[] = [
                 'use_proxy' => false,
