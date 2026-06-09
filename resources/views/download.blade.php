@@ -175,11 +175,11 @@
         }
 
         .platform-hero h1 {
-            font-size: 2.4rem;
+            font-size: 2rem;
             font-weight: 800;
             line-height: 1.2;
             color: #111827;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
             text-align: left;
         }
 
@@ -361,11 +361,11 @@
             }
 
             .platform-hero h1 {
-                font-size: clamp(2rem, 5.9vw, 2.35rem);
+                font-size: clamp(1.45rem, 6vw, 1.75rem);
                 font-weight: 800;
-                line-height: 1.18;
+                line-height: 1.16;
                 color: #000;
-                margin: 0 auto 1.25rem;
+                margin: 0 auto 1.45rem;
                 max-width: 470px;
                 text-align: center;
             }
