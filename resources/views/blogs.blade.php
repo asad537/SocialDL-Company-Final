@@ -290,10 +290,10 @@
 
         .blog-header h1 {
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 800;
             line-height: 1.2;
             color: #111827;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             text-align: left;
         }
 
@@ -720,11 +720,11 @@
             }
 
             .blog-header h1 {
-                font-size: clamp(1.6rem, 6vw, 2rem);
+                font-size: clamp(1.45rem, 6vw, 1.75rem);
                 font-weight: 800;
-                line-height: 1.2;
+                line-height: 1.16;
                 text-align: center;
-                margin-bottom: 1rem;
+                margin-bottom: 1.45rem;
                 position: static;
             }
 
