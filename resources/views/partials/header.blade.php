@@ -584,7 +584,18 @@
         border: 1px solid rgba(0,0,0,0.05);
         z-index: 1000;
     }
-    .nav-dropdown-wrap:hover .nav-dropdown {
+    /* Invisible bridge to prevent hover loss between trigger and dropdown */
+    .nav-dropdown::before {
+        content: '';
+        position: absolute;
+        top: -15px;
+        left: 0;
+        width: 100%;
+        height: 15px;
+        background: transparent;
+    }
+    .nav-dropdown-wrap:hover .nav-dropdown,
+    .nav-dropdown-wrap.open .nav-dropdown {
         display: block;
     }
     .dropdown-grid {
@@ -794,6 +805,26 @@
             if (m) m.style.display = 'none';
             const mm = document.getElementById('lang-menu-mobile');
             if (mm) mm.style.display = 'none';
+        }
+
+        // Close nav dropdown if clicking outside
+        const navDropdownWrap = document.querySelector('.nav-dropdown-wrap');
+        if (navDropdownWrap && !e.target.closest('.nav-dropdown-wrap')) {
+            navDropdownWrap.classList.remove('open');
+        }
+    });
+
+    // Toggle dropdown on click for Supported Platforms
+    document.addEventListener('DOMContentLoaded', function() {
+        const trigger = document.querySelector('.dropdown-trigger');
+        if (trigger) {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                const wrap = this.closest('.nav-dropdown-wrap');
+                if (wrap) {
+                    wrap.classList.toggle('open');
+                }
+            });
         }
     });
 
