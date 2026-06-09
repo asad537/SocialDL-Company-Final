@@ -97,7 +97,7 @@ class BlogController extends Controller
     {
         session(['helpcenter_resource' => $request->request->get('resource') ?: $request->resource]);
         session(['helpcenter_category' => $request->request->get('category') ?: $request->category]);
-        return redirect('/help-center/');
+        return redirect()->away(url('/help-center') . '/');
     }
 
     public function publicIndex(Request $request)
