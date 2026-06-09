@@ -391,72 +391,38 @@
             margin-bottom: 1rem;
         }
 
-        /* ── FAQs ── */
-        .faq-section {
-            padding: 4rem 0;
-            border-top: 1px solid #f1f5f9;
-            background: #fafafa;
-        }
 
-        .faq-wrap {
-            border: 1.5px solid #EBEBEB;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #fff;
-            margin-bottom: 0.8rem; line-height: 1.45; }
-
-        .faq-btn {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 1.5rem;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #111827;
-            text-align: left;
-        }
-
-        .faq-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-body p {
-            padding: 0 1.5rem 1.2rem;
-            font-size: 0.95rem;
-            color: #000;
-            line-height: 1.45;
-        }
+        /* --- Shared UI CSS --- */
 
         .why-choose-section {
             padding: 3rem 0;
-            background: #fff;
+            background: #ffffff;
         }
 
-        .why-choose-heading {
+        .why-choose-container {
+            max-width: 1050px;
+        }
+
+        .why-choose-header {
             text-align: center;
             margin-bottom: 2.5rem;
         }
 
-        .why-choose-heading h2 {
+        .why-choose-title {
             font-size: 1.8rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #0F0F0F;
             margin-bottom: 0.75rem;
             letter-spacing: -0.02em;
         }
 
-        .why-choose-heading p {
+        .why-choose-desc {
             font-size: 0.93rem;
             color: #000;
             max-width: 620px;
             margin: 0 auto;
-            line-height: 1.45;
+            line-height: 1.75;
+            text-align: center !important;
         }
 
         .why-choose-grid {
@@ -466,14 +432,20 @@
         }
 
         .why-choose-card {
-            background: #fff;
-            border: 1.5px solid #F0F1F3;
+            background: #ffffff;
+            border: 1.5px solid #FFB800;
             border-radius: 18px;
             padding: 1.5rem 1.8rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .why-choose-card-icon {
+        .why-choose-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(255, 184, 0, 0.15);
+        }
+
+        .why-choose-icon {
             width: 60px;
             height: 60px;
             background: #FEF3C7;
@@ -484,7 +456,7 @@
             margin-bottom: 1rem;
         }
 
-        .why-choose-card-icon img {
+        .why-choose-icon img {
             width: 35px;
             height: 35px;
             object-fit: contain;
@@ -496,6 +468,7 @@
             font-weight: 800;
             color: #0F172A;
             margin-bottom: 0.45rem;
+            text-align: left !important;
         }
 
         .why-choose-card p {
@@ -503,10 +476,8 @@
             color: #000;
             line-height: 1.45;
             margin: 0;
-            text-align: left;
+            text-align: left !important;
         }
-
-
 
         @media (max-width: 991px) {
             .why-choose-grid {
@@ -519,18 +490,22 @@
                 padding: 2rem 0;
             }
 
-            .why-choose-heading {
+            .why-choose-header {
                 margin-bottom: 1.4rem;
+                text-align: left;
             }
 
-            .why-choose-heading h2 {
-                font-size: 1.9rem;
-                line-height: 1.15;
+            .why-choose-title {
+                font-size: 1.35rem;
+                margin-bottom: 0.6rem;
             }
 
-            .why-choose-heading p {
-                font-size: 0.95rem;
-                line-height: 1.45;
+            .why-choose-desc {
+                max-width: 100%;
+                margin: 0;
+                font-size: 0.92rem;
+                line-height: 1.6;
+                text-align: left !important;
             }
 
             .why-choose-grid {
@@ -539,7 +514,8 @@
             }
 
             .why-choose-card {
-                padding: 1.2rem 1.05rem;
+                border-radius: 16px;
+                padding: 1.25rem 1.2rem;
             }
         }
     </style>
@@ -588,11 +564,11 @@
 
     <!-- Why Millions Choose Video Saver -->
     <section class="why-choose-section">
-        <div class="hero-container" style="max-width: 1050px;">
+        <div class="hero-container why-choose-container">
 
-            <div class="why-choose-heading">
-                <h2>Why Millions Choose Video Saver</h2>
-                <p style="line-height: 1.45;">
+            <div class="why-choose-header">
+                <h2 class="why-choose-title">Why Millions Choose Video Saver</h2>
+                <p class="why-choose-desc" style="line-height: 1.45;">
                     Video Saver makes it effortless to download videos, audio, reels, shorts, and photos in just a few
                     clicks. Built for speed, privacy, and a smooth experience, it works seamlessly across both mobile
                     and desktop browsers.
@@ -603,7 +579,7 @@
 
                 <!-- Card 1 -->
                 <div class="why-choose-card">
-                    <div class="why-choose-card-icon">
+                    <div class="why-choose-icon">
                         <img src="/images/icon-rocket.svg" alt="Instant">
                     </div>
                     <span class="why-choose-card-title">Instant Link Analysis</span>
@@ -613,7 +589,7 @@
 
                 <!-- Card 2 -->
                 <div class="why-choose-card">
-                    <div class="why-choose-card-icon">
+                    <div class="why-choose-icon">
                         <img src="/images/icon-globe.svg" alt="Multilingual">
                     </div>
                     <span class="why-choose-card-title">Multilingual Experience</span>
@@ -623,7 +599,7 @@
 
                 <!-- Card 3 -->
                 <div class="why-choose-card">
-                    <div class="why-choose-card-icon">
+                    <div class="why-choose-icon">
                         <img src="/images/icon-download.svg" alt="Quality">
                     </div>
                     <span class="why-choose-card-title">Flexible Quality Choices</span>
@@ -633,7 +609,7 @@
 
                 <!-- Card 4 -->
                 <div class="why-choose-card">
-                    <div class="why-choose-card-icon">
+                    <div class="why-choose-icon">
                         <img src="/images/icon-layers.svg" alt="Platform">
                     </div>
                     <span class="why-choose-card-title">Wide Platform Support</span>
@@ -643,7 +619,7 @@
 
                 <!-- Card 5 -->
                 <div class="why-choose-card">
-                    <div class="why-choose-card-icon">
+                    <div class="why-choose-icon">
                         <img src="/images/icon-settings.svg" alt="Device">
                     </div>
                     <span class="why-choose-card-title">Works on Any Device</span>
@@ -653,7 +629,7 @@
 
                 <!-- Card 6 -->
                 <div class="why-choose-card">
-                    <div class="why-choose-card-icon">
+                    <div class="why-choose-icon">
                         <img src="/images/icon-shield.png" alt="Privacy">
                     </div>
                     <span class="why-choose-card-title">Privacy-First by Design</span>
@@ -665,26 +641,126 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
     @if(count($faqs) > 0)
-        <section class="faq-section">
-            <div class="container" style="max-width: 850px;">
-                <h2 style="text-align:center; font-size: 2rem; font-weight: 700; margin-bottom: 2.5rem;">Frequently Asked
-                    Questions</h2>
-                <div class="faq-list">
-                    @foreach($faqs as $faq)
-                        <div class="faq-wrap">
-                            <button class="faq-btn" onclick="toggleFaq(this)">
+        <style>
+            .faq-list {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .faq-item {
+                border: 1px solid #E2E8F0;
+                border-radius: 16px;
+                overflow: hidden;
+                background: #fff;
+                transition: all 0.3s ease;
+            }
+
+            .faq-item:hover {
+                border-color: #FFB800;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            }
+
+            .faq-item.active {
+                border-color: #FFB800;
+            }
+
+            .faq-question {
+                padding: 1.2rem 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                font-weight: 700;
+                color: #1E293B;
+                font-size: 1rem;
+                user-select: none;
+            }
+
+            .faq-answer {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                background: #F8FAFC;
+            }
+
+            .faq-answer-inner {
+                padding: 0 1.5rem 1.5rem;
+                color: #000;
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+
+            .faq-answer-inner p {
+                margin: 0;
+            }
+
+            .faq-item.active .faq-answer {
+                max-height: 500px;
+            }
+
+            .faq-item.active .faq-question {
+                color: #FF8C00;
+            }
+
+            .toggle-icon {
+                font-size: 1.2rem;
+                color: #CBD5E1;
+                transition: transform 0.3s ease;
+            }
+
+            .faq-item.active .toggle-icon {
+                transform: rotate(45deg);
+                color: #FF8C00;
+            }
+        </style>
+        <section style="padding: 3.5rem 0; background: #ffffff; border-top: 1px solid #F3F4F6;">
+            <div class="hero-container" style="max-width: 850px;">
+
+                <div style="text-align:center; margin-bottom: 2.5rem;">
+                    <h2
+                        style="font-size: 1.8rem; font-weight: 700; color: #0F0F0F; margin-bottom: 0; letter-spacing:-0.02em;">
+                        Frequently Asked Questions
+                    </h2>
+                </div>
+
+                <div class="faq-list" id="faqAccordion">
+                    @foreach ($faqs as $faq)
+                        <div class="faq-item">
+                            <div class="faq-question">
                                 <span>{{ $faq->question }}</span>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <div class="faq-body">
-                                <p style="line-height: 1.45;">{{ $faq->answer }}</p>
+                                <i class="fas fa-plus toggle-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-answer-inner">
+                                    <p>{{ $faq->answer }}</p>
+                                </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
             </div>
         </section>
+
+        <script>
+            document.querySelectorAll('#faqAccordion .faq-question').forEach(button => {
+                button.addEventListener('click', () => {
+                    const item = button.parentElement;
+
+                    // Close other items
+                    document.querySelectorAll('#faqAccordion .faq-item').forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+
+                    item.classList.toggle('active');
+                });
+            });
+        </script>
     @endif
 
     <!-- Download CTA Section -->
@@ -697,20 +773,6 @@
     @include('partials.footer')
 
     <script>
-        function toggleFaq(btn) {
-            const body = btn.nextElementSibling;
-            const icon = btn.querySelector('i');
-            const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
-
-            document.querySelectorAll('.faq-body').forEach(b => b.style.maxHeight = '0px');
-            document.querySelectorAll('.faq-btn i').forEach(i => { i.classList.replace('fa-times', 'fa-plus'); });
-
-            if (!isOpen) {
-                body.style.maxHeight = body.scrollHeight + 'px';
-                icon.classList.replace('fa-plus', 'fa-times');
-            }
-        }
-
         const input = document.getElementById('videoUrl');
         const fetchBtn = document.getElementById('fetchBtn');
         const loader = document.getElementById('loader');
