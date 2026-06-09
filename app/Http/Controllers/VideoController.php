@@ -191,9 +191,9 @@ class VideoController extends Controller
             }
         }
 
-        // TikTok / Snapchat: stream directly using yt-dlp to avoid Akamai 403 blocks
+        // TikTok / Snapchat / Direct M3U8: stream directly using yt-dlp to avoid blocks and improve speed
         $platform = $detected['platform'];
-        if (in_array($platform, ['TikTok', 'Snapchat'])) {
+        if (!$aUrl) {
             $ytdlpPath = config('downloader.ytdlp_path', base_path('venv/bin/yt-dlp'));
             $cmd = '';
             if ($proxy) {
