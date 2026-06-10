@@ -390,13 +390,13 @@ class MediaExtractorService
             }
 
             // Skip AV1 and VP9 video codecs for resolutions ≤ 1080p (not natively supported by Apple QuickTime/macOS/iOS)
-            // We allow VP9 only for >1080p (2K/4K) where H264 does not exist.
+            // We allow AV1/VP9 only for >1080p (2K/4K) where H264 does not exist.
             $vcodec = strtolower($f['vcodec'] ?? '');
-            if ($type === 'video' && (strpos($vcodec, 'av01') !== false || strpos($vcodec, 'av1') !== false)) {
-                continue;
-            }
+            $isAv1 = strpos($vcodec, 'av01') !== false || strpos($vcodec, 'av1') !== false;
+            $isVp9 = strpos($vcodec, 'vp9') !== false || strpos($vcodec, 'vp09') !== false;
             $height = (int) ($f['height'] ?? 0);
-            if ($type === 'video' && $height <= 1080 && (strpos($vcodec, 'vp9') !== false || strpos($vcodec, 'vp09') !== false)) {
+
+            if ($type === 'video' && $height <= 1080 && ($isAv1 || $isVp9)) {
                 continue;
             }
 
