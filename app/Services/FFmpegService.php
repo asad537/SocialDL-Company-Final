@@ -177,7 +177,7 @@ class FFmpegService
                 . ' -c:v copy -c:a aac'
                 . ' -map 0:v:0 -map 1:a:0';
         } else {
-            $cmd .= ' -c copy';
+            $cmd .= ' -c copy -bsf:a aac_adtstoasc';
         }
         $cmd .= ' -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>' . escapeshellarg(storage_path('logs/ffmpeg.log'));
         return ['cmd' => $cmd, 'format' => 'mp4'];
