@@ -94,7 +94,7 @@
           "@type": "ListItem",
           "position": 2,
           "name": "{{ $platform->name }}",
-          "item": "{{ url('/' . $platform->slug) }}"
+          "item": "{{ url('/' . $platform->slug) }}/"
         }
       ]
     }
@@ -105,7 +105,7 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "name": "Frequently Asked Questions - {{ $platform->name }}",
-      "url": "{{ url('/' . $platform->slug) }}",
+      "url": "{{ url('/' . $platform->slug) }}/",
       "publisher": {
         "@id": "https://hdvideosaver.com/#organization"
       },
