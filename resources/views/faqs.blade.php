@@ -42,7 +42,7 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "name": "Frequently Asked Questions - Video Saver",
-      "url": "https://hdvideosaver.com/faq",
+      "url": "https://hdvideosaver.com/faq/",
       "description": "Find answers to frequently asked questions about Video Saver — how it works, supported platforms, troubleshooting, and general usage.",
       "publisher": {
         "@id": "https://hdvideosaver.com/#organization"
@@ -194,7 +194,7 @@
           "@type": "ListItem",
           "position": 2,
           "name": "FAQ",
-          "item": "https://hdvideosaver.com/faq"
+          "item": "https://hdvideosaver.com/faq/"
         }
       ]
     }
