@@ -253,9 +253,18 @@ class VideoController extends Controller
                     || str_contains($vcodec, 'av01')
                     || str_contains($vcodec, 'av1');
 
+        $isTwitch = str_contains($vUrl, 'twitch') || str_contains($vUrl, 'cloudfront.net');
+        $outputFile = 'pipe:1';
+        $tempFilePath = null;
+
+        if ($isTwitch) {
+            $tempFilePath = storage_path('app/temp/twitch_' . \Illuminate\Support\Str::random(16) . '.mp4');
+            $outputFile = $tempFilePath;
+        }
+
         $ffmpegService = new \App\Services\FFmpegService();
         $result = $ffmpegService->buildStreamMergeCommand(
-            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream, $height, $cookies
+            $vUrl, $aUrl, $referer, $userAgent, $proxy, $isVp9Stream, $height, $cookies, $outputFile
         );
         $cmd        = $result['cmd'];
         $outFormat  = $result['format']; // always 'mp4' now
@@ -267,8 +276,22 @@ class VideoController extends Controller
         Log::info('mergeDownload: vcodec=' . $vcodec . ' height=' . $height . ' isVp9=' . ($isVp9Stream ? 'yes' : 'no') . ' proxy=' . ($proxy ? 'yes' : 'no'));
         Log::info('mergeDownload Command: ' . $cmd);
 
+        set_time_limit(0);
+
+        if ($tempFilePath) {
+            exec($cmd);
+            if (file_exists($tempFilePath)) {
+                return response()->download($tempFilePath, $filename, [
+                    'Content-Type' => $contentType,
+                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                    'Pragma' => 'no-cache',
+                    'Expires' => '0',
+                ])->deleteFileAfterSend(true);
+            }
+            abort(500, 'Failed to process Twitch video.');
+        }
+
         return new StreamedResponse(function () use ($cmd) {
-            set_time_limit(0);
             // Clear any remaining PHP output buffers so data flows immediately
             while (ob_get_level()) { ob_end_clean(); }
             ob_implicit_flush(true);

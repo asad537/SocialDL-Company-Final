@@ -163,7 +163,13 @@ class FFmpegService
             } else {
                 $cmd .= ' ' . $vcodecArg;
             }
-            $cmd .= ' -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>' . escapeshellarg(storage_path('logs/ffmpeg.log'));
+            $cmd .= ' -f mp4';
+            if ($outputFile === 'pipe:1') {
+                $cmd .= ' -movflags frag_keyframe+empty_moov pipe:1';
+            } else {
+                $cmd .= ' -movflags +faststart ' . escapeshellarg($outputFile);
+            }
+            $cmd .= ' 2>' . escapeshellarg(storage_path('logs/ffmpeg.log'));
             return ['cmd' => $cmd, 'format' => 'mp4'];
         }
 
@@ -179,7 +185,13 @@ class FFmpegService
         } else {
             $cmd .= ' -c copy -bsf:a aac_adtstoasc';
         }
-        $cmd .= ' -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>' . escapeshellarg(storage_path('logs/ffmpeg.log'));
+        $cmd .= ' -f mp4';
+        if ($outputFile === 'pipe:1') {
+            $cmd .= ' -movflags frag_keyframe+empty_moov pipe:1';
+        } else {
+            $cmd .= ' -movflags +faststart ' . escapeshellarg($outputFile);
+        }
+        $cmd .= ' 2>' . escapeshellarg(storage_path('logs/ffmpeg.log'));
         return ['cmd' => $cmd, 'format' => 'mp4'];
     }
 
