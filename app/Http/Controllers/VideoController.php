@@ -219,12 +219,16 @@ class VideoController extends Controller
             Log::info('mergeDownload: Streaming TikTok/Snapchat via yt-dlp: ' . $cmd);
 
             return new StreamedResponse(function () use ($cmd) {
+                set_time_limit(0);
                 while (ob_get_level()) { ob_end_clean(); }
                 ob_implicit_flush(true);
 
                 $handle = popen($cmd, 'r');
                 if ($handle) {
                     while (!feof($handle)) {
+                        if (connection_aborted()) {
+                            break;
+                        }
                         $buffer = fread($handle, 262144);
                         if ($buffer !== false && $buffer !== '') {
                             echo $buffer;
@@ -264,6 +268,7 @@ class VideoController extends Controller
         Log::info('mergeDownload Command: ' . $cmd);
 
         return new StreamedResponse(function () use ($cmd) {
+            set_time_limit(0);
             // Clear any remaining PHP output buffers so data flows immediately
             while (ob_get_level()) { ob_end_clean(); }
             ob_implicit_flush(true);
@@ -271,6 +276,9 @@ class VideoController extends Controller
             $handle = popen($cmd, 'r');
             if ($handle) {
                 while (!feof($handle)) {
+                    if (connection_aborted()) {
+                        break;
+                    }
                     $buffer = fread($handle, 262144); // 256KB chunks for max throughput
                     if ($buffer !== false && $buffer !== '') {
                         echo $buffer;
