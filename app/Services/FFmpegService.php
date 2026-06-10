@@ -113,7 +113,7 @@ class FFmpegService
      * @param int         $height       Source video height in pixels (for bitrate selection)
      * @return array  ['cmd' => string, 'format' => 'mp4']
      */
-    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $isVp9Stream = false, $height = 0, $cookies = null)
+    public function buildStreamMergeCommand($videoUrl, $audioUrl = null, $referer = '', $userAgent = '', $proxy = null, $isVp9Stream = false, $height = 0, $cookies = null, $outputFile = 'pipe:1')
     {
         $ffmpeg = $this->findFfmpeg();
         $headersStr = '';
