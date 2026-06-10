@@ -367,11 +367,6 @@ class MediaExtractorService
                 if (!in_array($source, ['dailymotion', 'twitch', 'twitchvod', 'twitchstream']) && (strpos($f['url'], 'manifest.googlevideo.com') !== false || strpos($f['url'], 'hls_playlist') !== false || strpos($f['url'], '.mpd') !== false || strpos($f['url'], '.m3u8') !== false)) {
                     continue;
                 }
-
-                // Force m3u8 extension for Twitch so frontend routes it via merge-download
-                if (strpos($source, 'twitch') !== false && strpos($f['url'], '.m3u8') !== false) {
-                    $f['ext'] = 'm3u8';
-                }
             }
 
             // Skip storyboard and mhtml preview formats
